@@ -1,0 +1,20 @@
+@page
+@using API.Controllers
+@using CAPA_DATOS.Security
+@using DataBaseModel
+@{
+    string? identify = HttpContext?.Session.GetString("seassonKey");
+    var SystemConfig = Config.SystemConfig();
+    if (!SecurityController.HavePermission(identify, Permissions.NOTIFICACIONES_READER))
+    {
+        Response.Redirect("./");
+        return;
+    }
+}
+<script type="module">
+    import {NotificacionesView} from "/Notificaciones_Mensajeria/Gestion_Mensajes/NotificacionesView.js";
+    window.onload = ()=> {
+        MainN.append(new NotificacionesView());
+    } 
+</script>
+<div id="MainN"></div>

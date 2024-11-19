@@ -1,0 +1,17 @@
+@page
+@using API.Controllers
+@using CAPA_DATOS.Security
+@{
+    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("../LoginView");
+        return;
+    }   
+    if (!SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("../Security/permission_error");
+        return;
+    }
+}
+<script src='~/Questionnaires/Views/TestsView.js' type='module'></script>
+<div id='MainBody'></div>

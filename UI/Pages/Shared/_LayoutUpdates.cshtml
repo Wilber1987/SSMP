@@ -1,0 +1,33 @@
+﻿@using API.Controllers
+@using CAPA_DATOS.Security
+@using DataBaseModel
+@{
+    string identify = Context.Session.GetString("seassonKey");
+    var SystemConfig = Config.SystemConfig();
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @* <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0"> *@
+    <title>@ViewData["Title"] @SystemConfig.TITULO</title>
+    <link rel="stylesheet" href="~/css/AdminTemplate.css" />    
+</head>
+<body id="AdminTemplate" class="update-layout">
+    <header id="Header" class="admin-header">        
+        <div class="title-container">
+            <label for="" class="title">@SystemConfig.TITULO</label>
+            <label for="" class="sub-title">@SystemConfig.SUB_TITULO</label>
+        </div>      
+    </header>
+    <div id="MainContainer">
+        <main role="main" id="Main">
+            @RenderBody()
+        </main>
+    </div>    
+</body>
+</html>

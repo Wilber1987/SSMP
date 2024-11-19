@@ -1,0 +1,5 @@
+﻿@import url(../WDevCore/StyleModules/css/variables.css);
+@import url(./template.css);
+@import url(./navs.css);
+@import url(../WDevCore/StyleModules/css/form.css);
+@import url(../WDevCore/StyleModules/css/scrolls.css);

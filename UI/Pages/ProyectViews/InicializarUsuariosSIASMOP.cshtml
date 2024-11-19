@@ -1,0 +1,12 @@
+@page
+@using API.Controllers
+@using SNI_UI2.CAPA_NEGOCIO.Helpdesk.Services
+@{
+    if (!SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("/Security/login");
+        return;
+    }
+    GenerateUsers.Generate(HttpContext.Session.GetString("seassonKey"));
+
+}

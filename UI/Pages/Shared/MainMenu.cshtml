@@ -1,0 +1,388 @@
+@using API.Controllers
+@using CAPA_DATOS.Security
+@using DataBaseModel
+
+@{
+    string Identify = Context.Session.GetString("seassonKey");
+    var SystemConfig = Config.SystemConfig();
+}
+
+@* @if (SecurityController.HavePermission(Permissions.GESTION_RECIBOS.ToString(), Identify))
+{
+<a class="title-collapse" id="GestionRecibosMenu" onclick="changeActive(this)">GESTIÓN DE RECIBOS</a>
+<div class="collapse">
+<a class="menu-item" id="Gestion_Recibos" asp-area="" asp-page="/PagesViews/Gestion_Recibos">Nuevo
+Recibo</a>
+<a class="menu-item" id="Ver_Recibos" asp-area="" asp-page="/PagesViews/Ver_Recibos">Ver Recibos</a>
+</div>
+} *@
+<h3>TRANSACCIONES</h3>
+<a class="menu-item" id="Home" asp-area="" asp-page="/">HOME</a>
+
+@if (SecurityController.HavePermission(Identify, Permissions.PERFIL_ACCESS))
+{
+    <a class="menu-item" href="~/Gestion_Usuarios/Perfil">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path opacity=""
+                    d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M16.807 19.0112C15.4398 19.9504 13.7841 20.5 12 20.5C10.2159 20.5 8.56023 19.9503 7.193 19.0111C6.58915 18.5963 6.33109 17.8062 6.68219 17.1632C7.41001 15.8302 8.90973 15 12 15C15.0903 15 16.59 15.8303 17.3178 17.1632C17.6689 17.8062 17.4108 18.5964 16.807 19.0112Z"
+                    fill="#c9c9c9"></path>
+                <path
+                    d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3432 6 9.00004 7.34315 9.00004 9C9.00004 10.6569 10.3432 12 12 12Z"
+                    fill="#c9c9c9"></path>
+            </g>
+        </svg>
+        Mi Perfil
+    </a>
+}
+@if (SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(), Identify))
+{
+    <a class="menu-item" id="SolicitudesPendientes" href="~/ProyectViews/SolicitudesPendientes">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                    d="M7 5.75C6.59 5.75 6.25 5.41 6.25 5V2C6.25 1.59 6.59 1.25 7 1.25C7.41 1.25 7.75 1.59 7.75 2V5C7.75 5.41 7.41 5.75 7 5.75Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M15 5.75C14.59 5.75 14.25 5.41 14.25 5V2C14.25 1.59 14.59 1.25 15 1.25C15.41 1.25 15.75 1.59 15.75 2V5C15.75 5.41 15.41 5.75 15 5.75Z"
+                    fill="#06a3ec"></path>
+                <path opacity="0.4"
+                    d="M20 8.5V17C20 20 18.5 22 15 22H7C3.5 22 2 20 2 17V8.5C2 5.5 3.5 3.5 7 3.5H15C18.5 3.5 20 5.5 20 8.5Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M13 11.75H7C6.59 11.75 6.25 11.41 6.25 11C6.25 10.59 6.59 10.25 7 10.25H13C13.41 10.25 13.75 10.59 13.75 11C13.75 11.41 13.41 11.75 13 11.75Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M10 16.75H7C6.59 16.75 6.25 16.41 6.25 16C6.25 15.59 6.59 15.25 7 15.25H10C10.41 15.25 10.75 15.59 10.75 16C10.75 16.41 10.41 16.75 10 16.75Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M21 13.63C20.11 12.92 18.98 12.5 17.75 12.5C16.52 12.5 15.37 12.93 14.47 13.66C13.26 14.61 12.5 16.1 12.5 17.75C12.5 18.73 12.78 19.67 13.26 20.45C13.63 21.06 14.11 21.59 14.68 22C15.54 22.63 16.6 23 17.75 23C19.08 23 20.28 22.51 21.2 21.69C21.61 21.35 21.96 20.93 22.24 20.45C22.72 19.67 23 18.73 23 17.75C23 16.08 22.22 14.59 21 13.63ZM17.75 20.25C17.75 18.87 16.63 17.75 15.25 17.75C16.63 17.75 17.75 16.63 17.75 15.25C17.75 16.63 18.87 17.75 20.25 17.75C18.87 17.75 17.75 18.87 17.75 20.25Z"
+                    fill="#06a3ec"></path>
+            </g>
+        </svg>
+        Solicitudes Pendientes
+    </a>
+}
+@if (SecurityController.HavePermission(Identify, Permissions.ADMINISTRAR_CASOS_DEPENDENCIA,
+Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
+{
+    <a class="menu-item" id="Proyectos" href="~/ProyectViews/ProyectosProceso">
+        <svg fill="#000000" viewBox="0 0 24 24" id="note-check" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg"
+            class="icon flat-color">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <rect id="primary" x="4" y="3" width="16" height="19" rx="2" style="fill: #35417e;"></rect>
+                <path id="secondary"
+                    d="M16,3V5a1,1,0,0,1-1,1H9A1,1,0,0,1,8,5V3A1,1,0,0,1,9,2h6A1,1,0,0,1,16,3ZM11.71,15.71l4-4a1,1,0,0,0-1.42-1.42L11,13.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0Z"
+                    style="fill: #4ba8e2;"></path>
+            </g>
+        </svg>
+        En Proceso
+    </a>
+}
+@if (SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(), Identify)
+|| SecurityController.HavePermission(Permissions.TECNICO_CASOS_DEPENDENCIA.ToString(), Identify))
+{
+    <a class="menu-item" id="ProyectosCerrados" href="~/ProyectViews/ProyectosCerrados">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                    d="M5.97 1H3.03C1.76 1 1 1.76 1 3.03V5.97C1 7.24 1.76 8 3.03 8H5.97C7.24 8 8 7.24 8 5.97V3.03C8 1.76 7.24 1 5.97 1ZM6.47 5.56C6.72 5.81 6.72 6.22 6.47 6.47C6.34 6.59 6.17 6.65 6.01 6.65C5.85 6.65 5.69 6.59 5.56 6.47L4.49 5.41L3.45 6.47C3.32 6.59 3.16 6.65 2.98 6.65C2.82 6.65 2.66 6.59 2.53 6.47C2.28 6.22 2.28 5.81 2.53 5.56L3.6 4.5L2.54 3.45C2.29 3.2 2.29 2.79 2.54 2.54C2.79 2.29 3.2 2.29 3.45 2.54L4.49 3.6L5.55 2.54C5.8 2.29 6.21 2.29 6.46 2.54C6.71 2.79 6.71 3.2 6.46 3.45L5.41 4.5L6.47 5.56Z"
+                    fill="#06a3ec"></path>
+                <path opacity="0.4"
+                    d="M16.63 2H7.78C7.92 2.29 8 2.63 8 3.03V5.97C8 7.24 7.24 8 5.97 8H3.03C2.84 8 2.67 7.98 2.5 7.94V17.13C2.5 19.82 4.68 22 7.37 22H15.34C15.51 22 15.68 21.94 15.81 21.8C17.29 20.31 19.87 17.71 21.32 16.25C21.45 16.12 21.5 15.97 21.5 15.82V6.87C21.5 4.18 19.32 2 16.63 2Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M21.4995 15.8202C21.4995 15.9702 21.4495 16.1202 21.3195 16.2502C19.8695 17.7102 17.2895 20.3102 15.8095 21.8002C15.6795 21.9402 15.5095 22.0002 15.3395 22.0002C15.0095 22.0002 14.6895 21.7402 14.6895 21.3602V17.8602C14.6895 16.4002 15.9295 15.1902 17.4495 15.1902C18.3995 15.1802 19.7195 15.1802 20.8495 15.1802C21.2395 15.1802 21.4995 15.4902 21.4995 15.8202Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M14.7794 12.71H7.35938C6.93938 12.71 6.60938 12.37 6.60938 11.96C6.60938 11.55 6.94938 11.21 7.35938 11.21H14.7794C15.1994 11.21 15.5294 11.55 15.5294 11.96C15.5294 12.37 15.1994 12.71 14.7794 12.71Z"
+                    fill="#06a3ec"></path>
+                <path
+                    d="M11.9994 16.4199H7.35938C6.93938 16.4199 6.60938 16.0799 6.60938 15.6699C6.60938 15.2499 6.94938 14.9199 7.35938 14.9199H11.9994C12.4194 14.9199 12.7494 15.2599 12.7494 15.6699C12.7494 16.0799 12.4194 16.4199 11.9994 16.4199Z"
+                    fill="#06a3ec"></path>
+            </g>
+        </svg>
+        Finalizados
+    </a>
+}
+@if (SecurityController.HavePermission(Permissions.TECNICO_CASOS_DEPENDENCIA.ToString(), Identify))
+{
+    <a class="menu-item" id="Tareas" href="~/ProyectViews/Tareas">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path opacity="0.4"
+                    d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z"
+                    fill="#3b79c4"></path>
+                <path
+                    d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z"
+                    fill="#3b79c4"></path>
+                <path
+                    d="M17.4894 10.51C17.4294 10.51 17.3694 10.5 17.2994 10.49L12.4494 9.26002C12.0494 9.16002 11.8094 8.75002 11.9094 8.35002C12.0094 7.95002 12.4194 7.71002 12.8194 7.81002L17.6694 9.04002C18.0694 9.14002 18.3094 9.55002 18.2094 9.95002C18.1294 10.28 17.8194 10.51 17.4894 10.51Z"
+                    fill="#3b79c4"></path>
+                <path
+                    d="M14.5592 13.8899C14.4992 13.8899 14.4392 13.8799 14.3692 13.8699L11.4592 13.1299C11.0592 13.0299 10.8192 12.6199 10.9192 12.2199C11.0192 11.8199 11.4292 11.5799 11.8292 11.6799L14.7392 12.4199C15.1392 12.5199 15.3792 12.9299 15.2792 13.3299C15.1992 13.6699 14.8992 13.8899 14.5592 13.8899Z"
+                    fill="#3b79c4"></path>
+            </g>
+        </svg>
+        Tareas en Proceso</a>
+}
+@if (SecurityController.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(), Identify))
+{
+    <a class="menu-item" id="PerfilManager" href="~/Security/PerfilManager">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5 7C5 4.23858 7.23858 2 10 2C12.7614 2 15 4.23858 15 7C15 9.76142 12.7614 12 10 12C7.23858 12 5 9.76142 5 7ZM10 4C8.34315 4 7 5.34315 7 7C7 8.65685 8.34315 10 10 10C11.6569 10 13 8.65685 13 7C13 5.34315 11.6569 4 10 4Z"
+                    fill="#296dae"></path>
+                <path
+                    d="M4.00242 20C4.07771 17.7781 5.90263 16 8.14286 16H9C9.55228 16 10 15.5523 10 15C10 14.4477 9.55228 14 9 14H8.14286C4.75025 14 2 16.7503 2 20.1429C2 21.1685 2.83147 22 3.85714 22H10C10.5523 22 11 21.5523 11 21C11 20.4477 10.5523 20 10 20H4.00242Z"
+                    fill="#296dae"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M17 22C19.7614 22 22 19.7614 22 17C22 14.2386 19.7614 12 17 12C14.2386 12 12 14.2386 12 17C12 19.7614 14.2386 22 17 22ZM17.0303 19.0303L19.5303 16.5303C19.8232 16.2374 19.8232 15.7626 19.5303 15.4697C19.2374 15.1768 18.7626 15.1768 18.4697 15.4697L16.5 17.4393L16.0303 16.9697C15.7374 16.6768 15.2626 16.6768 14.9697 16.9697C14.6768 17.2626 14.6768 17.7374 14.9697 18.0303L15.9692 19.0298C16.2621 19.3227 16.7374 19.3232 17.0303 19.0303Z"
+                    fill="#296dae"></path>
+            </g>
+        </svg>
+        Administrador de perfiles
+    </a>
+}
+@if (SecurityController.HavePermission(Permissions.GENERADOR_SOLICITUDES.ToString(), Identify))
+{
+
+    <a class="menu-item" id="SolicitudesRealizadas" href="~/ProyectViews/SolicitudesRealizadas">
+        <svg fill="#48749d" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" enable-background="new 0 0 100 100"
+            xml:space="preserve" stroke="#48749d">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path
+                    d="M77.4,78.1H40.5c-1.2,0-2.3-1-2.3-2.2c0,0,0-0.1,0-0.1v-4.6c0-1.2,1-2.3,2.2-2.3c0,0,0.1,0,0.1,0h36.9 c1.2,0,2.3,1,2.3,2.2c0,0,0,0.1,0,0.1v4.6C79.8,77,78.8,78.1,77.4,78.1C77.5,78.1,77.5,78.1,77.4,78.1z">
+                </path>
+                <path
+                    d="M26.6,78.1H22c-1.2,0-2.3-1-2.3-2.2c0,0,0-0.1,0-0.1v-4.6c0-1.2,1-2.3,2.2-2.3c0,0,0.1,0,0.1,0h4.6 c1.2,0,2.3,1,2.3,2.2c0,0,0,0.1,0,0.1v4.6C29,77,28,78,26.8,78.1C26.7,78.1,26.7,78.1,26.6,78.1z">
+                </path>
+                <path
+                    d="M53.8,57.6c-1.2,0-2.3-1-2.3-2.2c0,0,0-0.1,0-0.1v-4.6c0-1.2,1-2.3,2.2-2.3c0,0,0.1,0,0.1,0h23.6 c1.2,0,2.3,1,2.3,2.2c0,0,0,0.1,0,0.1v4.6c0,1.2-1,2.3-2.2,2.3c0,0-0.1,0-0.1,0H53.8z">
+                </path>
+                <path
+                    d="M62.6,37.1c-1.2,0-2.3-1-2.3-2.2c0,0,0-0.1,0-0.1v-4.6c0-1.2,1-2.3,2.2-2.3c0,0,0.1,0,0.1,0h14.8 c1.2,0,2.3,1,2.3,2.2c0,0,0,0.1,0,0.1v4.6c0,1.2-1,2.3-2.2,2.3c0,0-0.1,0-0.1,0H62.6z">
+                </path>
+                <path
+                    d="M20.8,58.2C19.6,47.5,28,36.4,38,34.5l2.7-0.6c0.5-0.1,0.9-0.6,0.8-1.2c0-0.3-0.2-0.5-0.4-0.6l-6.7-4.5 c-0.7-0.5-0.8-1.4-0.3-2c0,0,0,0,0-0.1l1.7-2.5c0.4-0.7,1.4-0.9,2-0.4c0,0,0,0,0.1,0L54,33.5c0.7,0.4,0.9,1.4,0.4,2c0,0,0,0,0,0.1 l-11,16.2c-0.4,0.7-1.4,0.9-2,0.4c0,0,0,0-0.1,0l-2.5-1.7c-0.7-0.4-0.9-1.4-0.4-2c0,0,0,0,0-0.1l4.4-6.7c0.3-0.4,0.3-1.1-0.2-1.4 c-0.2-0.2-0.5-0.3-0.8-0.2l-1.6,0.3c-7.8,1.5-14.4,10.3-13.7,17.9c0,0.7-1.1,1.7-1.9,1.9h-1.9C21.8,60.3,20.8,59.1,20.8,58.2z">
+                </path>
+            </g>
+        </svg>
+        Solicitudes Realizadas</a>
+}
+
+@if (SystemConfig.isNotificationsAndMessagesActive() && SecurityController.HavePermission(Identify,
+Permissions.NOTIFICACIONES_READER,
+Permissions.SEND_MESSAGE))
+{
+
+    @if (SecurityController.HavePermission(Identify, Permissions.NOTIFICACIONES_READER))
+    {
+        <a href="~/Mensajes/NotificationesView" id="NotificationesView" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16.9414 8.73591C16.2551 8.36932 15.7811 7.65741 15.7515 6.83225C15.7505 6.80496 15.75 6.77754 15.75 6.75C15.75 6.19642 15.949 5.69126 16.2801 5.29919C16.694 4.8092 17.3105 4.5 18 4.5C19.2426 4.5 20.25 5.50736 20.25 6.75C20.25 7.75592 19.5893 8.6095 18.6764 8.89677C18.4638 8.96365 18.2369 9 18 9C17.6173 9 17.2569 8.90445 16.9414 8.73591Z"
+                        fill="#009bc2"></path>
+                    <path
+                        d="M14.25 6.75C14.25 8.56231 15.5356 10.0743 17.2446 10.4239C17.2449 10.4492 17.2451 10.4746 17.2451 10.5V13.65L18.1949 14.7897C19.0091 15.7667 18.3143 17.25 17.0426 17.25H6.94769C5.67593 17.25 4.9812 15.7667 5.79536 14.7897L6.74513 13.65V10.5C6.74513 7.85523 8.70078 5.66724 11.2449 5.3032V4.5C11.2449 4.08579 11.5807 3.75 11.9949 3.75C12.4091 3.75 12.7449 4.08579 12.7449 4.5V5.30313C13.3213 5.38555 13.8675 5.56159 14.3676 5.81536C14.2908 6.11427 14.25 6.42748 14.25 6.75Z"
+                        fill="#009bc2"></path>
+                    <path
+                        d="M8.56274 18.75C8.75015 19.1794 9.01645 19.5701 9.34802 19.9017C9.69624 20.2499 10.1096 20.5261 10.5646 20.7145C11.0196 20.903 11.5072 21 11.9997 21C12.4921 21 12.9798 20.903 13.4347 20.7145C13.8897 20.5261 14.3031 20.2499 14.6513 19.9017C14.9829 19.5701 15.2492 19.1794 15.4366 18.75H8.56274Z"
+                        fill="#009bc2"></path>
+                </g>
+            </svg>
+            Notificaciones
+        </a>
+    }
+    @if (SecurityController.HavePermission(Identify, Permissions.NOTIFICACIONES_MANAGER))
+    {
+        <a href="~/Mensajes/NotificacionesManager" id="NotificacionesManager" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.25 3C8.66421 3 9 3.33579 9 3.75V4.5H15V3.75C15 3.33579 15.3358 3 15.75 3C16.1642 3 16.5 3.33579 16.5 3.75V4.5H18.75C19.9926 4.5 21 5.50736 21 6.75V18.75C21 19.9926 19.9926 21 18.75 21H5.25C4.00736 21 3 19.9926 3 18.75V6.75C3 5.50736 4.00736 4.5 5.25 4.5H7.5V3.75C7.5 3.33579 7.83579 3 8.25 3ZM4.5 9L19.5 9V6.75C19.5 6.33579 19.1642 6 18.75 6H16.5V6.75C16.5 7.16421 16.1642 7.5 15.75 7.5C15.3358 7.5 15 7.16421 15 6.75V6H9V6.75C9 7.16421 8.66421 7.5 8.25 7.5C7.83579 7.5 7.5 7.16421 7.5 6.75V6H5.25C4.83579 6 4.5 6.33579 4.5 6.75V9Z"
+                        fill="#06a3ec"></path>
+                </g>
+            </svg>
+            notificaciones admin.</a>
+    }
+    @if (SecurityController.HavePermission(Identify, Permissions.SEND_MESSAGE))
+    {
+        <a href="~/Mensajes/MensajesView" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path opacity="0.4"
+                        d="M22 7.43018V13.4302C22 14.9302 21.5 16.1802 20.62 17.0602C19.75 17.9302 18.5 18.4302 17 18.4302V20.5602C17 21.3602 16.11 21.8402 15.45 21.4002L11 18.4302H8.88C8.96 18.1302 9 17.8202 9 17.5002C9 16.4802 8.61 15.5402 7.97 14.8302C7.25 14.0102 6.18 13.5002 5 13.5002C3.88 13.5002 2.86 13.9602 2.13 14.7102C2.04 14.3102 2 13.8802 2 13.4302V7.43018C2 4.43018 4 2.43018 7 2.43018H17C20 2.43018 22 4.43018 22 7.43018Z"
+                        fill="#06a3ec"></path>
+                    <path
+                        d="M15.5 11.25H8.5C8.09 11.25 7.75 10.91 7.75 10.5C7.75 10.09 8.09 9.75 8.5 9.75H15.5C15.91 9.75 16.25 10.09 16.25 10.5C16.25 10.91 15.91 11.25 15.5 11.25Z"
+                        fill="#06a3ec"></path>
+                    <path
+                        d="M5 13.5C2.79 13.5 1 15.29 1 17.5C1 18.25 1.20999 18.96 1.57999 19.56C2.26999 20.72 3.54 21.5 5 21.5C6.46 21.5 7.73001 20.72 8.42001 19.56C8.79001 18.96 9 18.25 9 17.5C9 15.29 7.21 13.5 5 13.5ZM6.97 17.17L4.84 19.14C4.7 19.27 4.50999 19.34 4.32999 19.34C4.13999 19.34 3.94999 19.27 3.79999 19.12L2.81 18.13C2.52 17.84 2.52 17.36 2.81 17.07C3.1 16.78 3.58 16.78 3.87 17.07L4.35001 17.55L5.95001 16.07C6.25001 15.79 6.73001 15.81 7.01001 16.11C7.29001 16.41 7.27 16.89 6.97 17.17Z"
+                        fill="#06a3ec"></path>
+                </g>
+            </svg>Mensajes</a>
+    }
+}
+
+@if (SystemConfig.isQuestionnairesActive())
+{
+    @if (SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), Identify))
+    {
+        <a class="menu-item" id="SolicitudesRealizadas" href="~/Questionnaires/TestsView">
+            <svg fill="#000000" viewBox="0 0 24 24" id="clipboard-edit-left" data-name="Flat Color"
+                xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <rect id="primary" x="6" y="4" width="16" height="18" rx="2" style="fill: #1a5799;"></rect>
+                    <path id="secondary"
+                        d="M18,4V5a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1V4a2,2,0,0,1,2-2h4A2,2,0,0,1,18,4ZM3.69,8.29l-1.4,1.4a1,1,0,0,0,0,1.4L8.9,17.71a1,1,0,0,0,.71.29H11a1,1,0,0,0,1-1V15.61a1.05,1.05,0,0,0-.29-.71L5.09,8.29A1,1,0,0,0,3.69,8.29Z"
+                        style="fill: #2e9ed6;"></path>
+                </g>
+            </svg>
+            Gestión de tests</a>
+    }
+    @if (SecurityController.HavePermission(Permissions.QUESTIONNAIRES_USER.ToString(), Identify))
+    {
+        <a class="menu-item" id="SolicitudesRealizadas" href="~/Questionnaires/ResolveTestView">
+            <svg height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path style="fill:#D7DEED;"
+                        d="M485.517,141.241h-88.276c-14.626,0-26.483-11.857-26.483-26.483V26.483 C370.759,11.857,382.615,0,397.241,0h88.276C500.143,0,512,11.857,512,26.483v88.276C512,129.385,500.143,141.241,485.517,141.241z">
+                    </path>
+                    <path style="fill:#303778;"
+                        d="M432.552,105.931c-2.259,0-4.519-0.862-6.242-2.585l-26.483-26.483 c-3.448-3.447-3.448-9.036,0-12.483c3.447-3.447,9.036-3.447,12.483,0l20.242,20.241l46.723-46.723 c3.447-3.447,9.036-3.447,12.483,0c3.448,3.447,3.448,9.036,0,12.483l-52.966,52.966C437.07,105.069,434.81,105.931,432.552,105.931 z">
+                    </path>
+                    <g>
+                        <path style="fill:#D7DEED;"
+                            d="M485.517,326.621h-88.276c-14.626,0-26.483-11.857-26.483-26.483v-88.276 c0-14.626,11.857-26.483,26.483-26.483h88.276c14.626,0,26.483,11.857,26.483,26.483v88.276 C512,314.764,500.143,326.621,485.517,326.621z">
+                        </path>
+                        <path style="fill:#D7DEED;"
+                            d="M485.517,512h-88.276c-14.626,0-26.483-11.857-26.483-26.483v-88.276 c0-14.626,11.857-26.483,26.483-26.483h88.276c14.626,0,26.483,11.857,26.483,26.483v88.276C512,500.143,500.143,512,485.517,512z">
+                        </path>
+                    </g>
+                    <path style="fill:#303778;"
+                        d="M432.552,476.69c-2.259,0-4.519-0.862-6.242-2.585l-26.483-26.483c-3.448-3.447-3.448-9.036,0-12.483 c3.447-3.447,9.036-3.447,12.483,0l20.242,20.241l46.723-46.723c3.447-3.447,9.036-3.447,12.483,0c3.448,3.447,3.448,9.036,0,12.483 l-52.966,52.966C437.07,475.828,434.81,476.69,432.552,476.69z">
+                    </path>
+                    <path style="fill:#D7DEED;"
+                        d="M185.379,52.966H8.828C3.948,52.966,0,49.013,0,44.138s3.948-8.828,8.828-8.828h176.552 c4.879,0,8.828,3.953,8.828,8.828S190.259,52.966,185.379,52.966z">
+                    </path>
+                    <g>
+                        <path style="fill:#3f5588;"
+                            d="M317.793,52.966H220.69c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h97.103 c4.879,0,8.828,3.953,8.828,8.828S322.673,52.966,317.793,52.966z">
+                        </path>
+                        <path style="fill:#3f5588;"
+                            d="M317.793,105.931h-35.31c-4.879,0-8.828-3.953-8.828-8.828c0-4.875,3.948-8.828,8.828-8.828h35.31 c4.879,0,8.828,3.953,8.828,8.828C326.621,101.978,322.673,105.931,317.793,105.931z">
+                        </path>
+                        <path style="fill:#3f5588;"
+                            d="M79.448,105.931H8.828c-4.879,0-8.828-3.953-8.828-8.828c0-4.875,3.948-8.828,8.828-8.828h70.621 c4.879,0,8.828,3.953,8.828,8.828C88.276,101.978,84.328,105.931,79.448,105.931z">
+                        </path>
+                    </g>
+                    <g>
+                        <path style="fill:#D7DEED;"
+                            d="M247.172,105.931H114.759c-4.879,0-8.828-3.953-8.828-8.828c0-4.875,3.948-8.828,8.828-8.828 h132.414c4.879,0,8.828,3.953,8.828,8.828C256,101.978,252.052,105.931,247.172,105.931z">
+                        </path>
+                        <path style="fill:#D7DEED;"
+                            d="M185.379,238.345H8.828c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h176.552 c4.879,0,8.828,3.953,8.828,8.828S190.259,238.345,185.379,238.345z">
+                        </path>
+                    </g>
+                    <g>
+                        <path style="fill:#3f5588;"
+                            d="M317.793,238.345H220.69c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h97.103 c4.879,0,8.828,3.953,8.828,8.828S322.673,238.345,317.793,238.345z">
+                        </path>
+                        <path style="fill:#3f5588;"
+                            d="M317.793,291.31h-35.31c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h35.31 c4.879,0,8.828,3.953,8.828,8.828S322.673,291.31,317.793,291.31z">
+                        </path>
+                        <path style="fill:#3f5588;"
+                            d="M79.448,291.31H8.828c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h70.621 c4.879,0,8.828,3.953,8.828,8.828S84.328,291.31,79.448,291.31z">
+                        </path>
+                    </g>
+                    <g>
+                        <path style="fill:#D7DEED;"
+                            d="M247.172,291.31H114.759c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h132.414 c4.879,0,8.828,3.953,8.828,8.828S252.052,291.31,247.172,291.31z">
+                        </path>
+                        <path style="fill:#D7DEED;"
+                            d="M185.379,423.724H8.828c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h176.552 c4.879,0,8.828,3.953,8.828,8.828S190.259,423.724,185.379,423.724z">
+                        </path>
+                    </g>
+                    <g>
+                        <path style="fill:#3f5588;"
+                            d="M317.793,423.724H220.69c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h97.103 c4.879,0,8.828,3.953,8.828,8.828S322.673,423.724,317.793,423.724z">
+                        </path>
+                        <path style="fill:#3f5588;"
+                            d="M317.793,476.69h-35.31c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h35.31 c4.879,0,8.828,3.953,8.828,8.828S322.673,476.69,317.793,476.69z">
+                        </path>
+                        <path style="fill:#3f5588;"
+                            d="M79.448,476.69H8.828c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h70.621 c4.879,0,8.828,3.953,8.828,8.828S84.328,476.69,79.448,476.69z">
+                        </path>
+                    </g>
+                    <path style="fill:#D7DEED;"
+                        d="M247.172,476.69H114.759c-4.879,0-8.828-3.953-8.828-8.828s3.948-8.828,8.828-8.828h132.414 c4.879,0,8.828,3.953,8.828,8.828S252.052,476.69,247.172,476.69z">
+                    </path>
+                    <path style="fill:#303778;"
+                        d="M453.863,256l20.241-20.241c3.448-3.447,3.448-9.036,0-12.483c-3.447-3.447-9.036-3.447-12.483,0 l-20.241,20.241l-20.241-20.241c-3.447-3.447-9.036-3.447-12.483,0c-3.448,3.447-3.448,9.036,0,12.483L428.896,256l-20.241,20.241 c-3.448,3.447-3.448,9.036,0,12.483c1.724,1.724,3.982,2.585,6.242,2.585c2.26,0,4.519-0.862,6.242-2.585l20.239-20.241 l20.241,20.241c1.724,1.724,3.982,2.585,6.242,2.585c2.26,0,4.519-0.862,6.242-2.585c3.448-3.447,3.448-9.036,0-12.483L453.863,256z ">
+                    </path>
+                </g>
+            </svg>
+            Resolver de tests</a>
+    }
+}
+
+
+
+@if (SecurityController.HavePermission(Identify, Permissions.ADMIN_ACCESS))
+{
+    <a class="menu-item" id="AdminPanel" href="~/Admin/Index">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path fill-rule="evenodd"
+                    d="M9.027 0a1 1 0 00-.99.859l-.37 2.598A6.993 6.993 0 005.742 4.57L3.305 3.59a1 1 0 00-1.239.428L.934 5.981a1 1 0 00.248 1.287l2.066 1.621a7.06 7.06 0 000 2.222l-2.066 1.621a1 1 0 00-.248 1.287l1.132 1.962a1 1 0 001.239.428l2.438-.979a6.995 6.995 0 001.923 1.113l.372 2.598a1 1 0 00.99.859h2.265a1 1 0 00.99-.859l.371-2.598a6.995 6.995 0 001.924-1.112l2.438.978a1 1 0 001.238-.428l1.133-1.962a1 1 0 00-.249-1.287l-2.065-1.621a7.063 7.063 0 000-2.222l2.065-1.621a1 1 0 00.249-1.287l-1.133-1.962a1 1 0 00-1.239-.428l-2.437.979a6.994 6.994 0 00-1.924-1.113L12.283.86a1 1 0 00-.99-.859H9.027zm1.133 13a3 3 0 100-6 3 3 0 000 6z"
+                    fill="#0a3b6b"></path>
+            </g>
+        </svg>
+        Panel Administrador
+    </a>
+    <a class="menu-item" id="AdminPanel" href="~/ProyectViews/InicializarUsuariosSIASMOP">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path fill-rule="evenodd"
+                    d="M1 3.5A1.5 1.5 0 012.5 2h15A1.5 1.5 0 0119 3.5v2A1.5 1.5 0 0117.5 7h-15A1.5 1.5 0 011 5.5v-2zm3.5 1a1 1 0 11-2 0 1 1 0 012 0zM1 9.5A1.5 1.5 0 012.5 8h6.073a1.5 1.5 0 011.342 2.17l-1 2a1.5 1.5 0 01-1.342.83H2.5A1.5 1.5 0 011 11.5v-2zm3.5 1a1 1 0 11-2 0 1 1 0 012 0zM1 15.5A1.5 1.5 0 012.5 14h5.27a1.5 1.5 0 011.471 1.206l.4 2A1.5 1.5 0 018.171 19H2.5A1.5 1.5 0 011 17.5v-2zm3.5 1a1 1 0 11-2 0 1 1 0 012 0zM12.159 13.059l-.682-.429a.987.987 0 01-.452-.611.946.946 0 01.134-.742.983.983 0 01.639-.425 1.023 1.023 0 01.758.15l.682.427c.369-.31.8-.54 1.267-.676V9.97c0-.258.104-.504.291-.686.187-.182.44-.284.704-.284.264 0 .517.102.704.284a.957.957 0 01.291.686v.783c.472.138.903.37 1.267.676l.682-.429a1.02 1.02 0 01.735-.107c.25.058.467.208.606.419.14.21.19.465.141.71a.97.97 0 01-.403.608l-.682.429a3.296 3.296 0 010 1.882l.682.43a.987.987 0 01.452.611.946.946 0 01-.134.742.982.982 0 01-.639.425 1.02 1.02 0 01-.758-.15l-.682-.428c-.369.31-.8.54-1.267.676v.783a.957.957 0 01-.291.686A1.01 1.01 0 0115.5 19a1.01 1.01 0 01-.704-.284.957.957 0 01-.291-.686v-.783a3.503 3.503 0 01-1.267-.676l-.682.429a1.02 1.02 0 01-.75.132.999.999 0 01-.627-.421.949.949 0 01-.135-.73.97.97 0 01.434-.61l.68-.43a3.296 3.296 0 010-1.882zm3.341-.507c-.82 0-1.487.65-1.487 1.449s.667 1.448 1.487 1.448c.82 0 1.487-.65 1.487-1.448 0-.8-.667-1.45-1.487-1.45z"
+                    fill="#0a4580"></path>
+            </g>
+        </svg>
+        Información base
+    </a>
+}

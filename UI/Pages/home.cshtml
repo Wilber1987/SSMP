@@ -1,0 +1,32 @@
+@page
+@using API.Controllers;
+@using CAPA_DATOS.Security; 
+@{
+   
+    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("./Security/Login");
+        return;
+    }
+
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./App.js" type="module"></script>
+    <link rel="stylesheet" href="~/css/AdminTemplate.css" />
+</head>
+
+<body id="App">
+    @* @if (SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+    {
+        <header id="Header" class="admin-header" >
+            <a href="~/Admin/Index" style="color: #000;">Admin Panel</a>
+        </header>
+    } *@
+</body>
+</html>

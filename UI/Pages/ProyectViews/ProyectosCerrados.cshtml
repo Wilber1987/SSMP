@@ -1,0 +1,20 @@
+@page
+@using API.Controllers
+@using CAPA_DATOS.Security
+@{
+    // Layout = null;
+    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("../Security/login");
+        return;
+    }
+    if (!SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(), HttpContext.Session.GetString("seassonKey")) 
+    && !SecurityController.HavePermission(Permissions.TECNICO_CASOS_DEPENDENCIA.ToString(), HttpContext.Session.GetString("seassonKey")) )
+    {
+        Response.Redirect("../Security/permission_error");
+        return;
+    }
+    
+}
+
+<script src="../Proyect/ProyectViews/Proyectos/CasosCerradosView.js" type="module"></script>

@@ -1,0 +1,20 @@
+@page
+@using API.Controllers
+@using CAPA_DATOS.Security
+@{
+    // Layout = null;
+    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("../Security/login");
+        return;
+    }
+    if (!SecurityController.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(),
+    HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("../Security/permission_error");
+        return;
+    }
+
+}
+
+<script type="module" src="/Proyect/Profile/ProfileManagerView.js"></script>

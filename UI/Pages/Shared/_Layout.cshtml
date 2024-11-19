@@ -1,0 +1,161 @@
+﻿@using API.Controllers
+@using CAPA_DATOS.Security
+@using DataBaseModel
+@{
+    string identify = Context.Session.GetString("seassonKey");
+    var SystemConfig = Config.SystemConfig();
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @* <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0"> *@
+    <title>@ViewData["Title"] @SystemConfig.TITULO</title>
+    <link rel="stylesheet" href="~/css/AdminTemplate.css" />
+    <script>
+        function displayNav() {
+            const Aside = document.querySelector(".Aside");
+            Aside.className = Aside.className.includes("navActive") ? "Aside" : "Aside navActive";
+        }
+    </script>
+    <script type="module">
+        import { WSecurity } from "/WDevCore/Security/WSecurity.js";
+        import { NotificacionesReader } from "/Notificaciones_Mensajeria/Gestion_Mensajes/NotificacionesView.js";
+        const logout = () => {
+            WSecurity.LogOut();
+        }
+        window.addEventListener("load", () => {
+            //active nav
+            document.querySelectorAll(".menu-item").forEach(item => {
+                if (location.href.includes(item.href)) {
+                    item.className = "active";
+                }
+            })
+            //logOut
+            btnLogOut.onclick = logout;
+            document.body.append(new NotificacionesReader({ Leidas: false }))
+        })
+    </script>
+    <script>
+        class ThemeSwitcher extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: "open" });
+                this.render();
+            }
+
+            connectedCallback() {
+                this.loadThemePreference();
+                this.shadowRoot
+                    .querySelector("button")
+                    .addEventListener("click", () => this.toggleTheme());
+            }
+
+            disconnectedCallback() {
+                this.shadowRoot
+                    .querySelector("button")
+                    .removeEventListener("click", this.toggleTheme);
+            }
+
+            render() {
+                this.shadowRoot.innerHTML = `<style>
+                    button {
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    border: none;
+                    border-radius: 5px;
+                    background-color: var(--tertiary-color);
+                    color: var(--primary-color);
+                    transition: background-color 0.3s ease, color 0.3s ease;
+                    }
+                </style>
+                <button>Cambiar Tema</button>`;
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute("data-theme");
+                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                const newTheme = currentTheme || (prefersDark ? "light" : "dark");
+
+                // Alternar entre claro y oscuro
+                const nextTheme = newTheme === "dark" ? "light" : "dark";
+                document.documentElement.setAttribute("data-theme", nextTheme);
+                localStorage.setItem("theme", nextTheme);
+            }
+
+            loadThemePreference() {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    document.documentElement.setAttribute("data-theme", savedTheme);
+                } else {
+                    // Si no hay preferencia guardada, usa el tema del sistema
+                    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                    document.documentElement.setAttribute(
+                        "data-theme",
+                        prefersDark ? "dark" : "light"
+                    );
+                }
+            }
+        }
+
+        customElements.define("theme-switcher", ThemeSwitcher);
+    </script>
+
+</head>
+
+<body id="AdminTemplate">
+    <aside class="Aside">
+        <nav>
+            <img src="~/Media/Image/close.webp" class="navIcon" onclick="displayNav()">
+            <div class="logo-container">
+                <img src="@SystemConfig.MEDIA_IMG_PATH@SystemConfig.LOGO_PRINCIPAL">
+            </div>
+            <partial name="MainMenu" />
+
+        </nav>
+    </aside>
+
+    <header id="Header" class="admin-header">
+        <img src="~/Media/Image/navIcon.png" class="navIcon" onclick="displayNav()">
+        <div class="title-container">
+            <label for="" class="title">@SystemConfig.TITULO</label>
+            <label for="" class="sub-title">@SystemConfig.SUB_TITULO</label>
+        </div>
+        <partial name="linksHeader" />
+    </header>
+    <div class="background"></div>
+
+    <div id="MainContainer">
+        <main role="main" id="Main">
+            @RenderBody()
+        </main>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        if (sessionStorage.getItem("menu_active") == null) {
+            sessionStorage.setItem("menu_active", "PrestamosClientesMenu")
+        }
+        const changeActive = (target) => {
+            if (target.className.includes("active-title")) {
+                target.className = target.className.replace("active-title", "")
+                sessionStorage.removeItem("menu_active")
+            }
+            else {
+                target.className = target.className + ' active-title';
+                sessionStorage.setItem("menu_active", target.id);
+            }
+        }
+        const menuActive = document.querySelector("#" + sessionStorage.getItem("menu_active"));
+        if (menuActive) {
+            changeActive(menuActive)
+        }
+
+    </script>
+</body>
+
+</html>

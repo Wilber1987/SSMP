@@ -1,0 +1,21 @@
+@page
+@using API.Controllers
+@using CAPA_DATOS.Security
+@{
+    // Layout = null;
+    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("../Security/login");
+        return;
+    }
+    @if (!SecurityController.HavePermission(HttpContext.Session.GetString("seassonKey"),
+        Permissions.ADMINISTRAR_CASOS_DEPENDENCIA,
+        Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
+    {
+        Response.Redirect("../Security/permission_error");
+        return;
+    }
+
+}
+
+<script src="../Proyect/ProyectViews/Proyectos/MainProyect.js" type="module"></script>

@@ -1,0 +1,144 @@
+.perfil-container {
+    display: grid;
+    grid-template-columns: 30% 30% 40%;
+    gap: 20px;
+}
+
+.card-profile {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secundary-color);
+    border-radius: 10px;
+    gap: 10px;
+    overflow: hidden;    
+    border: 1px solid rgb(73 73 73 / 25%);
+
+    & .detail {
+        display: grid;
+        grid-template-columns: 30% 60%;
+        padding: 10px 20px;
+        gap: 20px;
+    }
+
+    & .options {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+.img-thumbnail {
+    padding: .25rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.rounded-circle {
+    border-radius: 50% !important;
+}
+
+.avatar-xl {
+    height: 6rem;
+    width: 6rem;
+}
+
+
+img {
+    vertical-align: middle;
+}
+
+.user-profile-img {
+    position: relative;
+}
+
+.user-profile-img .overlay-content {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background:var(--secundary-color);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    height: 100%;
+    color: rgba(255, 255, 255, .6);
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.user-profile-img .profile-img {
+    width: 100%;
+    height: 250px;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+
+
+.perfil-header-container {
+    margin-top: -3rem !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
+    border-bottom: 1px solid var(--fourth-color);
+}
+.detail-container {
+    border-bottom: 1px solid var(--fourth-color);
+}
+
+.avatar-xl {
+    height: 6rem;
+    width: 6rem;
+}
+
+/*CARTAS DE GRUPOS*/
+:root {
+    font-size: 20px;
+}
+
+p {
+    margin: 0;
+}
+
+p:not(:last-child) {
+    margin-bottom: 1.5em;
+}
+
+.card {
+    max-width: 300px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 500px;    
+    padding: 35px;
+    border: 1px solid var(--fourth-color);
+    border-radius: 20px;
+    background-color: var(--fourth-color);
+    box-shadow: 0 0 10px 1px var(--fifty-color);
+    backdrop-filter: blur(15px);
+}
+
+.card-footer {
+    font-size: 0.65em;
+    color: #446;
+}
+
+@media (max-width:991px) {
+    .user-profile-img .profile-img {
+        height: 160px;
+    }
+
+    .perfil-container {
+        grid-template-columns: 100%;
+    }
+}

@@ -1,0 +1,40 @@
+﻿@page
+@using API.Controllers;
+@using CAPA_DATOS.Security; 
+@{  
+
+    if (!SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+    {
+        Response.Redirect("./login");
+        return;
+    }
+}
+<aside id="Aside"></aside>
+
+<script type="module">
+    import { WRender } from '../WDevCore/WModules/WComponentsTools.js';
+    import { StyleScrolls } from "../WDevCore/StyleModules/WStyleComponents.js";
+    AdminTemplate.append(WRender.createElement(StyleScrolls));
+</script>
+@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("seassonKey")))
+{
+    <script src="~/Admin/CaseManagerView.js" type="module"></script>
+}
+@if (SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+{
+    <script  src="~/Admin/AdminConfig.js" type="module"></script>
+}
+@if (SecurityController.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(), HttpContext.Session.GetString("seassonKey")))
+{
+    <script src="~/WDevCore/Security/AdminSecurity.js" type="module"></script>
+}
+@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("seassonKey")))
+{
+    <script src="~/Proyect/AdminNavigator.js" type="module"></script>
+}
+
+
+@* @if (SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("seassonKey")))
+{
+    <script src="~/Questionnaires/Views/AdminNavigator.js" type="module"></script>
+} *@
