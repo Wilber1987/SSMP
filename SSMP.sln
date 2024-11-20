@@ -3,19 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{D44E27BA-A11F-41A8-A25F-6284F2D99206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{D44E27BA-A11F-41A8-A25F-6284F2D99206}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{8A6EEF10-1A39-416C-8773-CA254F77037F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{8A6EEF10-1A39-416C-8773-CA254F77037F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore", "AppCore\AppCore.csproj", "{AD607203-E9A3-4EBF-B244-B65236192EC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCore", "AppCore\AppCore.csproj", "{AD607203-E9A3-4EBF-B244-B65236192EC2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQService", "RabbitMQService\RabbitMQService.csproj", "{EF70DB19-AB94-4191-9582-15A5B099E7C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D44E27BA-A11F-41A8-A25F-6284F2D99206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +29,15 @@ Global
 		{AD607203-E9A3-4EBF-B244-B65236192EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD607203-E9A3-4EBF-B244-B65236192EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD607203-E9A3-4EBF-B244-B65236192EC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF70DB19-AB94-4191-9582-15A5B099E7C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF70DB19-AB94-4191-9582-15A5B099E7C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF70DB19-AB94-4191-9582-15A5B099E7C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF70DB19-AB94-4191-9582-15A5B099E7C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4845B3D-3A0C-4F47-AE4E-725B68340D65}
 	EndGlobalSection
 EndGlobal
