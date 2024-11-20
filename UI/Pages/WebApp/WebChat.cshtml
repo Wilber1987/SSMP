@@ -1,0 +1,35 @@
+@page
+@using DataBaseModel
+@{
+    Layout = null;
+    var SystemConfig = Config.SystemConfig();
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>@SystemConfig.TITULO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+    </style>
+    <script>
+        localStorage.setItem("TITULO", '@SystemConfig.TITULO');
+        localStorage.setItem("SUB_TITULO", '@SystemConfig.SUB_TITULO');
+        localStorage.setItem("NOMBRE_EMPRESA", '@SystemConfig.NOMBRE_EMPRESA');
+        localStorage.setItem("MEDIA_IMG_PATH", '@SystemConfig.MEDIA_IMG_PATH');
+        localStorage.setItem("LOGO_PRINCIPAL", '@SystemConfig.LOGO_PRINCIPAL');
+    </script>
+    <script  type="module">
+        import {WChatComponent} from "/WDevCore/WComponents/WChatComponent.js";
+        window.onload = ()=> {
+            App.append(new WChatComponent());
+        } 
+    </script>
+</head>
+<body id="App">
+    
+</body>
+
+</html>
