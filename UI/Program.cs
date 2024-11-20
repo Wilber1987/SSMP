@@ -4,8 +4,8 @@ using BackgroundJob.Cron.Jobs;
 using CAPA_DATOS.Cron.Jobs;
 using Microsoft.AspNetCore.ResponseCompression;
 
-//SqlADOConexion.IniciarConexion("sa", "zaxscd", "localhost", "PROYECT_MANAGER_BD");//SIASMOP USAV
-SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
+SqlADOConexion.IniciarConexion("sa", "zaxscd", "localhost", "PROYECT_MANAGER_BD");//SIASMOP USAV
+//SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
 
 var builder = WebApplication.CreateBuilder(args);
 

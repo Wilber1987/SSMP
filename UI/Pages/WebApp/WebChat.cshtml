@@ -24,7 +24,9 @@
     <script  type="module">
         import {WChatComponent} from "/WDevCore/WComponents/WChatComponent.js";
         window.onload = ()=> {
-            App.append(new WChatComponent());
+            App.append(new WChatComponent({
+                Url: "../api/WebhookSsmpIA"
+            }));
         } 
     </script>
 </head>
