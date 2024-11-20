@@ -135,6 +135,52 @@ namespace CAPA_NEGOCIO.MAPEO
 			}
 
 		}
+		
+		/*Automatico caso con IA*/
+		public async Task<bool> CreateAutomaticCaseIA(UserMessage chat)
+		{
+			try
+			{
+                BeginGlobalTransaction();
+
+                List<ModelFiles> Attach = new List<ModelFiles>();
+ 
+				Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = chat.UserId }.Find<Tbl_Profile>();
+
+			    if (tbl_Profile == null)
+				{
+					tbl_Profile = new Tbl_Profile
+					{
+						Correo_institucional = chat?.UserId,
+						Nombres = chat?.UserId,
+						Apellidos = chat?.UserId,
+						Estado = "ACTIVO",
+						Foto = "\\Media\\profiles\\avatar.png",
+						Sexo = "Masculino"
+					};
+					tbl_Profile.Save();
+				}
+				Tbl_Profile = tbl_Profile; 
+
+				//RecoveryEmbebedCidImages(chat);
+
+				//guarda en base de dato el caso
+                Save();
+               
+                CommitGlobalTransaction();
+                return true;
+			}
+			catch (Exception ex)
+			{
+				Console.Write("error al guardar");
+				RollBackGlobalTransaction();
+				LoggerServices.AddMessageError($"error al crear el caso de: {chat.UserId}, {chat.Text}", ex);
+				return false;
+			}
+
+		}
+
+
 		private void RecoveryEmbebedCidImages(MimeMessage mail)
 		{
 			foreach (var part in mail.BodyParts)
