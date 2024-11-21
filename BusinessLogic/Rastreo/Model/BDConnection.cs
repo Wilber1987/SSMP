@@ -9,6 +9,6 @@ namespace BusinessLogic.Rastreo.Model
 {
     public class BDConnection
     {
-        public WDataMapper? DataMapper = SqlADOConexion.BuildDataMapper("localhost", "sa", "zaxscd", "");
+        public WDataMapper? DataMapper = SqlADOConexion.BuildDataMapper("localhost", "sa", "zaxscd", "IPS5Db");
     }
 }
