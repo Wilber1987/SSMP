@@ -405,6 +405,15 @@ CAPA_MODEL/obj/
 UNAN_UI/obj/
 CAPA_DATOS/obj/
 UI_USAV/obj/
+<<<<<<< HEAD
+=======
+AppCore/obj/
+AppCore/bin/
+RabbitMQService/obj/
+RabbitMQService/bin/
+BusinessLogic/obj/
+BusinessLogic/bin/
+>>>>>>> 5c7569ba3d9134dfeeb3a14f56f4c3b3420e812a
 SECURITY/bin/
 SNI_UI2/bin/
 CAPA_NEGOCIO/bin/
