@@ -43,7 +43,10 @@ namespace CAPA_NEGOCIO
                 model = "phi3:3.8b", // Aquí puedes especificar el modelo que deseas usar
                 messages = new[]
                 {
-                    new { role = "system", content = "Por favor, solo responde sobre el estado de los paquetes en tránsito, proporcionando información clara y detallada relacionada con la ubicación o estado de envío. No des información sobre otros temas. Solo responder en español." },
+                    new { role = "system", content = "Por favor, solo responde sobre el estado de los paquetes en tránsito, " +
+                    "proporcionando información clara. No des información sobre otros temas. " +
+                    "Solo responder en español. Si no entiendes lo que te pregunta el user solo contesta en que puedo ayudarte." +
+                    "No especifiques el mensaje de cliente en tu respuesta" },
                     new { role = "user", content = prompt } // Se pasa el mensaje que el usuario envía
                 },
                 stream = false // Controla si el resultado debe ser transmitido (stream)

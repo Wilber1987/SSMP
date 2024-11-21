@@ -22,4 +22,11 @@ namespace CAPA_NEGOCIO
         public int EvalCount { get; set; }
         public long EvalDuration { get; set; }
     }
+
+    public class ResponseWebApi
+    {
+        public string? Reply { get; set; }
+        public bool? WithAgentResponse { get; set; }
+        public string? ProfileName { get; set; }
+    }
 }

@@ -33,10 +33,16 @@ namespace UI.SSMP_IA.ApiControllers
                             //funcion para consultar directamente a la IA y retorna respuesta
                             var resp = EnqueueMessageWebApi(unifiedMessage, "webapi");
 
+                            ResponseWebApi reply = new ResponseWebApi()
+                            {
+                                Reply = resp,
+                                WithAgentResponse = false,
+                                ProfileName = "IA",
+                            };
                             //funcion para encolar mensage para procesar y posterior enviar una respuesta al usuario
                             //EnqueueMessage(message, "WebAPI"); //desactualizado no se ve necesario la interaccion encolada
 
-                            return Ok("Message: " + resp);
+                            return  Ok(reply);
                             break;
                         case "whatsapp":
                             // Responder al usuario según la plataforma
