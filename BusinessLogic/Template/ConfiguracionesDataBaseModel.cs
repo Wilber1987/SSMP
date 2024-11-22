@@ -76,10 +76,15 @@ namespace DataBaseModel
 			//TODO IMPLEMENTAR ESTE METODO
 			return true;
 		}
-		public static bool isNotificationsAndMessagesActive()
+		public static bool isNotificationsActive()
 		{
 			//TODO IMPLEMENTAR ESTE METODO
 			return true;
+		}
+		public static bool isMessagesActive()
+		{
+			//TODO IMPLEMENTAR ESTE METODO
+			return false;
 		}
 		public static bool isQuestionnairesActive()
 		{

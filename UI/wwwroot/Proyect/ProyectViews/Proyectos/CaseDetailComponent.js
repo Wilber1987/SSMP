@@ -324,7 +324,7 @@ class CaseDetailComponent extends HTMLElement {
         }
        .actividadDetailView {
             display: grid;
-            grid-template-columns: calc(100% - 620px) 600px;
+            grid-template-columns: calc(100% - 820px) 800px;
             grid-template-rows: 200px auto;
             gap: 20px;
         }
