@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = RabbitMQService
-build_property.ProjectDir = C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\
+build_property.ProjectDir = D:\PRO WIL\SSMP\RabbitMQService\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

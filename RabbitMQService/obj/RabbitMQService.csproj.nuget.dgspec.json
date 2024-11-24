@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\RabbitMQService\\RabbitMQService.csproj": {}
+    "D:\\PRO WIL\\SSMP\\RabbitMQService\\RabbitMQService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\AppCore\\AppCore.csproj": {
+    "D:\\PRO WIL\\SSMP\\AppCore\\AppCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\AppCore\\AppCore.csproj",
+        "projectUniqueName": "D:\\PRO WIL\\SSMP\\AppCore\\AppCore.csproj",
         "projectName": "AppCore",
-        "projectPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\AppCore\\AppCore.csproj",
-        "packagesPath": "C:\\Users\\wilbe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\AppCore\\obj\\",
+        "projectPath": "D:\\PRO WIL\\SSMP\\AppCore\\AppCore.csproj",
+        "packagesPath": "C:\\Users\\ronny\\.nuget\\packages\\",
+        "outputPath": "D:\\PRO WIL\\SSMP\\AppCore\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\wilbe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ronny\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -23,6 +27,7 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://3.14.232.66:5001/nuget/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -127,21 +132,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\BusinessLogic\\BusinessLogic.csproj": {
+    "D:\\PRO WIL\\SSMP\\BusinessLogic\\BusinessLogic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\BusinessLogic\\BusinessLogic.csproj",
+        "projectUniqueName": "D:\\PRO WIL\\SSMP\\BusinessLogic\\BusinessLogic.csproj",
         "projectName": "BusinessLogic",
-        "projectPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\BusinessLogic\\BusinessLogic.csproj",
-        "packagesPath": "C:\\Users\\wilbe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\BusinessLogic\\obj\\",
+        "projectPath": "D:\\PRO WIL\\SSMP\\BusinessLogic\\BusinessLogic.csproj",
+        "packagesPath": "C:\\Users\\ronny\\.nuget\\packages\\",
+        "outputPath": "D:\\PRO WIL\\SSMP\\BusinessLogic\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\wilbe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ronny\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -150,14 +159,15 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://3.14.232.66:5001/nuget/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\AppCore\\AppCore.csproj": {
-                "projectPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\AppCore\\AppCore.csproj"
+              "D:\\PRO WIL\\SSMP\\AppCore\\AppCore.csproj": {
+                "projectPath": "D:\\PRO WIL\\SSMP\\AppCore\\AppCore.csproj"
               }
             }
           }
@@ -192,21 +202,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\RabbitMQService\\RabbitMQService.csproj": {
+    "D:\\PRO WIL\\SSMP\\RabbitMQService\\RabbitMQService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\RabbitMQService\\RabbitMQService.csproj",
+        "projectUniqueName": "D:\\PRO WIL\\SSMP\\RabbitMQService\\RabbitMQService.csproj",
         "projectName": "RabbitMQService",
-        "projectPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\RabbitMQService\\RabbitMQService.csproj",
-        "packagesPath": "C:\\Users\\wilbe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\RabbitMQService\\obj\\",
+        "projectPath": "D:\\PRO WIL\\SSMP\\RabbitMQService\\RabbitMQService.csproj",
+        "packagesPath": "C:\\Users\\ronny\\.nuget\\packages\\",
+        "outputPath": "D:\\PRO WIL\\SSMP\\RabbitMQService\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\wilbe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ronny\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -215,14 +229,15 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://3.14.232.66:5001/nuget/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\BusinessLogic\\BusinessLogic.csproj": {
-                "projectPath": "C:\\Users\\wilbe\\repos\\NETCORE\\SSMP\\BusinessLogic\\BusinessLogic.csproj"
+              "D:\\PRO WIL\\SSMP\\BusinessLogic\\BusinessLogic.csproj": {
+                "projectPath": "D:\\PRO WIL\\SSMP\\BusinessLogic\\BusinessLogic.csproj"
               }
             }
           }
@@ -295,7 +310,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

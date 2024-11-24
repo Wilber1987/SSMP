@@ -1754,10 +1754,7 @@
           "itextsharp.xmlworker": "5.5.13"
         },
         "runtime": {
-          "AppCore.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "AppCore.dll": {}
         }
       },
       "BusinessLogic/1.0.0": {
@@ -1765,10 +1762,7 @@
           "AppCore": "1.0.0"
         },
         "runtime": {
-          "BusinessLogic.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "BusinessLogic.dll": {}
         }
       }
     }
