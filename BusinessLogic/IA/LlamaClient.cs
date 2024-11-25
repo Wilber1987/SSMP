@@ -2,6 +2,8 @@
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.Rastreo.Model;
+using BusinessLogic.Rastreo.Operations;
 using CAPA_DATOS;
 using CAPA_NEGOCIO.MAPEO;
 using MimeKit.Encodings;
@@ -11,13 +13,14 @@ namespace CAPA_NEGOCIO
 {
 	public class LlamaClient
 	{
+        public static object PlatformType { get; private set; }
 
-		public LlamaClient()
+        public LlamaClient()
 		{
 
 		}
 
-		public async Task<string> GenerateResponse(UserMessage question)
+		public async Task<UserMessage> GenerateResponse(UserMessage question)
 		{
 
 			var client = new HttpClient();
@@ -28,9 +31,15 @@ namespace CAPA_NEGOCIO
 			question.TypeProcess = tipocaso;
 
 			var dCaso = GestionaCaso(question);
+			string? trakingNumber = TrackingOperation.FindTrackingNumber(question.Text);
+			List<TrackingHistory> list = [];
+			if (trakingNumber != null)
+			{
+				list = new TrackingHistory{ Tracking = trakingNumber}.Get<TrackingHistory> ();
+			}
 			
 			// Crear el prompt estructurado para Ollama
-			string prompt = CrearPrompt(question.Text);
+			string prompt = CrearPrompt(question.Text, list);
 
 			//if (!EsConsultaEstadoPaquete(question.Text))
 			//{
@@ -46,7 +55,10 @@ namespace CAPA_NEGOCIO
 					new { role = "system", content = "Por favor, solo responde sobre el estado de los paquetes en tránsito, " +
 					"proporcionando información clara. No des información sobre otros temas. " +
 					"Solo responder en español. Si no entiendes lo que te pregunta el user solo contesta en que puedo ayudarte." +
-					"No especifiques el mensaje de cliente en tu respuesta" },
+					"No especifiques el mensaje de cliente en tu respuesta." +
+					"No contestes nada fuera de este contexto. " +
+					"Si el usuario manda preguntas ambiguas, solo contesta y pide la informacion necesaria para evaliar el estado o ubicacion del paquete" +
+					"Responde con claridad, se especifico al estado y ubicacion del paquete, no describas nada mas" },
 					new { role = "user", content = prompt } // Se pasa el mensaje que el usuario envía
 				},
 				stream = false // Controla si el resultado debe ser transmitido (stream)
@@ -68,12 +80,14 @@ namespace CAPA_NEGOCIO
 
 				//guarda interaccion de mensaje
 				await AddComment(dCaso, question);
+				question.Id_case = dCaso.Id_Case;
 
-				return messageContent; // Devuelve la respuesta del modelo Llama
+				return question; // Devuelve la respuesta del modelo Llama
 			}
 			else
-			{
-				return "Error al procesar la solicitud."; // Devuelve un mensaje de error si no fue exitosa
+			{	
+				question.MessageIA = "Error al procesar la solicitud.";
+				return question; // Devuelve un mensaje de error si no fue exitosa
 			}
 
 		}
@@ -105,14 +119,17 @@ namespace CAPA_NEGOCIO
 				}
 				else
 				{
-					var newCase = new Tbl_Case() { 
+					var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = data?.Source };
+
+                    var newCase = new Tbl_Case() { 
 						Titulo = data.UserId + data.Timestamp.ToString("yyyy-MM-dd"),
 						Descripcion = data.Text,
 						Estado = Case_Estate.Activo.ToString(),
 						Fecha_Inicio = data.Timestamp,
 						Id_Dependencia = dependencia?.Id_Dependencia,
-						Id_Servicio = servicios?.Id_Servicio
-					}; 
+						Id_Servicio = servicios?.Id_Servicio,
+						MimeMessageCaseData = mimeMessageCaseData
+                    }; 
 				  
 					newCase.CreateAutomaticCaseIA(data);
 
@@ -193,22 +210,41 @@ namespace CAPA_NEGOCIO
 
 		}
 
-		private string CrearPrompt(string numeroSeguimiento)
-		{
-			// Crear la prompt basada en el flujo de trabajo de consulta de paquetes
-			return $@"
-						1- Pregunta cliente:({numeroSeguimiento}). 
-						2- Verifica que la información que el cliente pregunta es especifica sobre estados de paquete, 
-						rastreo o ubicación de paquete. y Responde lo siguiente: Su numero de seguimiento esta siendo evaluado: $numeroSeguimiento
-						3- Si la informacion del texto no es valida pide al cliente el Identificador único del paquete para proceder con su consulta. 
-						4- Contesta breve pero haslo como que contestas al cliente si no hay numero de seguimiento solicitalo, si hay un numero de 
-							seguimiento contesta si no hay un numero de segumiento solo pide el numero al responder al cliente.
-						5- Actua como agente virtual del agencia de envios de paquetes.
-						
-			";  
-		}
+        private string CrearPrompt(string pregCliente, List<TrackingHistory> historial)
+        {
+            // Inicializar variables para la última ubicación y fecha
+            string ultimaUbicacion = "Información no disponible";
+            DateTime? ultimaFecha = null;
+			string? numeroSeguimiento = null;
+            // Validar si el historial contiene datos
+            if (historial != null && historial.Any())
+            {
+                // Ordenar por fecha descendente y tomar el primer registro
+                var ultimaEntrada = historial.OrderByDescending(x => x.Fecha_Evento).FirstOrDefault();
+                if (ultimaEntrada != null)
+                {
+                    ultimaUbicacion = ultimaEntrada.Oficina_Destino;
+                    ultimaFecha = ultimaEntrada.Fecha_Evento;
+					numeroSeguimiento = ultimaEntrada.Tracking;
+                }
+            }
 
-		private string ConsultaCasoPrompt(string text)
+            // Construir el prompt basado en los datos del historial y el número de seguimiento
+            return $@"
+        1- Pregunta cliente: ({pregCliente}).
+        2- Verifica que la información que el cliente pregunta es específica sobre estados de paquete, rastreo o ubicación.
+        3- Si el número de seguimiento no es nulo ({numeroSeguimiento}) es válido:
+            - Última ubicación registrada: {ultimaUbicacion}.
+            {(ultimaFecha.HasValue ? $"(Fecha: {ultimaFecha.Value:dd/MM/yyyy HH:mm})" : "")}
+        4- Si el número de seguimiento no es válido o no se proporciona, solicita al cliente el identificador único del paquete.
+        5- Contesta breve y directo, adaptándote como un agente virtual de una agencia de envíos de paquetes.
+        6- En caso de problemas como identificador incorrecto o datos incompletos, indica las políticas de identificación necesarias.
+        7- Si se trata de una excepción (como envíos desde Taiwán), comunica las políticas.
+    ";
+        }
+
+
+        private string ConsultaCasoPrompt(string text)
 		{
 			// Crear la prompt basada en el flujo de trabajo de consulta de paquetes
 			return $@"

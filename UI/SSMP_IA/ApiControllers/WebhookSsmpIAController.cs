@@ -35,10 +35,10 @@ namespace UI.SSMP_IA.ApiControllers
 
 							ResponseWebApi reply = new ResponseWebApi()
 							{
-								Reply = resp,
+								Reply = resp.MessageIA,
 								WithAgentResponse = false,
 								ProfileName = "IA",
-								//Id_Case = resp.Id_Case,
+								Id_Case = resp.Id_case,
 							};
 							//funcion para encolar mensage para procesar y posterior enviar una respuesta al usuario
 							//EnqueueMessage(message, "WebAPI"); //desactualizado no se ve necesario la interaccion encolada
@@ -137,7 +137,7 @@ namespace UI.SSMP_IA.ApiControllers
 		}
 
 		//Devuelve respuesta al usuario
-		private static string EnqueueMessageWebApi(UserMessage message, string source)
+		private static UserMessage EnqueueMessageWebApi(UserMessage message, string source)
 		{
 			message.Source = source; // Añadimos la fuente al mensaje
 

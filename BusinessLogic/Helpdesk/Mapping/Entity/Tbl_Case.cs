@@ -550,5 +550,9 @@ namespace CAPA_NEGOCIO.MAPEO
 	{
 		public string? MessageId { get; set; }
 		public string? InReplyTo { get;  set; }
+		public string? PlatformType { get; set; }
+	}
+	enum PlatformTypeEnum {
+		WHATSAPP, MESSENGER, INSTAGRAM, WEBAPP, TELEGRAM, TWITTER, MAIL
 	}
 }

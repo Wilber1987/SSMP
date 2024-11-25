@@ -36,7 +36,7 @@ namespace RabbitMQService.Consumers
                     var response = instanceIA.GenerateResponse(message).GetAwaiter().GetResult();
                    // var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(response); 
                     //string messageContent = jsonResponse.Message.Content;
-                    var response2 = responseIA.SendResponseToUser(message, response).GetAwaiter().GetResult();
+                    var response2 = responseIA.SendResponseToUser(message, response?.MessageIA).GetAwaiter().GetResult();
 
                     result.Message = "Proceso exitoso";
                     Console.WriteLine("Test receive" + message.Source);
