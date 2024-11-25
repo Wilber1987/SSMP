@@ -10,6 +10,8 @@
         public string? SessionId { get; set; }   // Identificador de sesión para seguir la conversación
         public string? TypeProcess { get; set; }
         public string? MessageIA { get; set; }
+
+        public int? Id_case { get; set; }
     }
 
 }

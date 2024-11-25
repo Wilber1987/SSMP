@@ -162,6 +162,9 @@ C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\refint\Rabbit
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\RabbitMQService.pdb
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\RabbitMQService.genruntimeconfig.cache
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\ref\RabbitMQService.dll
+D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\TraceReloggerLib.dll
+D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\Dia2Lib.dll
+D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\OSExtensions.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\x86\KernelTraceControl.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\x86\KernelTraceControl.Win61.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\x86\msdia140.dll
@@ -177,9 +180,6 @@ D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\msdia140.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\msvcp140.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\vcruntime140.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\vcruntime140_1.dll
-D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\TraceReloggerLib.dll
-D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\Dia2Lib.dll
-D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\OSExtensions.dll
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\appsettings.json
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\RabbitMQService.exe
 D:\PRO WIL\SSMP\RabbitMQService\bin\Debug\net8.0\RabbitMQService.deps.json
