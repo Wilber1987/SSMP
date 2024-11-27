@@ -10,7 +10,7 @@ namespace BusinessLogic.Rastreo.Model
 	{
 		public TrackingHistory()
 		{
-			this.MDataMapper = new BDConnection().DataMapper;
+			this.MDataMapper = new BDConnection().DataMapperSeguimiento;
 		}
 		public string? Tracking { get; set; }
 		public string? Nombre_Destinatario { get; set; }
@@ -34,7 +34,7 @@ namespace BusinessLogic.Rastreo.Model
 				return AdapterUtil.ConvertDataTable<TrackingHistory>(dt, this);
 			} else 
 			{
-				throw new Exception($"Traking number not found: {Tracking}");	
+				return [];	
 			}
 			
 		}

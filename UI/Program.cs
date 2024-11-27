@@ -3,9 +3,12 @@ using System.Text.Json.Serialization;
 using BackgroundJob.Cron.Jobs;
 using CAPA_DATOS.Cron.Jobs;
 using Microsoft.AspNetCore.ResponseCompression;
+using BusinessLogic.Rastreo.Model;
+using CAPA_NEGOCIO.MAPEO;
 
-//SqlADOConexion.IniciarConexion("sa", "zaxscd", "localhost", "PROYECT_MANAGER_BD");//SIASMOP USAV
-SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
+new BDConnection().IniciarMainConecction();
+Cat_Dependencias.PrepareDefaultDependencys();//crea las dependencias por defecto TODO REPARAR EN PRODUCTIVO
+//SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
 
 var builder = WebApplication.CreateBuilder(args);
 

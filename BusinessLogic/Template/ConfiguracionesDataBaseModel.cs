@@ -1,5 +1,6 @@
 using API.Controllers;
 using CAPA_DATOS;
+using Microsoft.Extensions.Configuration;
 namespace DataBaseModel
 {
 	public class Transactional_Configuraciones : EntityClass
@@ -91,7 +92,35 @@ namespace DataBaseModel
 			//TODO IMPLEMENTAR ESTE METODO
 			return true;
 		}
+		public static IConfigurationRoot AppConfiguration()
+		{
+			return new ConfigurationBuilder()
+					.SetBasePath(Directory.GetCurrentDirectory())
+					.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+					.Build();
+		}
+		public static IConfigurationSection AppConfigurationSection(string sectionName)
+		{
+			return new ConfigurationBuilder()
+					.SetBasePath(Directory.GetCurrentDirectory())
+					.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+					.Build().GetSection(sectionName);
+		}
+		public static string? AppConfigurationValue(AppConfigurationList sectionName, string value)
+		{
+			return new ConfigurationBuilder()
+					.SetBasePath(Directory.GetCurrentDirectory())
+					.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+					.Build().GetSection(sectionName.ToString())[value];
+		}
+
 	}
+	public enum AppConfigurationList
+	{
+		SQLCredentials,
+		SQLCredentialsSeguiminento,
+		IAServices,
+	}	
 
 	public enum ConfiguracionesTypeEnum
 	{
@@ -110,6 +139,8 @@ namespace DataBaseModel
 		{
 			return new SystemConfig();
 		}
+
 	}
+
 
 }

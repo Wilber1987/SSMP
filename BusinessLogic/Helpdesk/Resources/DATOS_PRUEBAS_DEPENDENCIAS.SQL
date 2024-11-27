@@ -20,11 +20,11 @@ DBCC CHECKIDENT ('PROYECT_MANAGER_BD.helpdesk.Tbl_Servicios', RESEED, 0);
 
 --DATOS BASICOS DE PRUEBA
 INSERT INTO PROYECT_MANAGER_BD.helpdesk.Cat_Dependencias
-(Descripcion, Id_Dependencia_Padre, Username, Password, Host, AutenticationType, TENAT, CLIENT, OBJECTID, CLIENT_SECRET, HostService, SMTPHOST, [default])
+(Descripcion, Id_Dependencia_Padre, Username, Password, Host, AutenticationType, TENAT, CLIENT, OBJECTID, CLIENT_SECRET, HostService, SMTPHOST, DefaultDependency)
 VALUES(N'DEVEXP', NULL, N'wdevexp@outlook.com', N'%WtestDev2023%1', N'outlook.office365.com', N'BASIC', NULL, NULL, NULL, NULL, N'OUTLOOK', N'smtp-mail.outlook.com', NULL);
 
 INSERT INTO PROYECT_MANAGER_BD.helpdesk.Cat_Dependencias
-(Descripcion, Id_Dependencia_Padre, Username, Password, Host, AutenticationType, TENAT, CLIENT, OBJECTID, CLIENT_SECRET, HostService, SMTPHOST, [default])
+(Descripcion, Id_Dependencia_Padre, Username, Password, Host, AutenticationType, TENAT, CLIENT, OBJECTID, CLIENT_SECRET, HostService, SMTPHOST, DefaultDependency)
 VALUES(N'ON_DEVEXP', NULL, N'wilbermatusgonzalez@wexpdev.onmicrosoft.com', N'-', N'outlook.office365.com', N'AUTH2', N'8097a003-1162-40cb-ba74-f198eda4d6e9', N'b3161d3c-f437-47b7-aa3b-6a0ed3532f5b', N'1c56f54e-0255-44fd-a5ea-8be46debd21c', N'RrH8Q~O6hHqDetZWbNOYLQrdRgn.WupFPlSpBatO', N'OUTLOOK', N'smtp-mail.outlook.com', 1);
 --servicios de prueba
 
@@ -162,7 +162,7 @@ VALUES(1, 1, N'ACTIVO');
 
 INSERT INTO PROYECT_MANAGER_BD.[security].Security_Users
 (Nombres, Estado, Descripcion, Password, Mail, Token, Token_Date, Token_Expiration_Date)
-VALUES(N'ADMIN', N'ACTIVO', N'ADMIN', N'PxI/Pz8/Pz8/PwdSP2E/Pw==', N'admin@admin.net', NULL, NULL, NULL);
+VALUES(N'ADMIN', N'ACTIVO', N'ADMIN', N'ixKQx9yhnazTxAdS4GGV2g==', N'admin@admin.net', NULL, NULL, NULL);
 
 INSERT INTO PROYECT_MANAGER_BD.[security].Tbl_Profile
 (Nombres, Apellidos, FechaNac, IdUser, Sexo, Foto, DNI, Correo_institucional, Id_Pais_Origen, Estado)
@@ -178,7 +178,7 @@ VALUES(1, 1, NULL);
 
 INSERT INTO PROYECT_MANAGER_BD.[security].Security_Users
 (Nombres, Estado, Descripcion, Password, Mail, Token, Token_Date, Token_Expiration_Date)
-VALUES(N'TECNICO', N'ACTIVO', N'TECNICO', N'PxI/Pz8/Pz8/PwdSP2E/Pw==', N'tecnico@tecnico.net', NULL, NULL, NULL);
+VALUES(N'TECNICO', N'ACTIVO', N'TECNICO', N'ixKQx9yhnazTxAdS4GGV2g==', N'tecnico@tecnico.net', NULL, NULL, NULL);
 
 INSERT INTO PROYECT_MANAGER_BD.[security].Tbl_Profile
 (Nombres, Apellidos, FechaNac, IdUser, Sexo, Foto, DNI, Correo_institucional, Id_Pais_Origen, Estado)
@@ -202,7 +202,7 @@ VALUES(2, 2, N'ACTIVO');
 
 INSERT INTO PROYECT_MANAGER_BD.[security].Security_Users
 (Nombres, Estado, Descripcion, Password, Mail, Token, Token_Date, Token_Expiration_Date)
-VALUES(N'GESTOR', N'ACTIVO', N'GESTOR', N'PxI/Pz8/Pz8/PwdSP2E/Pw==', N'GESTOR@GESTOR.net', NULL, NULL, NULL);
+VALUES(N'GESTOR', N'ACTIVO', N'GESTOR', N'ixKQx9yhnazTxAdS4GGV2g==', N'GESTOR@GESTOR.net', NULL, NULL, NULL);
 
 INSERT INTO PROYECT_MANAGER_BD.[security].Tbl_Profile
 (Nombres, Apellidos, FechaNac, IdUser, Sexo, Foto, DNI, Correo_institucional, Id_Pais_Origen, Estado)

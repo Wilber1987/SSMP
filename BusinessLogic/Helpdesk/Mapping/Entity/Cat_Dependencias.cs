@@ -47,7 +47,7 @@ public class Cat_Dependencias : EntityClass
 		{
 			Id_Perfil = Tbl_Profile.GetUserProfile(identity)?.Id_Perfil
 		};
-		return Where<Cat_Dependencias>( FilterData.In(
+		return Where<Cat_Dependencias>(FilterData.In(
 			"Id_Dependencia",
 			Inst.Get<Tbl_Dependencias_Usuarios>().Select(p => p.Id_Dependencia.ToString()).ToArray()
 		));
@@ -106,4 +106,71 @@ public class Cat_Dependencias : EntityClass
 		}
 		return this.Update();
 	}
+
+	public static void PrepareDefaultDependencys()
+	{
+		var DefaultDependencysList = Enum.GetValues(typeof(DefaultDependencys));
+		foreach (DefaultDependencys defaultDependency in DefaultDependencysList)
+		{
+			var dep = new Cat_Dependencias { Descripcion = defaultDependency.ToString() }.Find<Cat_Dependencias>();
+			if (dep == null)
+			{
+				List<Tbl_Servicios> servicios = [];
+				if (defaultDependency == DefaultDependencys.DEFAULT)
+				{
+					foreach (var service in Enum.GetValues(typeof(DefaultServices_Default)))
+					{
+						servicios.Add(new Tbl_Servicios{ Descripcion_Servicio = service.ToString() });
+					}
+					
+				} else if (defaultDependency == DefaultDependencys.CONSULTAS_SEGUIMIENTOS)
+				{
+					foreach (var service in Enum.GetValues(typeof(DefaultServices_DptConsultasSeguimientos)))
+					{
+						servicios.Add(new Tbl_Servicios{ Descripcion_Servicio = service.ToString() });
+					}
+					
+				} else if (defaultDependency == DefaultDependencys.DEPARTAMENTO_DE_QUEJAS)
+				{
+					foreach (var service in Enum.GetValues(typeof(DefaultServices_DptQuejas)))
+					{
+						servicios.Add(new Tbl_Servicios{ Descripcion_Servicio = service.ToString() });
+					}
+					
+				}
+				new Cat_Dependencias
+				{
+					Descripcion = defaultDependency.ToString(),
+					Tbl_Servicios = servicios
+				}.Save();
+			}
+		}
+	}
+}
+public enum DefaultDependencys
+{
+	DEFAULT,
+	CONSULTAS_SEGUIMIENTOS,
+	DEPARTAMENTO_DE_QUEJAS
+	
+}
+public enum DefaultServices_Default
+{
+	ASISTENCIA_GENERAL,
+	CONSULTA_DE_HORARIOS,
+	CONSULTA_DE_CONTACTO,
+	CONSULTA_SOBRE_EVENTOS,
+	SOLICITUD_DE_ASISTENIA
+}
+public enum DefaultServices_DptConsultasSeguimientos
+{	
+	RASTREO_Y_SEGUIMIENTOS,	
+	INFORMACION_ENTREGAS_SEGUIMIENTOS,
+	INFORMACION_SOBRE_DOCUMENTOS
+}
+public enum DefaultServices_DptQuejas
+{
+	QUEJAS_POR_RETRASOS,
+	QUEJAS_POR_IMPORTES,
+	QUEJAS_POR_ESTAFA	
 }

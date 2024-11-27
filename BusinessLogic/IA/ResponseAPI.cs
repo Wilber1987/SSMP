@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DataBaseModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,6 @@ namespace CAPA_NEGOCIO.IA
                     case "Messenger":
                         await SendResponseToMessengerAsync(userMessage.UserId, response);
                         break;
-
                     default:
                         Console.WriteLine("Canal no reconocido.");
                         break;
@@ -51,7 +51,7 @@ namespace CAPA_NEGOCIO.IA
                     var content = new StringContent(JsonConvert.SerializeObject(
                         new { UserId = userId, MessageIA = response }),
                         Encoding.UTF8, "application/json");
-                    var responseMessage = await client.PostAsync("https://localhost:5101/api/MessageIA/webapi/response", content); 
+                    var responseMessage = await client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.IAServices, "Server"), content); 
                     if (responseMessage.IsSuccessStatusCode) 
                     { 
                         return "OK"; 
