@@ -160,7 +160,7 @@ namespace CAPA_NEGOCIO.MAPEO
 					};
 					tbl_Profile.Save();
 				}
-				Tbl_Profile = tbl_Profile; 
+				Id_Perfil = tbl_Profile.Id_Perfil;
 
 				//RecoveryEmbebedCidImages(chat);
 
@@ -551,7 +551,8 @@ namespace CAPA_NEGOCIO.MAPEO
 		public string? MessageId { get; set; }
 		public string? InReplyTo { get;  set; }
 		public string? PlatformType { get; set; }
-	}
+        public bool WithAgent { get;  set; }
+    }
 	enum PlatformTypeEnum {
 		WHATSAPP, MESSENGER, INSTAGRAM, WEBAPP, TELEGRAM, TWITTER, MAIL
 	}

@@ -26,6 +26,17 @@ namespace CAPA_NEGOCIO
 
 		public async Task<UserMessage> GenerateResponse(UserMessage question)
 		{
+			string caseTitle = $"{question?.UserId} - {question?.Timestamp.ToString("yyyy-MM-dd")}";
+			var instaCase = new Tbl_Case().Find<Tbl_Case>(FilterData.Equal("Titulo", caseTitle));
+
+			if (instaCase != null && instaCase.MimeMessageCaseData?.WithAgent == true)
+			{
+				question!.WithAgentResponse = true;
+				question.Id_case = instaCase.Id_Case;
+				instaCase.MimeMessageCaseData!.WithAgent = true;
+				await AddComment(instaCase, question);
+				return question;
+			}
 			string? trakingNumber = TrackingOperation.FindTrackingNumber(question.Text);
 			var client = new HttpClient();
 			question.Timestamp = DateTime.Now;
@@ -36,8 +47,8 @@ namespace CAPA_NEGOCIO
 
 			question.TypeProcess = tipocaso;
 
-			var dCaso = GestionaCaso(question);
-			
+			var dCaso = GestionaCaso(question, caseTitle, instaCase);
+
 			List<TrackingHistory> list = [];
 			if (trakingNumber != null)
 			{
@@ -45,6 +56,16 @@ namespace CAPA_NEGOCIO
 				//tipocaso = DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString();
 				string responseUltimaHubicacionText = ProntManager.BuildTrakingResponse(trakingNumber, list);
 				question.MessageIA = responseUltimaHubicacionText;
+				return question;
+			}
+			else if (tipocaso == "SOLICITUD_DE_ASISTENCIA")
+			{
+				question.MessageIA = "Con mucho gusto te comunicare con un asistente de servicio al cliente, por favor espera en linea";
+				question.WithAgentResponse = true;
+				question.Id_case = dCaso.Id_Case;
+				dCaso.MimeMessageCaseData!.WithAgent = true;
+				await AddComment(dCaso, question);
+				dCaso.Update();
 				return question;
 			}
 			else
@@ -114,13 +135,11 @@ namespace CAPA_NEGOCIO
 			return historialMensajes;
 		}
 
-		public static Tbl_Case GestionaCaso(UserMessage data)
+		public static Tbl_Case GestionaCaso(UserMessage data, string caseTitle, Tbl_Case? instaCase)
 		{
 			try
 			{
 				string resp = "";
-				string caseTitle = $"{data?.UserId} - {data?.Timestamp.ToString("yyyy-MM-dd")}";
-
 
 				Tbl_Servicios? servicios = new Tbl_Servicios().Find<Tbl_Servicios>(FilterData.Equal("Descripcion_Servicio", data?.TypeProcess?.ToString()));
 
@@ -134,7 +153,7 @@ namespace CAPA_NEGOCIO
 					}.Find<Cat_Dependencias>();
 				}
 				//filtra casoi especifico
-				var instaCase = new Tbl_Case().Find<Tbl_Case>(FilterData.Equal("Titulo", caseTitle));
+
 
 				if (instaCase != null)
 				{
@@ -186,16 +205,20 @@ namespace CAPA_NEGOCIO
 				Mail = interaction.UserId,
 			};
 			us.Save();
-			Tbl_Comments ia = new Tbl_Comments()
+			if (interaction.MessageIA != null)
 			{
-				Id_Case = data?.Id_Case,
-				Body = interaction.MessageIA,
-				NickName = "IA",
-				Fecha = DateTime.Now,
-				Estado = CommetsState.Leido.ToString(),
-				Mail = "IA@soporte.net",
-			};
-			ia.Save();
+				Tbl_Comments ia = new Tbl_Comments()
+				{
+					Id_Case = data?.Id_Case,
+					Body = interaction.MessageIA,
+					NickName = "IA",
+					Fecha = DateTime.Now,
+					Estado = CommetsState.Leido.ToString(),
+					Mail = "IA@soporte.net",
+				};
+				ia.Save();
+			}
+
 		}
 
 		public async Task<string> EvaluaCaso(UserMessage question)

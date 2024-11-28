@@ -160,7 +160,7 @@ public enum DefaultServices_Default
 	CONSULTA_DE_HORARIOS,
 	CONSULTA_DE_CONTACTO,
 	CONSULTA_SOBRE_EVENTOS,
-	SOLICITUD_DE_ASISTENIA
+	SOLICITUD_DE_ASISTENCIA
 }
 public enum DefaultServices_DptConsultasSeguimientos
 {	

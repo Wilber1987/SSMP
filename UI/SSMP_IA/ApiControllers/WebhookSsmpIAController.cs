@@ -36,7 +36,7 @@ namespace UI.SSMP_IA.ApiControllers
 							ResponseWebApi reply = new ResponseWebApi()
 							{
 								Reply = resp.MessageIA,
-								WithAgentResponse = false,
+								WithAgentResponse = resp.WithAgentResponse ?? false,
 								ProfileName = "IA",
 								Id_Case = resp.Id_case,
 							};
@@ -44,7 +44,6 @@ namespace UI.SSMP_IA.ApiControllers
 							//EnqueueMessage(message, "WebAPI"); //desactualizado no se ve necesario la interaccion encolada
 
 							return  Ok(reply);
-							break;
 						case "whatsapp":
 							// Responder al usuario según la plataforma
 							MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
@@ -85,7 +84,7 @@ namespace UI.SSMP_IA.ApiControllers
 					Source = "WhatsApp",
 					UserId = whatsAppMessage.from,
 					Text = whatsAppMessage.text?.body,
-					Timestamp = DateTime.UtcNow // O extraer del mensaje
+					Timestamp = DateTime.Now // O extraer del mensaje
 				};
 			}
 			catch
@@ -108,7 +107,7 @@ namespace UI.SSMP_IA.ApiControllers
 					Source = "Messenger",
 					UserId = messagingEvent.sender?.id,
 					Text = messagingEvent.message?.text,
-					Timestamp = DateTime.UtcNow // O extraer del mensaje
+					Timestamp = DateTime.Now // O extraer del mensaje
 				};
 			}
 			catch

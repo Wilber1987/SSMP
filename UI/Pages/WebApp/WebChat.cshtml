@@ -25,7 +25,14 @@
         import {WChatComponent} from "/WDevCore/WComponents/WChatComponent.js";
         window.onload = ()=> {
             App.append(new WChatComponent({
-                Url: "../api/WebhookSsmpIA"
+                Url: "../api/WebhookSsmpIA",
+                UrlGetConfigData: "../api/ApiEntityHelpdesk/getTbl_Comments",
+                UrlSearch: "../api/ApiEntityHelpdesk/getTbl_Comments",
+                UrlAdd: "../api/ApiEntityHelpdesk/saveTbl_Comments",
+                UserIdProp: "Id_User",
+                CommentsIdentify: undefined,
+                CommentsIdentifyName: "Id_Case",
+                AddObject: false
             }));
         } 
     </script>

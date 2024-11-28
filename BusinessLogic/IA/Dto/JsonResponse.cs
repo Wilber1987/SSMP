@@ -21,6 +21,7 @@ namespace CAPA_NEGOCIO
 		public long PromptEvalDuration { get; set; }
 		public int EvalCount { get; set; }
 		public long EvalDuration { get; set; }
+		public bool? WithAgentResponse { get; set; }
 	}
 
 	public class ResponseWebApi
