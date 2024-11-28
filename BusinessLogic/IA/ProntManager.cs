@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using BusinessLogic.IA.Model;
 using BusinessLogic.Rastreo.Model;
 using CAPA_NEGOCIO.IA;
+using CAPA_NEGOCIO.MAPEO;
 
 namespace BusinessLogic.IA
 {
 	public class ProntManager
 	{
-		 public static string[] ValidCodes = {
+		 public static string[] ValidCodes = Tbl_Servicios.GetServicesCodes(); /*{
 			"RASTREO_Y_SEGUIMIENTOS",
 			"INFORMACION_ENTREGAS_SEGUIMIENTOS",
 			"INFORMACION_SOBRE_DOCUMENTOS",
@@ -22,7 +23,7 @@ namespace BusinessLogic.IA
 			"CONSULTA_SOBRE_EVENTOS",
 			"SOLICITUD_DE_ASISTENCIA",
 			"ASISTENCIA_GENERAL"
-		};
+		};*/
 		public static string ProntValidation(string? prontTpe)
 		{
 			return GetPront(prontTpe);
@@ -105,71 +106,7 @@ namespace BusinessLogic.IA
 
 		public static string ServicesEvaluatorPrompt(string text)
 		{
-			return GetPront("SERVICES_PRONT_VALIDATOR").Replace("{text}", text);
-			
-			/*return $@"Por favor, evalúa el texto proporcionado por el cliente y responde únicamente con el código de clasificación correspondiente. Responde **solo** con el código, sin incluir ningún texto adicional.
-				los codigos son los siguientes:
-					- ""RASTREO_Y_SEGUIMIENTOS""
-					- ""INFORMACION_ENTREGAS_SEGUIMIENTOS""
-					- ""INFORMACION_SOBRE_DOCUMENTOS""
-					- ""QUEJAS_POR_RETRASOS""
-					- ""QUEJAS_POR_IMPORTES""
-					- ""QUEJAS_POR_ESTAFA""
-					- ""CONSULTA_DE_HORARIOS""
-					- ""CONSULTA_DE_CONTACTO""
-					- ""CONSULTA_SOBRE_EVENTOS""
-					- ""SOLICITUD_DE_ASISTENCIA""
-					- ""ASISTENCIA_GENERAL""
-
-				Consulta inicial del cliente: ""{text}"".
-
-				Categorías de respuesta:
-				1. Si el cliente menciona el estado o ubicación de un paquete:
-				Responde: ""RASTREO_Y_SEGUIMIENTOS"".
-
-				2. Si el cliente menciona tiempos de espera o ubicación de entrega:
-				Responde: ""INFORMACION_ENTREGAS_SEGUIMIENTOS"".
-
-				3. Si el cliente pregunta por documentación necesaria:
-				Responde: ""INFORMACION_SOBRE_DOCUMENTOS"".
-
-				4. Si el cliente menciona retrasos o quejas sobre entregas tardías:
-				Responde: ""QUEJAS_POR_RETRASOS"".
-
-				5. Si el cliente menciona costos adicionales o impuestos inesperados:
-				Responde: ""QUEJAS_POR_IMPORTES"".
-
-				6. Si el cliente menciona estafas, robos, fraudes o envíos incompletos:
-				Responde: ""QUEJAS_POR_ESTAFA"".
-
-				7. Si el cliente pregunta por horarios de atención:
-				Responde: ""CONSULTA_DE_HORARIOS"".
-
-				8. Si el cliente pregunta por números de contacto o sitios web:
-				Responde: ""CONSULTA_DE_CONTACTO"".
-
-				9. Si el cliente menciona eventos especiales en correos:
-				Responde: ""CONSULTA_SOBRE_EVENTOS"".
-
-				10. Si el cliente desea hablar con soporte técnico o un agente:
-					Responde: ""SOLICITUD_DE_ASISTENCIA"".
-
-				11. Si no puedes identificar ninguna de las categorías anteriores:
-					Responde: ""ASISTENCIA_GENERAL"".
-
-				Ejemplo de respuestas:
-				- ""RASTREO_Y_SEGUIMIENTOS""
-				- ""INFORMACION_ENTREGAS_SEGUIMIENTOS""
-				- ""INFORMACION_SOBRE_DOCUMENTOS""
-				- ""QUEJAS_POR_RETRASOS""
-				- ""QUEJAS_POR_IMPORTES""
-				- ""QUEJAS_POR_ESTAFA""
-				- ""CONSULTA_DE_HORARIOS""
-				- ""CONSULTA_DE_CONTACTO""
-				- ""CONSULTA_SOBRE_EVENTOS""
-				- ""SOLICITUD_DE_ASISTENCIA""
-				- ""ASISTENCIA_GENERAL""
-			"; */
+			return GetPront("SERVICES_PRONT_VALIDATOR").Replace("{text}", text);	
 		}
 	}
 }

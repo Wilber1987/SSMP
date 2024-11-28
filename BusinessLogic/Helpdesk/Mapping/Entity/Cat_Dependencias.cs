@@ -120,23 +120,37 @@ public class Cat_Dependencias : EntityClass
 				{
 					foreach (var service in Enum.GetValues(typeof(DefaultServices_Default)))
 					{
-						servicios.Add(new Tbl_Servicios{ Descripcion_Servicio = service.ToString() });
+						servicios.Add(new Tbl_Servicios
+						{
+							Descripcion_Servicio = service.ToString(),
+							Nombre_Servicio = service.ToString()
+						});
 					}
-					
-				} else if (defaultDependency == DefaultDependencys.CONSULTAS_SEGUIMIENTOS)
+
+				}
+				else if (defaultDependency == DefaultDependencys.CONSULTAS_SEGUIMIENTOS)
 				{
 					foreach (var service in Enum.GetValues(typeof(DefaultServices_DptConsultasSeguimientos)))
 					{
-						servicios.Add(new Tbl_Servicios{ Descripcion_Servicio = service.ToString() });
+						servicios.Add(new Tbl_Servicios
+						{
+							Descripcion_Servicio = service.ToString(),
+							Nombre_Servicio = service.ToString()
+						});
 					}
-					
-				} else if (defaultDependency == DefaultDependencys.DEPARTAMENTO_DE_QUEJAS)
+
+				}
+				else if (defaultDependency == DefaultDependencys.DEPARTAMENTO_DE_QUEJAS)
 				{
 					foreach (var service in Enum.GetValues(typeof(DefaultServices_DptQuejas)))
 					{
-						servicios.Add(new Tbl_Servicios{ Descripcion_Servicio = service.ToString() });
+						servicios.Add(new Tbl_Servicios
+						{
+							Descripcion_Servicio = service.ToString(),
+							Nombre_Servicio = service.ToString()
+						});
 					}
-					
+
 				}
 				new Cat_Dependencias
 				{
@@ -152,7 +166,7 @@ public enum DefaultDependencys
 	DEFAULT,
 	CONSULTAS_SEGUIMIENTOS,
 	DEPARTAMENTO_DE_QUEJAS
-	
+
 }
 public enum DefaultServices_Default
 {
@@ -163,8 +177,8 @@ public enum DefaultServices_Default
 	SOLICITUD_DE_ASISTENCIA
 }
 public enum DefaultServices_DptConsultasSeguimientos
-{	
-	RASTREO_Y_SEGUIMIENTOS,	
+{
+	RASTREO_Y_SEGUIMIENTOS,
 	INFORMACION_ENTREGAS_SEGUIMIENTOS,
 	INFORMACION_SOBRE_DOCUMENTOS
 }
@@ -172,5 +186,6 @@ public enum DefaultServices_DptQuejas
 {
 	QUEJAS_POR_RETRASOS,
 	QUEJAS_POR_IMPORTES,
-	QUEJAS_POR_ESTAFA	
+	QUEJAS_POR_ESTAFA,
+	QUEJAS_GENERALES
 }

@@ -56,6 +56,9 @@ namespace CAPA_NEGOCIO
 				//tipocaso = DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString();
 				string responseUltimaHubicacionText = ProntManager.BuildTrakingResponse(trakingNumber, list);
 				question.MessageIA = responseUltimaHubicacionText;
+				question.Id_case = dCaso.Id_Case;
+				question.WithAgentResponse = false;
+				await AddComment(dCaso, question);
 				return question;
 			}
 			else if (tipocaso == "SOLICITUD_DE_ASISTENCIA")
