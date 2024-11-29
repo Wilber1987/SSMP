@@ -1,4 +1,5 @@
-﻿using CAPA_NEGOCIO;
+﻿using CAPA_DATOS;
+using CAPA_NEGOCIO;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RabbitMQ;
@@ -67,6 +68,7 @@ namespace UI.SSMP_IA.ApiControllers
 			{
 				// Manejo de errores genérico
 				Console.WriteLine($"Error processing message: {ex}");
+				LoggerServices.AddMessageError($"ERROR: procesando mensaje", ex);
 				return StatusCode(500, "Internal Server Error");
 			}
 		}

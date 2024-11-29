@@ -16,7 +16,6 @@ C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\msdia14
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\msvcp140.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\vcruntime140.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\arm64\vcruntime140_1.dll
-C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\appsettings.json
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\RabbitMQService.exe
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\RabbitMQService.deps.json
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\RabbitMQService.runtimeconfig.json

@@ -78,7 +78,7 @@ namespace RabbitMQService
                     message = $"{message}:{Environment.NewLine}{string.Join(Environment.NewLine, result.Messages)}";
                 }
  
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(200);
             };
             channel.BasicConsume(queue: _queueName,
                                     autoAck: true,
