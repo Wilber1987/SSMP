@@ -1,29 +1,17 @@
-﻿using System.Diagnostics;
-using System.Security.AccessControl;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using BusinessLogic.IA;
-using BusinessLogic.IA.Model;
 using BusinessLogic.Rastreo.Model;
 using BusinessLogic.Rastreo.Operations;
 using CAPA_DATOS;
 using CAPA_NEGOCIO.MAPEO;
-using MimeKit.Encodings;
+using DataBaseModel;
 using Newtonsoft.Json;
-using static CAPA_NEGOCIO.MAPEO.Cat_Dependencias;
 
 namespace CAPA_NEGOCIO
 {
 	public class LlamaClient
 	{
-		public static object PlatformType { get; private set; }
-
-		public LlamaClient()
-		{
-
-		}
-
 		public async Task<UserMessage> GenerateResponse(UserMessage question)
 		{
 			try
@@ -40,7 +28,7 @@ namespace CAPA_NEGOCIO
 					return question;
 				}
 				string? trakingNumber = TrackingOperation.FindTrackingNumber(question.Text);
-				var client = new HttpClient();
+
 				question.Timestamp = DateTime.Now;
 
 				// evalua tipo de caso
@@ -77,27 +65,11 @@ namespace CAPA_NEGOCIO
 				{
 					// Crear el prompt estructurado para Ollama
 					string prompt = ProntManager.CrearPrompt(question.Text, trakingNumber, list, tipocaso);
-
-					//if (!EsConsultaEstadoPaquete(question.Text))
-					//{
-					//    return "Por favor, pregunta por el estado de tu paquete proporcionando un número de seguimiento.";
-					//}
-					//ProntTypes prontTypes = DefineProntType(dCaso);
 					List<object> historialMensajes = GetHistoryMessage(question, dCaso, prompt, tipocaso);
-					var requestBody = new
-					{
-						model = "phi3:3.8b", // Especifica el modelo
-						messages = historialMensajes,
-						stream = false, // Controla si el resultado debe ser transmitido (stream)
-						temperature = 0.2, // Controla la creatividad de las respuestas
-						frequency_penalty = 0.2, // Reduce repeticiones en las respuestas
-						presence_penalty = 0.0, // Fomenta nuevas ideas sin desviarse del contexto
-						max_tokens = 1 // Establece el número máximo de tokens permitidos en la respuesta
-					};
-
+					object requestBody = BuildLLamaConfig(historialMensajes);
 					var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
 					// Realiza la solicitud POST
-					var response = await client.PostAsync("http://localhost:11434/api/chat", content);
+					HttpResponseMessage response = await GetIAResponse(content);
 					if (response.IsSuccessStatusCode)
 					{
 						// Si la solicitud es exitosa, lee la respuesta
@@ -128,6 +100,21 @@ namespace CAPA_NEGOCIO
 
 		}
 
+		private static object BuildLLamaConfig(List<object> historialMensajes)
+		{
+			var requestBody = new
+			{
+				model = SystemConfig.AppConfigurationValue(AppConfigurationList.IAServices, "Model"), // Especifica el modelo
+				messages = historialMensajes,
+				stream = false, // Controla si el resultado debe ser transmitido (stream)
+				temperature = 0.7, // Controla la creatividad de las respuestas
+				frequency_penalty = 0.2, // Reduce repeticiones en las respuestas
+				presence_penalty = 0.2, // Fomenta nuevas ideas sin desviarse del contexto
+				//max_tokens = 1 // Establece el número máximo de tokens permitidos en la respuesta
+			};
+			return requestBody;
+		}
+
 		private static List<object> GetHistoryMessage(UserMessage question, Tbl_Case dCaso, string prompt, string prontTypes)
 		{
 			var historialMensajes = new List<object>
@@ -139,11 +126,11 @@ namespace CAPA_NEGOCIO
 			historialMensajes.AddRange(tbl_Comments.Select(c =>
 				new
 				{
-					role = c.NickName == question.UserId ? "human" : "asistant",
+					role = c.NickName == question.UserId ? "user" : "asistant",
 					content = c.Body
 				}
 			));
-			historialMensajes.Add(new { role = "human", content = prompt });
+			historialMensajes.Add(new { role = "user", content = prompt });
 			return historialMensajes;
 		}
 
@@ -151,10 +138,7 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
-				string resp = "";
-
 				Tbl_Servicios? servicios = new Tbl_Servicios().Find<Tbl_Servicios>(FilterData.Equal("Descripcion_Servicio", data?.TypeProcess?.ToString()));
-
 				Cat_Dependencias? dependencia = new Cat_Dependencias().Find<Cat_Dependencias>(FilterData.Equal("Id_Dependencia", servicios?.Id_Dependencia ?? -1));
 
 				if (dependencia == null)
@@ -164,9 +148,6 @@ namespace CAPA_NEGOCIO
 						DefaultDependency = true
 					}.Find<Cat_Dependencias>();
 				}
-				//filtra casoi especifico
-
-
 				if (instaCase != null)
 				{
 					if (dependencia?.DefaultDependency != true && instaCase.Cat_Dependencias?.DefaultDependency == true)
@@ -190,9 +171,7 @@ namespace CAPA_NEGOCIO
 						Id_Servicio = servicios?.Id_Servicio,
 						MimeMessageCaseData = mimeMessageCaseData
 					};
-
 					newCase.CreateAutomaticCaseIA(data);
-
 					return newCase;
 				}
 
@@ -205,7 +184,6 @@ namespace CAPA_NEGOCIO
 
 		public async Task AddComment(Tbl_Case data, UserMessage interaction)
 		{
-
 
 			Tbl_Comments us = new Tbl_Comments()
 			{
@@ -235,31 +213,15 @@ namespace CAPA_NEGOCIO
 
 		public async Task<string> EvaluaCaso(UserMessage question)
 		{
-			var client = new HttpClient();
 
 			//string prompt = ProntManager.ServicesEvaluatorPrompt(question.Text);
-
-			// Crea el contenido que se enviará en la solicitud
-			var requestBody = new
-			{
-				model = "phi3:3.8b", // Aquí puedes especificar el modelo que deseas usar
-				messages = new[]
-				{
-					new { role = "system", content =  ProntManager.GetPront("SERVICES_PRONT_VALIDATOR_CONTEXT")},
-					new { role = "user", content = question.Text } // Se pasa el mensaje que el usuario envía
-				},
-				temperature = 0.0, // Controla la creatividad de las respuestas
-				frequency_penalty = 0, // Reduce repeticiones en las respuestas
-				presence_penalty = 0, // Fomenta nuevas ideas sin desviarse del contexto
-				max_tokens = 1, // Establece el número máximo de tokens permitidos en la respuesta
-				stream = false // Controla si el resultado debe ser transmitido (stream)
-			};
-
+			List<object> historialMensajes = [
+				new { role = "system", content =  ProntManager.GetPront("SERVICES_PRONT_VALIDATOR_CONTEXT")},
+				new { role = "user", content = question.Text } // Se pasa el mensaje que el usuario envía
+			];
+			object requestBody = BuildLLamaConfig(historialMensajes);
 			var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-
-			// Realiza la solicitud POST
-			var response = await client.PostAsync("http://localhost:11434/api/chat", content);
-
+			HttpResponseMessage response = await GetIAResponse(content);
 			if (response.IsSuccessStatusCode)
 			{
 				// Si la solicitud es exitosa, lee la respuesta
@@ -277,6 +239,17 @@ namespace CAPA_NEGOCIO
 
 		}
 
+		private static async Task<HttpResponseMessage> GetIAResponse(StringContent content)
+		{
+			var client = new HttpClient
+			{
+				Timeout = TimeSpan.FromMinutes(10) // Ajusta según sea necesario
+			};
+			// Realiza la solicitud POST
+			var response = await client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.IAServices, "IAHost"), content);
+			return response;
+		}
+
 		static string ExtractAndValidateCode(string botResponse, string[] validCodes)
 		{
 			// Expresión regular para encontrar palabras exactas que coincidan con los códigos válidos
@@ -291,25 +264,6 @@ namespace CAPA_NEGOCIO
 			{
 				return "ASISTENCIA_GENERAL"; // Retorna un código por defecto si no encuentra coincidencias
 			}
-		}
-
-
-		// Método para analizar el mensaje y determinar si es una consulta válida sobre el estado del paquete
-		public bool EsConsultaEstadoPaquete(string mensaje)
-		{
-			// Definir una lista de palabras clave que indican una consulta sobre el estado de un paquete
-			var palabrasClave = new[] { "paquete",
-										"estado",
-										"seguimiento",
-										"dónde está mi paquete",
-										"ubicación",
-										"rastreo" };
-
-			// Convertir el mensaje a minúsculas para facilitar la búsqueda
-			mensaje = mensaje.ToLower();
-
-			// Verificar si alguna palabra clave está presente en el mensaje
-			return palabrasClave.Any(palabra => mensaje.Contains(palabra));
 		}
 	}
 

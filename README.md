@@ -15,3 +15,13 @@ http://190.99.117.243/webapp/webchat
 
 dotnet publish -c Release -o C:\wwwroot\ssmp
 ssmpV20241127
+
+IA MODELS - SMALL
+"llama3.2:1b"
+ollama run llama3.2:1b
+https://ollama.com/library/llama3.2
+
+IA MODELS -  STANDARD
+"phi3:3.8b"
+ollama run phi3:3.8b
+https://ollama.com/library/phi3:3.8b
