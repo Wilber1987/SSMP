@@ -33,7 +33,8 @@ namespace CAPA_NEGOCIO
 
 				// evalua tipo de caso
 				string tipocaso = trakingNumber != null ? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()
-				 : ExtractAndValidateCode(EvaluaCaso(question).GetAwaiter().GetResult(), ProntManager.ValidCodes);
+				 : CaseEvaluatorManager.DeterminarCategoria(question.Text);
+				 // ExtractAndValidateCode(EvaluaCaso(question).GetAwaiter().GetResult(), ProntManager.ValidCodes);
 
 				question.TypeProcess = tipocaso;
 
@@ -48,7 +49,22 @@ namespace CAPA_NEGOCIO
 					question.MessageIA = responseUltimaHubicacionText;
 					question.Id_case = dCaso.Id_Case;
 					question.WithAgentResponse = false;
-					await AddComment(dCaso, question);
+					await AddComment(dCaso, question, true);
+					return question;
+				} 
+				else if (tipocaso == "SALUDOS")
+				{ 
+					question.MessageIA = ProntManager.GetSaludo();
+					question.Id_case = dCaso.Id_Case;
+					await AddComment(dCaso, question);					
+					return question;
+				}else if (tipocaso == "CIERRE_DE_CASO")
+				{ 
+					question.MessageIA = ProntManager.Get_Cierre();
+					question.Id_case = dCaso.Id_Case;					
+					await AddComment(dCaso, question);	
+					dCaso.Estado = Case_Estate.Finalizado.ToString();	
+					dCaso.Update();			
 					return question;
 				}
 				else if (tipocaso == "SOLICITUD_DE_ASISTENCIA")
@@ -117,6 +133,7 @@ namespace CAPA_NEGOCIO
 
 		private static List<object> GetHistoryMessage(UserMessage question, Tbl_Case dCaso, string prompt, string prontTypes)
 		{
+			//Console.Write(ProntManager.ProntValidation(prontTypes));
 			var historialMensajes = new List<object>
 			{
 				new { role = "system", content = ProntManager.ProntValidation(prontTypes)},
@@ -126,7 +143,7 @@ namespace CAPA_NEGOCIO
 			historialMensajes.AddRange(tbl_Comments.Select(c =>
 				new
 				{
-					role = c.NickName == question.UserId ? "user" : "asistant",
+					role = c.NickName == question.UserId ? "user" :  (c.NickName == "traking_system" ? "traking_system" : "asistant") ,
 					content = c.Body
 				}
 			));
@@ -154,6 +171,7 @@ namespace CAPA_NEGOCIO
 					{
 						instaCase.Cat_Dependencias = dependencia;
 						instaCase.Id_Dependencia = dependencia?.Id_Dependencia;
+						instaCase.Update();
 					}
 					return instaCase;
 				}
@@ -182,7 +200,7 @@ namespace CAPA_NEGOCIO
 			}
 		}
 
-		public async Task AddComment(Tbl_Case data, UserMessage interaction)
+		public async Task AddComment(Tbl_Case data, UserMessage interaction, bool isSystem = false)
 		{
 
 			Tbl_Comments us = new Tbl_Comments()
@@ -197,16 +215,32 @@ namespace CAPA_NEGOCIO
 			us.Save();
 			if (interaction.MessageIA != null)
 			{
-				Tbl_Comments ia = new Tbl_Comments()
+				if (isSystem)	 
 				{
-					Id_Case = data?.Id_Case,
-					Body = interaction.MessageIA,
-					NickName = "IA",
-					Fecha = DateTime.Now,
-					Estado = CommetsState.Leido.ToString(),
-					Mail = "IA@soporte.net",
-				};
-				ia.Save();
+					Tbl_Comments ia = new Tbl_Comments()
+					{
+						Id_Case = data?.Id_Case,
+						Body = interaction.MessageIA,
+						NickName = "traking_system",
+						Fecha = DateTime.Now,
+						Estado = CommetsState.Leido.ToString(),
+						Mail = "traking_system@soporte.net",
+					};
+					ia.Save();
+				} else 
+				{
+					Tbl_Comments ia = new Tbl_Comments()
+					{
+						Id_Case = data?.Id_Case,
+						Body = interaction.MessageIA,
+						NickName = "IA",
+						Fecha = DateTime.Now,
+						Estado = CommetsState.Leido.ToString(),
+						Mail = "IA@soporte.net",
+					};
+					ia.Save();
+				}
+				
 			}
 
 		}

@@ -86,7 +86,7 @@ namespace CAPA_NEGOCIO.IA
                     }
                 }), Encoding.UTF8, "application/json");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "EAARa3vZCcGMQBO5oiYGZAAF4tHxzfstCu4rDPSzb1ZCCUuZBomvG0LBj9mMTcWlSxwZBAmSBenImbamqry7k1TMXH3aT5oIRUN3IvDtmif4K2J0kmX7zSkvEAU20ebCwATvprQBt9FSPedP46ELuUzzVs82UE0onmzyYZCzZA8aONe7H8yNgdYADZBDYR9DpIJ50UlssP1ZCQ7TmCVrSFxHj0E8kCWRbG8EFfpkUI3QwZD");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "EAAYIa2ZCUUBcBO638ZCTCVh7g7hytYmnJDk41iMPfZAvIQhuWhTOKYt34yJxCzIZBZCK6e7KQwg2iKiQds3f1xZC0YQMKp33hkHW5ZAfPJ3uVksSTO9ASFMSGZBrNWb6MOoj9BA8Xxgmkk1a4ZAAmZAXz8ZBwsExZAnVJutgVNGZAMkW6ni2q6lrLWJSki6zvETfulWbUvjOqBHPTz3E3OwVv");
                 client.PostAsync("https://graph.facebook.com/v21.0/488818134316697/messages", content).Wait();
 
                 return "OK";
