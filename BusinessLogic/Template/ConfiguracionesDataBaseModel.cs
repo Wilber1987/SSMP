@@ -2,7 +2,7 @@ using API.Controllers;
 using CAPA_DATOS;
 namespace DataBaseModel
 {
-    public class Transactional_Configuraciones : EntityClass
+	public class Transactional_Configuraciones : EntityClass
 	{
 		[PrimaryKey(Identity = true)]
 		public int? Id_Configuracion { get; set; }
@@ -49,6 +49,8 @@ namespace DataBaseModel
 		SQLCredentials,
 		SQLCredentialsSeguiminento,
 		IAServices,
+		MettaApi,
+		XApi
 	}	
 
 	public enum ConfiguracionesTypeEnum

@@ -86,8 +86,8 @@ namespace CAPA_NEGOCIO.IA
                     }
                 }), Encoding.UTF8, "application/json");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "EAAYIa2ZCUUBcBO638ZCTCVh7g7hytYmnJDk41iMPfZAvIQhuWhTOKYt34yJxCzIZBZCK6e7KQwg2iKiQds3f1xZC0YQMKp33hkHW5ZAfPJ3uVksSTO9ASFMSGZBrNWb6MOoj9BA8Xxgmkk1a4ZAAmZAXz8ZBwsExZAnVJutgVNGZAMkW6ni2q6lrLWJSki6zvETfulWbUvjOqBHPTz3E3OwVv");
-                client.PostAsync("https://graph.facebook.com/v21.0/488818134316697/messages", content).Wait();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "Beaver"));
+                client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"), content).Wait();
 
                 return "OK";
             }
@@ -110,8 +110,8 @@ namespace CAPA_NEGOCIO.IA
                     message = new { text = response }
                 }), Encoding.UTF8, "application/json");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "YOUR_FACEBOOK_PAGE_ACCESS_TOKEN");
-                client.PostAsync("https://graph.facebook.com/v13.0/me/messages", content).Wait();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "Beaver"));
+                client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageMessengerServices"), content).Wait();
 
                 return "OK";
             }

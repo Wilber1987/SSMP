@@ -1,5 +1,6 @@
 ﻿using CAPA_DATOS;
 using CAPA_NEGOCIO;
+using DataBaseModel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RabbitMQ;
@@ -155,7 +156,7 @@ namespace UI.SSMP_IA.ApiControllers
 		[HttpGet]
 		public IActionResult VerifyToken()
 		{
-			string AccessToken = "EAARa3vZCcGMQBO5oiYGZAAF4t";
+			string? AccessToken = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "AppToken");
 
 			var token = Request.Query["hub.verify_token"].ToString();
 			var challenge = Request.Query["hub.challenge"].ToString();
