@@ -42,6 +42,7 @@ namespace CAPA_NEGOCIO.IA
             }
         }
 
+//este metodo puede implementar si se envia la respuesta a otra api externa, invocando la url y preparando el body
         public async static Task<string> SendResponseToWebAPIAsync(string userId, string response)
         {
             try
@@ -112,6 +113,30 @@ namespace CAPA_NEGOCIO.IA
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverMessenger"));
                 client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageMessengerServices"), content).Wait();
+
+                return "OK";
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+         public async static Task<string> SendResponseToInstagramAsync(string userId, string response)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var content = new StringContent(JsonConvert.SerializeObject(new
+                {
+                    recipient = new { id = userId },
+                    message = new { text = response }
+                }), Encoding.UTF8, "application/json");
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "Beaver"));
+                client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageInstagramServices"), content).Wait();
 
                 return "OK";
             }
