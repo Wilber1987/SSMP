@@ -29,6 +29,34 @@ namespace BusinessLogic.IA
 
 			// Diccionario para contar coincidencias ponderadas
 			Dictionary<string, int> coincidencias = new Dictionary<string, int>();
+			if (consulta == "7")
+			{
+				return "SOLICITUD_DE_ASISTENCIA";
+			}
+			else if (consulta == "6")
+			{
+				return "INFORMACION_SOBRE_DOCUMENTOS";
+			}
+			else if (consulta == "5")
+			{
+				return "CONSULTA_DE_CONTACTO";
+			}
+			else if (consulta == "4")
+			{
+				return "QUEJAS_POR_ESTAFA";
+			}
+			else if (consulta == "3")
+			{
+				return "QUEJAS_POR_IMPORTES";
+			}
+			else if (consulta == "2")
+			{
+				return "QUEJAS_POR_RETRASOS";
+			}
+			else if (consulta == "1")
+			{
+				return "RASTREO_Y_SEGUIMIENTOS";
+			}
 
 			foreach (var categoria in Categorias)
 			{
@@ -46,7 +74,17 @@ namespace BusinessLogic.IA
 					else
 					{
 						// Coincidencias parciales en palabras clave
-						conteo += palabras.Count(p => fraseNormalizada.Contains(p));
+						int palabraCoincidencias = palabras.Count(p => fraseNormalizada.Contains(p));
+
+						// Se puede incrementar el peso de las coincidencias de "retraso" para hacerlas más significativas
+						if (categoria.Key == "QUEJAS_POR_RETRASOS" && palabraCoincidencias > 0)
+						{
+							conteo += 20;  // Agregar más peso a coincidencias de queja por retrasos
+						}
+						else
+						{
+							conteo += palabraCoincidencias;
+						}
 					}
 				}
 
@@ -61,7 +99,6 @@ namespace BusinessLogic.IA
 			{
 				return coincidencias.OrderByDescending(c => c.Value).First().Key;
 			}
-
 			// Retornar categoría predeterminada si no hay coincidencias
 			return "ASISTENCIA_GENERAL";
 		}
@@ -104,9 +141,18 @@ namespace BusinessLogic.IA
 					"Todo bien", "Todo claro", "Todo perfecto", "Todo listo",
 					"Ok, gracias", "Vale, gracias", "Gracias, ya entendí",
 				}
-			},
-
-			{ "RASTREO_Y_SEGUIMIENTOS", new List<string>
+			},{ "QUEJAS_POR_RETRASOS", new List<string>
+				{
+					"retraso", "tardanza", "no llega", "demora", "tardó mucho",
+					"se retrasó", "demorado", "esperando paquete", "aún no llega",
+					"tiempo de espera", "muy lento", "problema con el tiempo", "tarda mucho",
+					"Mi paquete lleva mucho tiempo sin llegar", "Tengo un retraso con mi envío",
+					"El pedido está tardando más de lo esperado", "Consulta sobre demora en mi paquete",
+					"Mi paquete está retrasado", "No llega mi pedido",
+					"El tiempo de espera es muy largo", "Problema con el retraso de mi envío",
+					"¿Por qué mi paquete aún no llega?", "Estoy esperando pero no hay actualización"
+				}
+			},{ "RASTREO_Y_SEGUIMIENTOS", new List<string>
 				{
 					// Palabras clave comunes
 					"paquete", "rastrear", "seguimiento", "número de rastreo", "estado", "dónde está",
@@ -172,20 +218,7 @@ namespace BusinessLogic.IA
 			"Necesito información sobre la documentación", "¿Cuáles son las políticas de trámites?",
 			"¿Qué identificaciones aceptan?", "¿Dónde puedo conseguir los formularios?"
 				}
-			},
-			{ "QUEJAS_POR_RETRASOS", new List<string>
-				{
-					"retraso", "tardanza", "no llega", "demora", "tardó mucho",
-					"se retrasó", "demorado", "esperando paquete", "aún no llega",
-					"tiempo de espera", "muy lento", "problema con el tiempo", "tarda mucho",
-					 "Mi paquete lleva mucho tiempo sin llegar", "Tengo un retraso con mi envío",
-			"El pedido está tardando más de lo esperado", "Consulta sobre demora en mi paquete",
-			"Mi paquete está retrasado", "No llega mi pedido",
-			"El tiempo de espera es muy largo", "Problema con el retraso de mi envío",
-			"¿Por qué mi paquete aún no llega?", "Estoy esperando pero no hay actualización"
-				}
-			},
-			{ "QUEJAS_POR_IMPORTES", new List<string>
+			},{ "QUEJAS_POR_IMPORTES", new List<string>
 				{
 					"impuesto", "tarifa", "monto", "pago", "importe", "cuota",
 					"cargos", "costos adicionales", "dinero extra", "pago inesperado",

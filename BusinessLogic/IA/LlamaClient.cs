@@ -58,7 +58,8 @@ namespace CAPA_NEGOCIO
 					question.Id_case = dCaso.Id_Case;
 					await AddComment(dCaso, question);					
 					return question;
-				}else if (tipocaso == "CIERRE_DE_CASO")
+				}
+				else if (tipocaso == "CIERRE_DE_CASO")
 				{ 
 					question.MessageIA = ProntManager.Get_Cierre();
 					question.Id_case = dCaso.Id_Case;					
