@@ -42,6 +42,7 @@ namespace CAPA_NEGOCIO.IA
             }
         }
 
+//este metodo puede implementar si se envia la respuesta a otra api externa, invocando la url y preparando el body
         public async static Task<string> SendResponseToWebAPIAsync(string userId, string response)
         {
             try
@@ -122,6 +123,77 @@ namespace CAPA_NEGOCIO.IA
             }
 
         }
+
+         public async static Task<string> SendResponseToInstagramAsync(string userId, string response)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var content = new StringContent(JsonConvert.SerializeObject(new
+                {
+                    recipient = new { id = userId },
+                    message = new { text = response }
+                }), Encoding.UTF8, "application/json");
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "Beaver"));
+                client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageInstagramServices"), content).Wait();
+
+                return "OK";
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+         public async static Task<string> SendTwitterDirectMessageAsync(string userId, string message)
+    {
+        try
+        {
+            using (var client = new HttpClient())
+            {
+                // Configurar encabezados de autorización
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverTwiter"));
+
+                // Construir el cuerpo del mensaje
+                var messageBody = new
+                {
+                    @event = new
+                    {
+                        type = "message_create",
+                        message_create = new
+                        {
+                            target = new { recipient_id = userId },
+                            message_data = new { text = message }
+                        }
+                    }
+                };
+
+                // Serializar a JSON
+                var jsonContent = JsonConvert.SerializeObject(messageBody);
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                // Hacer la solicitud
+                var response = await client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageTwitterServices"), content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return "Ok";
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error al enviar mensaje: {errorResponse}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Excepción: {ex.Message}", ex);
+        }
+    }
 
     }
 }
