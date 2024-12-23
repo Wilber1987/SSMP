@@ -8,5 +8,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AppCore\AppCore.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.6.11" />
+  </ItemGroup>
 
 </Project>

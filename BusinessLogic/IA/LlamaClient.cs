@@ -17,8 +17,10 @@ namespace CAPA_NEGOCIO
 			try
 			{
 				string caseTitle = $"{question?.UserId} - {question?.Timestamp.ToString("yyyy-MM-dd")}";
-				var instaCase = new Tbl_Case().Find<Tbl_Case>(FilterData.Equal("Titulo", caseTitle));
-
+				var instaCase = new Tbl_Case().Find<Tbl_Case>(
+					FilterData.Equal("Titulo", caseTitle),
+					FilterData.Equal("Estado", Case_Estate.Activo)
+				);
 				if (instaCase != null && instaCase.MimeMessageCaseData?.WithAgent == true)
 				{
 					question!.WithAgentResponse = true;
@@ -26,18 +28,15 @@ namespace CAPA_NEGOCIO
 					instaCase.MimeMessageCaseData!.WithAgent = true;
 					await AddComment(instaCase, question);
 					return question;
-				}
+				}				
 				string? trakingNumber = TrackingOperation.FindTrackingNumber(question.Text);
-
 				question.Timestamp = DateTime.Now;
-
 				// evalua tipo de caso
-				string tipocaso = trakingNumber != null ? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()
-				 : CaseEvaluatorManager.DeterminarCategoria(question.Text);
-				 // ExtractAndValidateCode(EvaluaCaso(question).GetAwaiter().GetResult(), ProntManager.ValidCodes);
-
+				string tipocaso = instaCase == null ? "INICIO":
+				trakingNumber != null 
+				? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()				
+				: CaseEvaluatorManager.DeterminarCategoria(question.Text, instaCase?.Tbl_Servicios?.Descripcion_Servicio);
 				question.TypeProcess = tipocaso;
-
 				var dCaso = GestionaCaso(question, caseTitle, instaCase);
 
 				List<TrackingHistory> list = [];
@@ -52,7 +51,7 @@ namespace CAPA_NEGOCIO
 					await AddComment(dCaso, question, true);
 					return question;
 				} 
-				else if (tipocaso == "SALUDOS")
+				else if (tipocaso == "INICIO")
 				{ 
 					question.MessageIA = ProntManager.GetSaludo();
 					question.Id_case = dCaso.Id_Case;
@@ -112,9 +111,8 @@ namespace CAPA_NEGOCIO
 			catch (Exception ex)
 			{
 				LoggerServices.AddMessageError($"ERROR: GenerateResponse", ex);
-				throw ex;
+				throw;
 			}
-
 		}
 
 		private static object BuildLLamaConfig(List<object> historialMensajes)
@@ -145,7 +143,7 @@ namespace CAPA_NEGOCIO
 				new
 				{
 					role = c.NickName == question.UserId ? "user" :  (c.NickName == "traking_system" ? "traking_system" : "asistant") ,
-					content = c.Body
+					content = ProntManager.ProntAdapter(c.Body)
 				}
 			));
 			historialMensajes.Add(new { role = "user", content = prompt });
@@ -168,10 +166,12 @@ namespace CAPA_NEGOCIO
 				}
 				if (instaCase != null)
 				{
-					if (dependencia?.DefaultDependency != true && instaCase.Cat_Dependencias?.DefaultDependency == true)
+					if (instaCase.Tbl_Servicios == null && servicios != null)
 					{
 						instaCase.Cat_Dependencias = dependencia;
 						instaCase.Id_Dependencia = dependencia?.Id_Dependencia;
+						instaCase.Id_Servicio = servicios?.Id_Servicio;
+						instaCase.Tbl_Servicios = servicios;
 						instaCase.Update();
 					}
 					return instaCase;
@@ -246,7 +246,7 @@ namespace CAPA_NEGOCIO
 
 		}
 
-		public async Task<string> EvaluaCaso(UserMessage question)
+		/*public async Task<string> EvaluaCaso(UserMessage question)
 		{
 
 			//string prompt = ProntManager.ServicesEvaluatorPrompt(question.Text);
@@ -272,7 +272,7 @@ namespace CAPA_NEGOCIO
 				return "Error al procesar la solicitud."; // Devuelve un mensaje de error si no fue exitosa
 			}
 
-		}
+		}*/
 
 		private static async Task<HttpResponseMessage> GetIAResponse(StringContent content)
 		{
@@ -284,7 +284,7 @@ namespace CAPA_NEGOCIO
 			var response = await client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.IAServices, "IAHost"), content);
 			return response;
 		}
-
+		/*
 		static string ExtractAndValidateCode(string botResponse, string[] validCodes)
 		{
 			// Expresión regular para encontrar palabras exactas que coincidan con los códigos válidos
@@ -299,7 +299,7 @@ namespace CAPA_NEGOCIO
 			{
 				return "ASISTENCIA_GENERAL"; // Retorna un código por defecto si no encuentra coincidencias
 			}
-		}
+		}*/
 	}
 
 }

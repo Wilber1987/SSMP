@@ -132,7 +132,7 @@ VALUES(N'SERVICES_PRONT_VALIDATOR', N'Por favor, evalúa el texto proporcionado 
 					- "QUEJAS_POR_ESTAFA"
 					- "CONSULTA_DE_HORARIOS"
 					- "CONSULTA_DE_CONTACTO"
-					- "CONSULTA_SOBRE_EVENTOS"
+					- "EVENTOS"
 					- "SOLICITUD_DE_ASISTENCIA"
 					- "ASISTENCIA_GENERAL"
 
@@ -164,7 +164,7 @@ VALUES(N'SERVICES_PRONT_VALIDATOR', N'Por favor, evalúa el texto proporcionado 
 				Responde: "CONSULTA_DE_CONTACTO".
 
 				9. Si el cliente menciona eventos especiales en correos:
-				Responde: "CONSULTA_SOBRE_EVENTOS".
+				Responde: "EVENTOS".
 
 				10. Si el cliente desea hablar con soporte técnico o un agente:
 					Responde: "SOLICITUD_DE_ASISTENCIA".
@@ -181,7 +181,7 @@ VALUES(N'SERVICES_PRONT_VALIDATOR', N'Por favor, evalúa el texto proporcionado 
 				- "QUEJAS_POR_ESTAFA"
 				- "CONSULTA_DE_HORARIOS"
 				- "CONSULTA_DE_CONTACTO"
-				- "CONSULTA_SOBRE_EVENTOS"
+				- "EVENTOS"
 				- "SOLICITUD_DE_ASISTENCIA"
 				- "ASISTENCIA_GENERAL"');
 INSERT INTO PROYECT_MANAGER_BD.helpdesk.Tbl_Pronts
@@ -197,7 +197,7 @@ Códigos válidos de respuesta:
 - "QUEJAS_POR_ESTAFA"
 - "CONSULTA_DE_HORARIOS"
 - "CONSULTA_DE_CONTACTO"
-- "CONSULTA_SOBRE_EVENTOS"
+- "EVENTOS"
 - "SOLICITUD_DE_ASISTENCIA"
 - "ASISTENCIA_GENERAL"
 

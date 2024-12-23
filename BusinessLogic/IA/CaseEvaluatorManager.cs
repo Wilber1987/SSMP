@@ -9,17 +9,9 @@ namespace BusinessLogic.IA
 {
 	public class CaseEvaluatorManager
 	{
-		public static string DeterminarCategoria(string consulta)
+		public static string DeterminarCategoria(string consulta, string? previusCategory)
 		{
-			// Método para normalizar texto
-			string NormalizarTexto(string texto)
-			{
-				texto = texto.ToLowerInvariant();
-				texto = string.Concat(texto.Normalize(NormalizationForm.FormD)
-										   .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
-				var caracteresPermitidos = texto.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c));
-				return new string(caracteresPermitidos.ToArray());
-			}
+			
 
 			// Normalizar la consulta
 			consulta = NormalizarTexto(consulta);
@@ -29,7 +21,32 @@ namespace BusinessLogic.IA
 
 			// Diccionario para contar coincidencias ponderadas
 			Dictionary<string, int> coincidencias = new Dictionary<string, int>();
-			if (consulta == "7")
+			string category = ExtractCategoryServices(consulta, palabras, coincidencias);
+			if (previusCategory != null && category != "CIERRE_DE_CASO" && previusCategory != "INICIO")
+			{
+				return previusCategory;
+			}
+			// Retornar categoría predeterminada si no hay coincidencias
+			return category;
+
+		}
+		// Método para normalizar texto
+		private static	string NormalizarTexto(string texto)
+			{
+				texto = texto.ToLowerInvariant();
+				texto = string.Concat(texto.Normalize(NormalizationForm.FormD)
+										   .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
+				var caracteresPermitidos = texto.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c));
+				return new string(caracteresPermitidos.ToArray());
+			}
+		private static string ExtractCategoryServices(string consulta, string[] palabras, Dictionary<string, int> coincidencias)
+		{
+			string category = "ASISTENCIA_GENERAL";
+			if (consulta == "8")
+			{
+				return "EVENTOS";
+			}
+			else if (consulta == "7")
 			{
 				return "SOLICITUD_DE_ASISTENCIA";
 			}
@@ -97,10 +114,10 @@ namespace BusinessLogic.IA
 			// Seleccionar la categoría con más coincidencias ponderadas
 			if (coincidencias.Any())
 			{
-				return coincidencias.OrderByDescending(c => c.Value).First().Key;
+				category = coincidencias.OrderByDescending(c => c.Value).First().Key;
 			}
-			// Retornar categoría predeterminada si no hay coincidencias
-			return "ASISTENCIA_GENERAL";
+
+			return category;
 		}
 
 		static Dictionary<string, List<string>> Categorias = new Dictionary<string, List<string>>()
@@ -141,7 +158,7 @@ namespace BusinessLogic.IA
 					"Todo bien", "Todo claro", "Todo perfecto", "Todo listo",
 					"Ok, gracias", "Vale, gracias", "Gracias, ya entendí",
 				}
-			},{ "QUEJAS_POR_RETRASOS", new List<string>
+			}, { "QUEJAS_POR_RETRASOS", new List<string>
 				{
 					"retraso", "tardanza", "no llega", "demora", "tardó mucho",
 					"se retrasó", "demorado", "esperando paquete", "aún no llega",
@@ -152,7 +169,7 @@ namespace BusinessLogic.IA
 					"El tiempo de espera es muy largo", "Problema con el retraso de mi envío",
 					"¿Por qué mi paquete aún no llega?", "Estoy esperando pero no hay actualización"
 				}
-			},{ "RASTREO_Y_SEGUIMIENTOS", new List<string>
+			}, { "RASTREO_Y_SEGUIMIENTOS", new List<string>
 				{
 					// Palabras clave comunes
 					"paquete", "rastrear", "seguimiento", "número de rastreo", "estado", "dónde está",
@@ -192,8 +209,7 @@ namespace BusinessLogic.IA
 					"Seguimiento de mi pedido", "¿Cuándo llegará mi paquete?", "Seguimiento en aduanas",
 					"El tracking no muestra nada", "No sé dónde está mi pedido"
 				}
-			},
-			{ "INFORMACION_ENTREGAS_SEGUIMIENTOS", new List<string>
+			}, { "INFORMACION_ENTREGAS_SEGUIMIENTOS", new List<string>
 				{
 					"entregado", "entrega", "recibido", "ya llegó", "confirmar entrega",
 					"fecha de entrega", "días de entrega", "plazo de entrega", "entregaron",
@@ -204,8 +220,7 @@ namespace BusinessLogic.IA
 					"El paquete debería estar entregado pero no tengo confirmación",
 					"Consulta sobre el plazo de entrega"
 				}
-			},
-			{ "INFORMACION_SOBRE_DOCUMENTOS", new List<string>
+			}, { "INFORMACION_SOBRE_DOCUMENTOS", new List<string>
 				{
 					"documentos", "papeles", "trámites", "requisitos", "certificados",
 					"formularios", "qué papeles", "qué necesito", "identificación",
@@ -218,7 +233,7 @@ namespace BusinessLogic.IA
 			"Necesito información sobre la documentación", "¿Cuáles son las políticas de trámites?",
 			"¿Qué identificaciones aceptan?", "¿Dónde puedo conseguir los formularios?"
 				}
-			},{ "QUEJAS_POR_IMPORTES", new List<string>
+			}, { "QUEJAS_POR_IMPORTES", new List<string>
 				{
 					"impuesto", "tarifa", "monto", "pago", "importe", "cuota",
 					"cargos", "costos adicionales", "dinero extra", "pago inesperado",
@@ -230,8 +245,7 @@ namespace BusinessLogic.IA
 			"El pago no corresponde a lo acordado", "Reclamo por importes incorrectos",
 			"Consulta sobre costos y pagos"
 				}
-			},
-			{ "QUEJAS_POR_ESTAFA", new List<string>
+			}, { "QUEJAS_POR_ESTAFA", new List<string>
 				{
 					"fraude", "estafa", "robado", "engañado", "falso", "problema legal",
 					"engañaron", "reclamo por estafa", "me robaron", "me engañaron",
@@ -242,8 +256,7 @@ namespace BusinessLogic.IA
 			"El paquete parece haber sido robado", "Reclamo por estafa en el costo",
 			"Me han robado el contenido del paquete", "Sospecho de un fraude con mi pedido"
 				}
-			},
-			{ "QUEJAS_GENERALES", new List<string>
+			}, { "QUEJAS_GENERALES", new List<string>
 				{
 					"queja", "reclamo", "problema", "inconformidad", "no estoy satisfecho",
 					"fallo", "quejarse", "no me gusta", "inconveniente", "problemas con servicio",
@@ -254,8 +267,7 @@ namespace BusinessLogic.IA
 			"El servicio no fue adecuado", "Reclamo por una mala experiencia",
 			"Problema en general con la gestión del envío", "Quiero reportar un inconveniente"
 				}
-			},
-			{ "CONSULTA_DE_HORARIOS", new List<string>
+			}, { "CONSULTA_DE_HORARIOS", new List<string>
 				{
 					"horarios", "hora", "abren", "cierran", "apertura", "cierre",
 					"horas de servicio", "disponibilidad", "qué horario tienen",
@@ -266,8 +278,7 @@ namespace BusinessLogic.IA
 			"Consulta sobre horario de cierre", "¿Están abiertos hoy?",
 			"Horario de atención durante feriados", "¿Cuándo puedo ir a la oficina?"
 				}
-			},
-			{ "CONSULTA_DE_CONTACTO", new List<string>
+			}, { "CONSULTA_DE_CONTACTO", new List<string>
 				{
 					"contactar", "teléfono", "correo", "hablar con", "dirección",
 					"cómo ubicar", "redes sociales", "email", "llamar", "contacto directo",
@@ -278,20 +289,16 @@ namespace BusinessLogic.IA
 					"¿Cómo me comunico con ustedes?", "¿Tienen un número de contacto?",
 					"Quiero información de contacto", "Consulta sobre formas de comunicación"
 				}
-			},
-			{ "CONSULTA_SOBRE_EVENTOS", new List<string>
+			}, { "EVENTOS", new List<string>
 				{
-					"eventos", "actividades", "promociones", "campañas", "ofertas",
-					"noticias", "publicidad", "anuncios", "ferias", "novedades",
-					"convocatorias", "actividades especiales", "qué eventos hay", "descuentos",
-					"¿Tienen promociones este mes?", "Consulta sobre actividades recientes",
+					"eventos", "actividades", "noticias", "publicidad", "anuncios", "ferias", "novedades",
+					"convocatorias", "eventos estan proximos", "eventos proximos","actividades especiales", "qué eventos hay",
+					"¿Tienen eventos este mes?", "Consulta sobre actividades recientes",
 					"¿Hay algún evento especial en su oficina?", "Quiero información sobre campañas actuales",
-					"¿Qué promociones ofrecen?", "Consulta sobre novedades",
-					"¿Tienen descuentos disponibles?", "¿Qué actividades tienen en marcha?",
+					"Consulta sobre novedades", "¿Qué actividades tienen en marcha?",
 					"Consulta sobre ferias o eventos especiales", "¿Ofrecen algo nuevo este mes?"
 				}
-			},
-			{ "SOLICITUD_DE_ASISTENCIA", new List<string>
+			}, { "SOLICITUD_DE_ASISTENCIA", new List<string>
 				{
 					"ayuda", "asistencia", "soporte", "servicio al cliente", "necesito ayuda",
 					"quiero ayuda", "problema técnico", "asistirme", "necesito soporte",
@@ -313,7 +320,7 @@ namespace BusinessLogic.IA
 					"orientación de un representante", "atención por parte de un agente",
 					"asistencia de un ser humano", "quiero soporte especializado"
 				}
-			}, { "SALUDOS", new List<string>
+			}, { "INICIO", new List<string>
 				{
 					"hola", "buenos días", "buenas tardes", "buenas noches",
 					"saludos", "qué tal", "cómo están", "hola, buen día",

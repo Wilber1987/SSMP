@@ -420,3 +420,4 @@ CAPA_DATOS/bin/
 UI_USAV/bin/
 UI/bin
 UI/obj
+UI/error_log.text

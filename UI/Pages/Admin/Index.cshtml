@@ -32,6 +32,10 @@
 {
     <script src="~/Proyect/AdminNavigator.js" type="module"></script>
 }
+@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("seassonKey")))
+{
+    <script src="~/SystemDocuments/Views/SystemDocumentsNavigator.js" type="module"></script>
+}
 
 
 @* @if (SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("seassonKey")))

@@ -54,7 +54,7 @@ VALUES(N'SERVICES_PRONT_VALIDATOR', N'Por favor, evalúa el texto proporcionado 
 					- "QUEJAS_GENERALES"
 					- "CONSULTA_DE_HORARIOS"
 					- "CONSULTA_DE_CONTACTO"
-					- "CONSULTA_SOBRE_EVENTOS"
+					- "EVENTOS"
 					- "SOLICITUD_DE_ASISTENCIA"
 					- "ASISTENCIA_GENERAL"
 					
@@ -90,7 +90,7 @@ VALUES(N'SERVICES_PRONT_VALIDATOR', N'Por favor, evalúa el texto proporcionado 
 				Responde: "CONSULTA_DE_CONTACTO".
 
 				10. Si el cliente menciona eventos especiales en correos:
-				Responde: "CONSULTA_SOBRE_EVENTOS".
+				Responde: "EVENTOS".
 
 				11. Si el cliente desea hablar con soporte técnico o un agente:
 					Responde: "SOLICITUD_DE_ASISTENCIA".
@@ -108,7 +108,7 @@ VALUES(N'SERVICES_PRONT_VALIDATOR', N'Por favor, evalúa el texto proporcionado 
 				- "QUEJAS_GENERALES"
 				- "CONSULTA_DE_HORARIOS"
 				- "CONSULTA_DE_CONTACTO"
-				- "CONSULTA_SOBRE_EVENTOS"
+				- "EVENTOS"
 				- "SOLICITUD_DE_ASISTENCIA"
 				- "ASISTENCIA_GENERAL"');
 INSERT INTO PROYECT_MANAGER_BD.helpdesk.Tbl_Pronts
@@ -432,7 +432,7 @@ Tu respuesta debe ser únicamente uno de los códigos listados, exactamente como
 - "QUEJAS_GENERALES"
 - "CONSULTA_DE_HORARIOS"
 - "CONSULTA_DE_CONTACTO"
-- "CONSULTA_SOBRE_EVENTOS"
+- "EVENTOS"
 - "SOLICITUD_DE_ASISTENCIA"
 - "ASISTENCIA_GENERAL"
 
@@ -506,11 +506,11 @@ Tu respuesta debe ser únicamente uno de los códigos listados, exactamente como
     - Entrada: "¿Cómo puedo contactar a correos de Guatemala?"
       Respuesta esperada: "CONSULTA_DE_CONTACTO"
 
-- **"CONSULTA_SOBRE_EVENTOS"**:
+- **"EVENTOS"**:
   - Palabras clave: "eventos", "actividades", "promociones", "campañas".
   - Ejemplos:
     - Entrada: "¿Tienen alguna promoción este mes?"
-      Respuesta esperada: "CONSULTA_SOBRE_EVENTOS"
+      Respuesta esperada: "EVENTOS"
 
 - **"SOLICITUD_DE_ASISTENCIA"**:
   - Palabras clave: "ayuda", "asistencia", "soporte", "servicio al cliente".

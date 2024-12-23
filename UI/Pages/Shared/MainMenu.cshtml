@@ -16,8 +16,10 @@ Recibo</a>
 <a class="menu-item" id="Ver_Recibos" asp-area="" asp-page="/PagesViews/Ver_Recibos">Ver Recibos</a>
 </div>
 } *@
-<h3>TRANSACCIONES</h3>
-<a class="menu-item" id="Home" asp-area="" asp-page="/">HOME</a>
+<a class="menu-item" id="Home" asp-area="" asp-page="/home">
+    <svg viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#0d4c73" stroke-width="1.536"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212121" stroke-width="1.488"> <path opacity="0.5" d="M13.1061 22H10.8939C7.44737 22 5.72409 22 4.54903 20.9882C3.37396 19.9764 3.13025 18.2827 2.64284 14.8952L2.36407 12.9579C1.98463 10.3208 1.79491 9.00229 2.33537 7.87495C2.87583 6.7476 4.02619 6.06234 6.32691 4.69181L7.71175 3.86687C9.80104 2.62229 10.8457 2 12 2C13.1543 2 14.199 2.62229 16.2882 3.86687L17.6731 4.69181C19.9738 6.06234 21.1242 6.7476 21.6646 7.87495C22.2051 9.00229 22.0154 10.3208 21.6359 12.9579L21.3572 14.8952C20.8697 18.2827 20.626 19.9764 19.451 20.9882C18.2759 22 16.5526 22 13.1061 22Z" fill="#06a3ec"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75Z" fill="#06a3ec"></path> </g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" d="M13.1061 22H10.8939C7.44737 22 5.72409 22 4.54903 20.9882C3.37396 19.9764 3.13025 18.2827 2.64284 14.8952L2.36407 12.9579C1.98463 10.3208 1.79491 9.00229 2.33537 7.87495C2.87583 6.7476 4.02619 6.06234 6.32691 4.69181L7.71175 3.86687C9.80104 2.62229 10.8457 2 12 2C13.1543 2 14.199 2.62229 16.2882 3.86687L17.6731 4.69181C19.9738 6.06234 21.1242 6.7476 21.6646 7.87495C22.2051 9.00229 22.0154 10.3208 21.6359 12.9579L21.3572 14.8952C20.8697 18.2827 20.626 19.9764 19.451 20.9882C18.2759 22 16.5526 22 13.1061 22Z" fill="#06a3ec"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75Z" fill="#06a3ec"></path> </g></svg>
+    HOME
+</a>
 
 @if (SecurityController.HavePermission(Identify, Permissions.PERFIL_ACCESS))
 {
@@ -192,7 +194,8 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
 @if (SystemConfig.isMessagesActive() || SystemConfig.isNotificationsActive())
 {
 
-    @if (SystemConfig.isNotificationsActive() && SecurityController.HavePermission(Identify, Permissions.NOTIFICACIONES_READER))
+    @if (SystemConfig.isNotificationsActive() && SecurityController.HavePermission(Identify,
+   Permissions.NOTIFICACIONES_READER))
     {
         <a href="~/Mensajes/NotificationesView" id="NotificationesView" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -213,7 +216,8 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
             Notificaciones
         </a>
     }
-    @if (SystemConfig.isNotificationsActive() && SecurityController.HavePermission(Identify, Permissions.NOTIFICACIONES_MANAGER))
+    @if (SystemConfig.isNotificationsActive() && SecurityController.HavePermission(Identify,
+   Permissions.NOTIFICACIONES_MANAGER))
     {
         <a href="~/Mensajes/NotificacionesManager" id="NotificacionesManager" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -366,12 +370,12 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
             <g id="SVGRepo_iconCarrier">
                 <path fill-rule="evenodd"
                     d="M9.027 0a1 1 0 00-.99.859l-.37 2.598A6.993 6.993 0 005.742 4.57L3.305 3.59a1 1 0 00-1.239.428L.934 5.981a1 1 0 00.248 1.287l2.066 1.621a7.06 7.06 0 000 2.222l-2.066 1.621a1 1 0 00-.248 1.287l1.132 1.962a1 1 0 001.239.428l2.438-.979a6.995 6.995 0 001.923 1.113l.372 2.598a1 1 0 00.99.859h2.265a1 1 0 00.99-.859l.371-2.598a6.995 6.995 0 001.924-1.112l2.438.978a1 1 0 001.238-.428l1.133-1.962a1 1 0 00-.249-1.287l-2.065-1.621a7.063 7.063 0 000-2.222l2.065-1.621a1 1 0 00.249-1.287l-1.133-1.962a1 1 0 00-1.239-.428l-2.437.979a6.994 6.994 0 00-1.924-1.113L12.283.86a1 1 0 00-.99-.859H9.027zm1.133 13a3 3 0 100-6 3 3 0 000 6z"
-                    fill="#0a3b6b"></path>
+                    fill="#06a3ec"></path>
             </g>
         </svg>
         Panel Administrador
     </a>
-    <a class="menu-item" id="AdminPanel" href="~/ProyectViews/InicializarUsuariosSIASMOP">
+    @* <a class="menu-item" id="AdminPanel" href="~/ProyectViews/InicializarUsuariosSIASMOP">
         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#000000">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -382,5 +386,5 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
             </g>
         </svg>
         Información base
-    </a>
+    </a> *@
 }
