@@ -66,7 +66,7 @@ builder.Services.AddCronJob<CreateAutomaticsCaseSchedulerJob>(options =>
 
 
 var app = builder.Build();
-app.UseMiddleware<RequestLoggingMiddleware>();
+//app.UseMiddleware<RequestLoggingMiddleware>();
 // builder.Services.AddSession(options =>
 // {
 //     options.Cookie.Name = ".AdventureWorks.Session";
