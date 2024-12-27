@@ -87,3 +87,12 @@ include web chat in anypage
         </script>       
     </div> 
 ``
+
+
+
+sc create MyRabbitC binPath= "C:\rabbit\RabbitMQService.exe"
+Ronny Alberto Vega Mendieta
+9:56
+sc config MyRabbitC start= auto
+sc start MyRabbitC
+sc delete MyRabbitC

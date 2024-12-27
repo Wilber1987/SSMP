@@ -1,5 +1,8 @@
-﻿using CAPA_DATOS;
+﻿using System.Text.Json;
+using API.Controllers;
+using CAPA_DATOS;
 using CAPA_NEGOCIO;
+using CAPA_NEGOCIO.IA;
 using DataBaseModel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,10 +17,12 @@ namespace UI.SSMP_IA.ApiControllers
 	public class WebhookSsmpIAController : ControllerBase
 	{
 		[HttpPost]
+		[AuthController]//TODO QUITAR
 		public IActionResult ReceiveMessage([FromBody] dynamic message, [FromHeader(Name = "X-Platform")] string platform)
 		{
 			try
 			{
+				LoggerServices.AddMessageInfo($"Info: nuevoMensaje: " +  message.toString());
 				// Determinar el origen del mensaje
 				UserMessage unifiedMessage = platform?.ToLower() switch
 				{
@@ -46,15 +51,29 @@ namespace UI.SSMP_IA.ApiControllers
 							//EnqueueMessage(message, "WebAPI"); //desactualizado no se ve necesario la interaccion encolada
 
 							return  Ok(reply);
-						case "whatsapp":
+						case "whatsapp": case "messenger":
+						 	//var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
+							//var message = System.Text.Json.JsonSerializer.Deserialize<UserMessage>(e, options);
+
+							//result.TransactionNumber = message.SessionId;
+							var instanceIA = new LlamaClient();
+							var responseIA = new ResponseAPI();
+							var processMesage = ProcessWhatsAppMessage(message);
+
+							// Ejecutar asincronía sincrónicamente usando GetAwaiter().GetResult()
+							var response = instanceIA.GenerateResponse(processMesage).GetAwaiter().GetResult();
+						  // var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(response); 
+							//string messageContent = jsonResponse.Message.Content;
+							var response2 = responseIA.SendResponseToUser(processMesage, response?.MessageIA).GetAwaiter().GetResult();
 							// Responder al usuario según la plataforma
-							MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
+							//MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
 							break;
-						case "messenger":
+						/*case "messenger":
 							// token EAARa3vZCcGMQBOZCMy5ixTSzPHZAA5ZAz8iaNZByAEDRhqgaw3TjtU9OyZCN4QDCsaf00u1ihTNPaC9sIZACpGQI3tisjofB8GaUvQNTkcVtYYZARTYyqMvfAa4xPUZCDbcqBXVIFJH3EMBGezPLNycWwjttisdbtjNCKotQZAZBGtZBlFLQ0nQgddYKG3Prq24kjreLDgZDZD
 							// Responder al usuario según la plataforma
-							MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
-							break;
+							//MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
+							LlamaClient.
+							break;*/
 
 						default:
 							break;
@@ -78,6 +97,8 @@ namespace UI.SSMP_IA.ApiControllers
 		{
 			try
 			{
+				string whatsAppMessagestringg = message.ToString();
+				
 				var whatsAppMessage = message?.entry[0]?.changes[0]?.value?.messages[0];
 				if (whatsAppMessage == null)
 					return null;
@@ -90,7 +111,7 @@ namespace UI.SSMP_IA.ApiControllers
 					Timestamp = DateTime.Now // O extraer del mensaje
 				};
 			}
-			catch
+			catch (Exception ex)
 			{
 				return null;
 			}
@@ -147,8 +168,8 @@ namespace UI.SSMP_IA.ApiControllers
 
 			// Ejecutar asincronía sincrónicamente usando GetAwaiter().GetResult()
 			var response = instanceIA.GenerateResponse(message).GetAwaiter().GetResult();
-		   // var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(response);
-		   // string messageContent = jsonResponse.Message.Content;
+			// var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(response);
+			// string messageContent = jsonResponse.Message.Content;
 
 			return response;
 		}
@@ -156,19 +177,29 @@ namespace UI.SSMP_IA.ApiControllers
 		[HttpGet]
 		public IActionResult VerifyToken()
 		{
-			string? AccessToken = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "AppToken");
-
-			var token = Request.Query["hub.verify_token"].ToString();
-			var challenge = Request.Query["hub.challenge"].ToString();
-
-			if (challenge != null && token != null && token == AccessToken)
+			try
 			{
-				return Ok(challenge);
+				string? AccessToken = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "AppToken");
+
+				var token = Request.Query["hub.verify_token"].ToString();
+				var challenge = Request.Query["hub.challenge"].ToString();
+
+				if (challenge != null && token != null && token == AccessToken)
+				{
+					return Ok(challenge);
+				}
+				else
+				{
+					return BadRequest();
+				}
 			}
-			else
+			catch (System.Exception ex)
 			{
-				return BadRequest();
+				LoggerServices.AddMessageError($"ERROR: Verificando token", ex);
+
+				throw;
 			}
+
 		}
 
 	}

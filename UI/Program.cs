@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.ResponseCompression;
 using BusinessLogic.Rastreo.Model;
 using CAPA_NEGOCIO.MAPEO;
 
+
 new BDConnection().IniciarMainConecction();
 Cat_Dependencias.PrepareDefaultDependencys();//crea las dependencias por defecto TODO REPARAR EN PRODUCTIVO
 //SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
+
 
 var builder = WebApplication.CreateBuilder(args);
 

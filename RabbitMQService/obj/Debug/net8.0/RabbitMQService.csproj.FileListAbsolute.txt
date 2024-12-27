@@ -163,3 +163,4 @@ C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\RabbitMQServi
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\ref\RabbitMQService.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\HtmlAgilityPack.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Xml.XPath.XmlDocument.dll
+C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\appsettings.json

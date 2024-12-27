@@ -12,11 +12,21 @@ using RabbitMQService.Consumers;
 
 internal class Program
 {
-    private static void Main(string[] args)
+	private static void Main(string[] args)
+	{
+		ServicesMQ.ExcuteCola();
+	}
+
+	
+}
+
+public class ServicesMQ
+{
+	public static void ExcuteCola()
     {
         IConfiguration Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json")
-                                                          .AddEnvironmentVariables()
-                                                          .Build();
+                                                                  .AddEnvironmentVariables()
+                                                                  .Build();
 
 
         var cadena = Configuration.GetConnectionString("DevCnx");
