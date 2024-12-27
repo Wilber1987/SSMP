@@ -5,6 +5,7 @@ using CAPA_DATOS.Cron.Jobs;
 using Microsoft.AspNetCore.ResponseCompression;
 using BusinessLogic.Rastreo.Model;
 using CAPA_NEGOCIO.MAPEO;
+using UI;
 
 
 new BDConnection().IniciarMainConecction();
@@ -13,6 +14,7 @@ Cat_Dependencias.PrepareDefaultDependencys();//crea las dependencias por defecto
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 
 // Add services to the container.
@@ -64,6 +66,7 @@ builder.Services.AddCronJob<CreateAutomaticsCaseSchedulerJob>(options =>
 
 
 var app = builder.Build();
+app.UseMiddleware<RequestLoggingMiddleware>();
 // builder.Services.AddSession(options =>
 // {
 //     options.Cookie.Name = ".AdventureWorks.Session";
