@@ -31,8 +31,12 @@ namespace BusinessLogic.IA
 			//
 			string pront = GetPront("SYSTEMPRONT")
 				.Replace("{request_type}", prontTypes)
-				.Replace("{rules}", GetPront(prontTypes))
-				.Replace("{documents}", $"- {prontTypes}: {GetDocumentsPront(prontTypes)}" );
+				.Replace("{rules}", GetPront(prontTypes));
+			string documents = GetDocumentsPront(prontTypes);
+			if (documents != "")
+			{
+				pront = pront.Replace("{documents}", $"- {prontTypes}: {documents}");
+			}
 			Console.Write(pront);
 			return pront;
 		}
@@ -43,7 +47,7 @@ namespace BusinessLogic.IA
 			var articles = new Article().Where<Article>(
 				FilterData.In("Category_Id", cat?.Category_Id ?? -1)
 			).ToList();
-			var list = articles.Select(x => $"\n {articles.IndexOf(x) + 1} {x.Title}: {ExtractTextFromHtml(x.Body)}" ).ToList();
+			var list = articles.Select(x => $"\n {articles.IndexOf(x) + 1} {x.Title}: {ExtractTextFromHtml(x.Body)}").ToList();
 			return string.Join("\n - ", list);
 		}
 
@@ -174,6 +178,21 @@ Por favor, selecciona una opción y cuéntame cómo puedo asistirte hoy.";
 			{
 				return consulta ?? "ASISTENCIA_GENERAL";
 			}
+		}
+		internal static string? GetAutomaticResponse(string consulta)
+		{
+			return consulta switch
+			{
+				"1" => "Con mucho gusto puedo apoyarte con el rastreo y seguimiento. Por favor, proporcióname el número de seguimiento para poder ayudarte.",
+				"2" => "Lamento mucho el retraso en tu envío. Por favor, indícame el número de seguimiento para revisar el estado actual de tu paquete.",
+				"3" => "Entiendo tu preocupación sobre los impuestos. podrias darme mas detalles para poder ayudarte?",
+				"4" => "Gracias por tu reporte. Si sospechas de una posible estafa, por favor comparte todos los detalles del caso para que podamos investigarlo adecuadamente.",
+				"5" => "Con gusto puedo proporcionarte información de contacto, horarios de nuestras oficinas o detalles sobre eventos y actividades. Por favor, indícame qué información necesitas específicamente.",
+				"6" => "Claro, puedo ayudarte con procedimientos de soporte técnico o detalles sobre los documentos necesarios para trámites. Por favor, dime qué trámite o soporte necesitas.",
+				"7" => "Entendido. Te pondré en contacto con un agente de servicio al cliente para que puedan asistirte directamente. Por favor, espera un momento.",
+				"8" => "¡Gracias por tu interés en nuestros eventos! Por favor, dime qué tipo de evento o actividad te interesa para brindarte más información.",
+				_ => null
+			};
 		}
 	}
 

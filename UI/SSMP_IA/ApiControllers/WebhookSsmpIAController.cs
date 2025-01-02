@@ -17,30 +17,33 @@ namespace UI.SSMP_IA.ApiControllers
 	[ApiController]
 	public class WebhookSsmpIAController : ControllerBase
 	{
+		private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(10); // Limitar a 10 tareas simultáneas
+
 		[HttpPost]
-		[AuthController]//TODO QUITAR
+		[AuthController] // TODO: QUITAR
 		public IActionResult ReceiveMessage([FromBody] dynamic message, [FromHeader(Name = "X-Platform")] string platform = null)
 		{
 			try
 			{
 				if (string.IsNullOrEmpty(platform))
 				{
-					// Si el encabezado no está presente, maneja el caso.
 					platform = "whatsapp"; // Valor predeterminado o manejo alternativo.
 				}
 				try
 				{
-					LoggerServices.AddMessageInfo($"Info: nuevoMensaje: " +  message.toString());
+					LoggerServices.AddMessageInfo($"Info: nuevoMensaje: " + message.ToString());
 				}
-				catch (System.Exception)
-				{}
-				
+				catch (Exception)
+				{
+					// Manejo silencioso del error de logging
+				}
+
 				// Determinar el origen del mensaje
 				UserMessage unifiedMessage = platform?.ToLower() switch
 				{
-					"whatsapp" => ProcessWhatsAppMessage(message),
-					"messenger" => ProcessMessengerMessage(message),
-					"webapi" => ProcessWebApiMessage(message),
+					"whatsapp" => UserMessage.ProcessWhatsAppMessage(message),
+					"messenger" => UserMessage.ProcessMessengerMessage(message),
+					"webapi" => UserMessage.ProcessWebApiMessage(message),
 					_ => throw new InvalidOperationException("Unsupported platform")
 				};
 
@@ -49,9 +52,8 @@ namespace UI.SSMP_IA.ApiControllers
 					switch (unifiedMessage.Source)
 					{
 						case "webapi":
-							//funcion para consultar directamente a la IA y retorna respuesta
+							// Procesar inmediatamente para webapi
 							var resp = EnqueueMessageWebApi(unifiedMessage, "webapi");
-
 							ResponseWebApi reply = new ResponseWebApi()
 							{
 								Reply = resp.MessageIA,
@@ -59,39 +61,17 @@ namespace UI.SSMP_IA.ApiControllers
 								ProfileName = "IA",
 								Id_Case = resp.Id_case,
 							};
-							//funcion para encolar mensage para procesar y posterior enviar una respuesta al usuario
-							//EnqueueMessage(message, "WebAPI"); //desactualizado no se ve necesario la interaccion encolada
-
-							return  Ok(reply);
-						case "WhatsApp": case "messenger":
-						 	//var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
-							//var message = System.Text.Json.JsonSerializer.Deserialize<UserMessage>(e, options);
-
-							//result.TransactionNumber = message.SessionId;
-							var instanceIA = new LlamaClient();
-							var responseIA = new ResponseAPI();
-							// Ejecutar asincronía sincrónicamente usando GetAwaiter().GetResult()
-							var response = instanceIA.GenerateResponse(unifiedMessage).GetAwaiter().GetResult();
-						  // var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(response); 
-							//string messageContent = jsonResponse.Message.Content;
-							var response2 = responseIA.SendResponseToUser(unifiedMessage, response?.MessageIA).GetAwaiter().GetResult();
-							// Responder al usuario según la plataforma
-							//MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
-							break;
-						/*case "messenger":
-							// token EAARa3vZCcGMQBOZCMy5ixTSzPHZAA5ZAz8iaNZByAEDRhqgaw3TjtU9OyZCN4QDCsaf00u1ihTNPaC9sIZACpGQI3tisjofB8GaUvQNTkcVtYYZARTYyqMvfAa4xPUZCDbcqBXVIFJH3EMBGezPLNycWwjttisdbtjNCKotQZAZBGtZBlFLQ0nQgddYKG3Prq24kjreLDgZDZD
-							// Responder al usuario según la plataforma
-							//MQClient.PublishToQueue("TSK_Receiver_Message", unifiedMessage);
-							LlamaClient.
-							break;*/
-
+							// Respuesta inmediata para webapi
+							return Ok(reply);
+						case "WhatsApp":
+						case "messenger":
+							// Procesar en segundo plano para WhatsApp y Messenger
+							Task.Run(() => BusinessLogic.BackgroundProcessor.ProcessInBackground(unifiedMessage));
+							return Ok("EVENT_RECEIVED");
 						default:
-							break;
+							return BadRequest("Unsupported platform source.");
 					}
-
-					return Ok("EVENT_RECEIVED");
 				}
-
 				return BadRequest("Message could not be processed.");
 			}
 			catch (Exception ex)
@@ -102,87 +82,12 @@ namespace UI.SSMP_IA.ApiControllers
 				return StatusCode(500, "Internal Server Error");
 			}
 		}
-
-		private UserMessage ProcessWhatsAppMessage(dynamic message)
-		{
-			try
-			{
-				//string whatsAppMessagestringg = message.ToString();
-				
-				//var whatsAppMessage = message?.entry[0]?.changes[0]?.value?.messages[0];
-				var whatsAppMessage = JsonConvert.DeserializeObject<WhatsappBusinessAccount>(message.ToString());
-				
-				if (whatsAppMessage == null)
-					return null;
-
-				return new UserMessage
-				{
-					Source = "WhatsApp",
-					UserId =  whatsAppMessage?.Entry[0]?.Changes[0]?.Value?.Messages[0].From,
-					Text =  whatsAppMessage?.Entry[0]?.Changes[0]?.Value?.Messages[0].Text?.Body,
-					Timestamp = DateTime.Now // O extraer del mensaje
-				};
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
-		}
-
-		private UserMessage ProcessMessengerMessage(dynamic message)
-		{
-			try
-			{
-				var entry = message?.entry?[0];
-				var messagingEvent = entry?.messaging?[0];
-				if (messagingEvent == null)
-					return null;
-
-				return new UserMessage
-				{
-					Source = "Messenger",
-					UserId = messagingEvent.sender?.id,
-					Text = messagingEvent.message?.text,
-					Timestamp = DateTime.Now // O extraer del mensaje
-				};
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
-		private UserMessage ProcessWebApiMessage(dynamic message)
-		{
-			try
-			{
-				string jsonString = System.Text.Json.JsonSerializer.Serialize(message);
-				var jsonElement = System.Text.Json.JsonSerializer.Deserialize<UserMessage>(jsonString.ToString());
-
-				if (jsonElement == null)
-					return null;
-
-				return jsonElement;
-
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
-		//Devuelve respuesta al usuario
 		private static UserMessage EnqueueMessageWebApi(UserMessage message, string source)
 		{
 			message.Source = source; // Añadimos la fuente al mensaje
-
 			var instanceIA = new LlamaClient();
-
 			// Ejecutar asincronía sincrónicamente usando GetAwaiter().GetResult()
 			var response = instanceIA.GenerateResponse(message).GetAwaiter().GetResult();
-			// var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(response);
-			// string messageContent = jsonResponse.Message.Content;
-
 			return response;
 		}
 
@@ -208,7 +113,6 @@ namespace UI.SSMP_IA.ApiControllers
 			catch (System.Exception ex)
 			{
 				LoggerServices.AddMessageError($"ERROR: Verificando token", ex);
-
 				throw;
 			}
 

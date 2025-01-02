@@ -8,13 +8,13 @@ namespace IA.Dto
     public class WhatsappBusinessAccount
     {
         public string Object { get; set; }
-        public List<Entry> Entry { get; set; }
+        public List<Entry> Entry { get; set; } = [];
     }
 
     public class Entry
     {
         public string Id { get; set; }
-        public List<Change> Changes { get; set; }
+        public List<Change> Changes { get; set; } = [];
     }
 
     public class Change
@@ -26,8 +26,8 @@ namespace IA.Dto
     {
         public string MessagingProduct { get; set; }
         public Metadata Metadata { get; set; }
-        public List<Contact> Contacts { get; set; }
-        public List<Message> Messages { get; set; }
+        public List<Contact> Contacts { get; set; } = [];
+        public List<Message> Messages { get; set; } = [];
     }
 
     public class Metadata

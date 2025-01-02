@@ -21,11 +21,9 @@ namespace CAPA_NEGOCIO.IA
 					case "WebAPI":
 						await SendResponseToWebAPIAsync(userMessage.UserId, response);
 						break;
-
 					case "WhatsApp":
 						await SendResponseToWhatsApp(userMessage.UserId, response);
 						break;
-
 					case "Messenger":
 						await SendResponseToMessengerAsync(userMessage.UserId, response);
 						break;
@@ -118,6 +116,95 @@ namespace CAPA_NEGOCIO.IA
 			{
 				// Manejo de excepciones
 				return $"Exception: {ex.Message}";
+			}
+		}
+		public async Task<string> SendDeliveryReceipt(string messageId, string userId)
+		{
+			try
+			{
+				using var client = new HttpClient();
+
+				// Crear el contenido de la solicitud
+				var content = new StringContent(JsonConvert.SerializeObject(new
+				{
+					messaging_product = "whatsapp",
+					status = "delivered",
+					message_id = messageId,
+					to = "+" + userId.Replace("+", "")
+				}), Encoding.UTF8, "application/json");
+
+				// Configurar el encabezado de autorización
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+					"Bearer",
+					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverWhatsApp")
+				);
+
+				// Enviar la solicitud
+				var responseMessage = await client.PostAsync(
+					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"),
+					content
+				);
+
+				// Leer el contenido de la respuesta
+				var responseContent = await responseMessage.Content.ReadAsStringAsync();
+
+				if (responseMessage.IsSuccessStatusCode)
+				{
+					return $"Delivery receipt sent successfully: {responseContent}";
+				}
+				else
+				{
+					return $"Error sending delivery receipt: {responseMessage.StatusCode} - {responseContent}";
+				}
+			}
+			catch (Exception ex)
+			{
+				return $"Exception while sending delivery receipt: {ex.Message}";
+			}
+		}
+
+		public async Task<string> SendReadReceipt(string messageId, string userId)
+		{
+			try
+			{
+				using var client = new HttpClient();
+
+				// Crear el contenido de la solicitud
+				var content = new StringContent(JsonConvert.SerializeObject(new
+				{
+					messaging_product = "whatsapp",
+					status = "read",
+					message_id = messageId,
+					to = "+" + userId.Replace("+", "")
+				}), Encoding.UTF8, "application/json");
+
+				// Configurar el encabezado de autorización
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+					"Bearer",
+					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverWhatsApp")
+				);
+
+				// Enviar la solicitud
+				var responseMessage = await client.PostAsync(
+					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"),
+					content
+				);
+
+				// Leer el contenido de la respuesta
+				var responseContent = await responseMessage.Content.ReadAsStringAsync();
+
+				if (responseMessage.IsSuccessStatusCode)
+				{
+					return $"Read receipt sent successfully: {responseContent}";
+				}
+				else
+				{
+					return $"Error sending read receipt: {responseMessage.StatusCode} - {responseContent}";
+				}
+			}
+			catch (Exception ex)
+			{
+				return $"Exception while sending read receipt: {ex.Message}";
 			}
 		}
 		/*

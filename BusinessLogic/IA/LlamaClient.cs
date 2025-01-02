@@ -16,7 +16,7 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
-				string caseTitle = $"{question?.UserId} - {question?.Timestamp.ToString("yyyy-MM-dd")}";
+				string caseTitle = $"{question?.UserId} - {question?.Timestamp?.ToString("yyyy-MM-dd")}";
 				var instaCase = new Tbl_Case().Find<Tbl_Case>(
 					FilterData.Equal("Titulo", caseTitle),
 					FilterData.Equal("Estado", Case_Estate.Activo)
@@ -79,6 +79,14 @@ namespace CAPA_NEGOCIO
 				}
 				else
 				{
+					string? automaticResponse = ProntManager.GetAutomaticResponse(question.Text); 
+					if (automaticResponse != null)
+					{
+						question.MessageIA = automaticResponse;
+						question.Id_case = dCaso.Id_Case;
+						await AddComment(dCaso, question);
+						return question;
+					}
 					// Crear el prompt estructurado para Ollama
 					string prompt = ProntManager.CrearPrompt(question.Text, trakingNumber, list, tipocaso);
 					List<object> historialMensajes = GetHistoryMessage(question, dCaso, prompt, tipocaso);
