@@ -334,5 +334,37 @@ namespace CAPA_NEGOCIO.IA
 			}
 		}
 
+		public async static Task<string> SendTelegramDirectMessageAsync(string userId, string message)
+		{
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					// Configurar encabezados de autorización
+					client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverTelegram"));
+
+
+ 					string url = $"https://api.telegram.org/bot{SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverTelegram")}/sendMessage";
+            		var content = new StringContent($"{{\"chat_id\": \"{userId}\", \"text\": \"{message}\"}}", Encoding.UTF8, "application/json");
+
+					HttpResponseMessage response = await client.PostAsync(url, content);
+					if (response.IsSuccessStatusCode)
+					{
+						return "Ok";
+					}
+					else
+					{ 
+						var errorResponse = await response.Content.ReadAsStringAsync();
+						throw new Exception($"Error al enviar mensaje: {errorResponse}");
+					}
+					
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception($"Excepción: {ex.Message}", ex);
+			}
+		}
+
 	}
 }
