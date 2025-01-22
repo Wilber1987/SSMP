@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="~/css/Perfil.css">
 <div class="perfil-container">
     <div class="col-xxl-5">
+         <h3>Datos generales</h3>
         <div class="card-profile">
             <div class="user-profile-img">
                 <img src="@SystemConfig.MEDIA_IMG_PATH@SystemConfig.LOGO_PRINCIPAL"
@@ -102,7 +103,10 @@
         @foreach (var grupos_Profile in perfil.Tbl_Grupos_Profiles ?? [])
         {
             <div class="card">
-                <p><strong>@grupos_Profile?.Tbl_Grupo?.Nombre</strong>. @Html.Raw(grupos_Profile?.Tbl_Grupo?.Descripcion ?? "") </p>
+                <p><strong>@grupos_Profile?.Tbl_Grupo?.Nombre</strong>.</p>
+                <div class="card-body">
+                    @Html.Raw(grupos_Profile?.Tbl_Grupo?.Descripcion ?? "") 
+                </div>
                 <p class="card-footer">@grupos_Profile?.Tbl_Grupo?.Tbl_Profile?.GetNombreCompleto()</p>
             </div>
         }

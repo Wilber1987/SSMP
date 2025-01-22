@@ -191,10 +191,10 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
         Solicitudes Realizadas</a>
 }
 
-@if (SystemConfig.isMessagesActive() || SystemConfig.isNotificationsActive())
+@if (SystemConfig.IsMessagesActive() || SystemConfig.IsNotificationsActive())
 {
 
-    @if (SystemConfig.isNotificationsActive() && SecurityController.HavePermission(Identify,
+    @if (SystemConfig.IsNotificationsActive() && SecurityController.HavePermission(Identify,
    Permissions.NOTIFICACIONES_READER))
     {
         <a href="~/Mensajes/NotificationesView" id="NotificationesView" class="menu-item">
@@ -216,7 +216,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
             Notificaciones
         </a>
     }
-    @if (SystemConfig.isNotificationsActive() && SecurityController.HavePermission(Identify,
+    @if (SystemConfig.IsNotificationsActive() && SecurityController.HavePermission(Identify,
    Permissions.NOTIFICACIONES_MANAGER))
     {
         <a href="~/Mensajes/NotificacionesManager" id="NotificacionesManager" class="menu-item">
@@ -231,7 +231,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
             </svg>
             notificaciones admin.</a>
     }
-    @if (SystemConfig.isMessagesActive() && SecurityController.HavePermission(Identify, Permissions.SEND_MESSAGE))
+    @if (SystemConfig.IsMessagesActive() && SecurityController.HavePermission(Identify, Permissions.SEND_MESSAGE))
     {
         <a href="~/Mensajes/MensajesView" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -252,7 +252,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
     }
 }
 
-@if (SystemConfig.isQuestionnairesActive())
+@if (SystemConfig.IsQuestionnairesActive())
 {
     @if (SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), Identify))
     {

@@ -124,8 +124,21 @@ p:not(:last-child) {
     border: 1px solid var(--fourth-color);
     border-radius: 20px;
     background-color: var(--fourth-color);
-    box-shadow: 0 0 10px 1px var(--fifty-color);
     backdrop-filter: blur(15px);
+    padding: 40px;
+    & * {
+        color: var(--font-primary-color) !important;
+    }
+    & strong {
+        color: var(--font-secundary-color) !important;
+    }
+    & .card-body {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: justify;        
+        max-height: 400px;
+    }
+    
 }
 
 .card-footer {

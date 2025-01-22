@@ -16,11 +16,6 @@ class NotificationRequest_ModelComponent extends EntityClass {
    /**@type {ModelProperty}*/ Mensaje = { type: 'richtext' };
    /**@type {ModelProperty}*/ Files = { type: 'file' , require: false};
    /**@type {ModelProperty}*/ NotificationType = { type: 'text', hidden: true };
-   /**@type {ModelProperty}*/ Responsables = { type: 'multiselect', hidden: true  };
-   /**@type {ModelProperty}*/ Niveles = { type: 'multiselect', hidden: true };
-   /**@type {ModelProperty}*/ Clases = { type: 'multiselect', hidden: true };
-   /**@type {ModelProperty}*/ Secciones = { type: 'multiselect', hidden: true };
-   /**@type {ModelProperty}*/ Periodos = { type: 'multiselect', hidden: true };
    /**@type {ModelProperty}*/ NotificationsServicesEnum = { type: 'multiselect', hidden: true };
 
 }
@@ -33,6 +28,6 @@ export { NotificationsServicesEnum }
 
 const NotificationTypeEnum =
 {
-    DEPENDENCIA: "DEPENDENCIA", USUARIOS: "USUARIOS"
+    DEPENDENCIA: "DEPENDENCIA", USUARIOS: "USUARIOS", LIBRE: "LIBRE"
 }
 export { NotificationTypeEnum }

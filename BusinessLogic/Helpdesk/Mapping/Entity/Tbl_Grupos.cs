@@ -151,10 +151,6 @@ namespace CAPA_NEGOCIO.MAPEO
 
 		public object? SaveGroup(string? identity)
 		{
-			if (AuthNetCore.HavePermission(identity, Permissions.ADMIN_ACCESS))
-			{
-				return Save();
-			}
 			UserModel user = AuthNetCore.User(identity);
 			Tbl_Profile? profile = new Tbl_Profile { IdUser = user.UserId }.Find<Tbl_Profile>();
 			Id_Perfil_Crea = profile?.Id_Perfil;
@@ -163,7 +159,11 @@ namespace CAPA_NEGOCIO.MAPEO
 				Id_Perfil = profile?.Id_Perfil,Estado = GroupState.ACTIVO.ToString(),Fecha_Incorporacion = DateTime.Now
 			}];
 			Save();
-			return this;
+			return new ResponseService
+			{
+				status= 200,
+				message = "Grupo guardado"
+			};
 		}
 
 		public object? UpdateGroup(string? identity)

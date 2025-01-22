@@ -1,4 +1,5 @@
-﻿using DataBaseModel;
+﻿using CAPA_DATOS;
+using DataBaseModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using WhatsAppApi;
 
 namespace CAPA_NEGOCIO.IA
 {
@@ -85,6 +87,7 @@ namespace CAPA_NEGOCIO.IA
 						body = response
 					}
 				}), Encoding.UTF8, "application/json");
+				
 
 				// Configurar el encabezado de autorización
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
@@ -114,6 +117,55 @@ namespace CAPA_NEGOCIO.IA
 			}
 			catch (Exception ex)
 			{
+				// Manejo de excepciones
+				return $"Exception: {ex.Message}";
+			}
+		}
+		//{"error":{"message":"(#132001) Template name does not exist in the translation","type":"OAuthException","code":132001,"error_data":{"messaging_product":"whatsapp","details":"template name (notificacion_paquete) does not exist in es"},"fbtrace_id":"AKCYcYG8nDBghnNaaYAQx3M"}}
+		//{"error":{"message":"(#100) The parameter messaging_product is required.","type":"OAuthException","code":100,"fbtrace_id":"ABuwLf-MvFCEZAEGKA-c8m_"}}
+		public async Task<string> SendResponseToWhatsAppWithTemplate(WhatsAppMessage message)
+		{
+			try
+			{
+				using var client = new HttpClient();
+				
+				/*message.template.name = "hello_world";
+				message.template.language.code = "en_US";
+				message.template.components = null;*/
+
+				// Crear el contenido de la solicitud
+				var content = new StringContent(JsonConvert.SerializeObject(message), Encoding.UTF8, "application/json");
+
+				// Configurar el encabezado de autorización
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+					"Bearer",
+					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverWhatsApp")
+				);
+
+				// Enviar la solicitud y capturar la respuesta
+				var responseMessage = await client.PostAsync(
+					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"),
+					content
+				);
+
+				// Leer el contenido de la respuesta
+				var responseContent = await responseMessage.Content.ReadAsStringAsync();
+
+				if (responseMessage.IsSuccessStatusCode)
+				{
+					// La solicitud fue exitosa
+					return $"Success: {responseContent}";
+				}
+				else
+				{
+					LoggerServices.AddMessageError("Error al enviar notificacion por whatsapp", new Exception(responseContent));
+					// La solicitud falló, registra los detalles del error
+					return $"Error: {responseMessage.StatusCode} - {responseContent}";
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerServices.AddMessageError("Error al enviar notificacion por whatsapp", ex);
 				// Manejo de excepciones
 				return $"Exception: {ex.Message}";
 			}

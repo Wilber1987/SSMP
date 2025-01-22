@@ -17,7 +17,15 @@ class NotificationRequest extends EntityClass {
    /**@type {String}*/ NotificationType;
    /**@type {Array<Number>}*/ Usuarios;
    /**@type {Array<Number>}*/ Dependencias;
+   /**@type {Array<Number>}*/ ToAdress; //correos o numeros de telefono
    /**@type {String}*/ NotificationsServicesEnum;  
+   /**@type {Array<NotificactionDestinatarios>}*/  Destinatarios;
 }
 
 export { NotificationRequest }
+
+export class NotificactionDestinatarios {
+    /**@type {String} */ Correo;
+    /**@type {String} */ Telefono;
+    /**@type {Object} */ NotificationData;
+}

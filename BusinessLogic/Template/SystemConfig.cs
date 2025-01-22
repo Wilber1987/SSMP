@@ -1,7 +1,8 @@
+using iTextSharp.text.pdf;
 using Microsoft.Extensions.Configuration;
 namespace DataBaseModel
 {
-    public class SystemConfig
+	public class SystemConfig
 	{
 		public SystemConfig()
 		{
@@ -28,22 +29,27 @@ namespace DataBaseModel
 		public string VERSION = "2024.07";
 		public List<Transactional_Configuraciones> configuraciones = new List<Transactional_Configuraciones>();
 
-		public static bool isAutomaticCaseActive()
+		public static bool IsAutomaticCaseActive()
 		{
 			//TODO IMPLEMENTAR ESTE METODO
 			return true;
 		}
-		public static bool isNotificationsActive()
+		public static bool IsNotificationsActive()
 		{
 			//TODO IMPLEMENTAR ESTE METODO
 			return true;
 		}
-		public static bool isMessagesActive()
+		public static bool IsMessagesActive()
 		{
 			//TODO IMPLEMENTAR ESTE METODO
 			return false;
 		}
-		public static bool isQuestionnairesActive()
+		public static bool IsWhatsAppActive()
+		{
+			//TODO IMPLEMENTAR ESTE METODO
+			return true;
+		}
+		public static bool IsQuestionnairesActive()
 		{
 			//TODO IMPLEMENTAR ESTE METODO
 			return true;

@@ -1,6 +1,8 @@
 
 
+using BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operations;
 using CAPA_DATOS.Cron.Jobs;
+using CAPA_NEGOCIO.Gestion_Mensajes.Operations;
 using CAPA_NEGOCIO.Services;
 using DataBaseModel;
 using Microsoft.Extensions.Logging;
@@ -50,7 +52,7 @@ namespace BackgroundJob.Cron.Jobs
 			//CARGA AUTOMATICA DE CASOS
 			try
 			{
-				if(SystemConfig.isAutomaticCaseActive()) 
+				if(SystemConfig.IsAutomaticCaseActive()) 
 				{
 					await new IMAPCaseServices().chargeAutomaticCase();
 				}				
@@ -81,6 +83,8 @@ namespace BackgroundJob.Cron.Jobs
 			try
 			{
 				await new SMTPCaseServices().sendCaseMailNotificationsAsync();
+				//ENVIO DE NOTIFICACIONES
+				await NotificationSenderOperation.SendNotificationsAsync();
 			}
 			catch (Exception ex)
 			{

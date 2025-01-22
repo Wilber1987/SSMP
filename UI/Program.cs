@@ -57,12 +57,12 @@ builder.Services.AddCronJob<CreateAutomaticsCaseSchedulerJob>(options =>
 	options.TimeZone = TimeZoneInfo.Local;
 });
 
-// builder.Services.AddCronJob<SendMailNotificationsSchedulerJob>(options =>
-// {
-//     // Corre cada minuto
-//     options.CronExpression = "* * * * *";
-//     options.TimeZone = TimeZoneInfo.Local;
-// });
+builder.Services.AddCronJob<SendMailNotificationsSchedulerJob>(options =>
+{
+    // Corre cada minuto
+    options.CronExpression = "* * * * *";
+    options.TimeZone = TimeZoneInfo.Local;
+});
 
 
 var app = builder.Build();
