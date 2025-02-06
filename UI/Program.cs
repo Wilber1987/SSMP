@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.ResponseCompression;
 using BusinessLogic.Rastreo.Model;
 using CAPA_NEGOCIO.MAPEO;
 using UI;
+using BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operations;
 
 
 new BDConnection().IniciarMainConecction();
 Cat_Dependencias.PrepareDefaultDependencys();//crea las dependencias por defecto TODO REPARAR EN PRODUCTIVO
 //SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
 
-
+NotificationSenderOperation.SendNotificationReport();
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -57,11 +58,18 @@ builder.Services.AddCronJob<CreateAutomaticsCaseSchedulerJob>(options =>
 	options.TimeZone = TimeZoneInfo.Local;
 });
 
+builder.Services.AddCronJob<ReportSenderSchedulerJob>(options =>
+{
+	// Corre una vez al día
+	options.CronExpression = "0 0 * * *";
+	options.TimeZone = TimeZoneInfo.Local;
+});
+
 builder.Services.AddCronJob<SendMailNotificationsSchedulerJob>(options =>
 {
-    // Corre cada minuto
-    options.CronExpression = "* * * * *";
-    options.TimeZone = TimeZoneInfo.Local;
+	// Corre cada minuto
+	options.CronExpression = "* * * * *";
+	options.TimeZone = TimeZoneInfo.Local;
 });
 
 

@@ -28,6 +28,7 @@ C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\CommandLine.d
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\Cronos.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\Gee.External.Capstone.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\Google.Protobuf.dll
+C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\HtmlAgilityPack.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\Iced.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\itextsharp.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\itextsharp.xmlworker.dll
@@ -88,6 +89,7 @@ C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Servic
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Text.Encodings.Web.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Text.Json.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Xml.XPath.XmlDocument.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\Topshelf.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\TopShelf.ServiceInstaller.dll
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
@@ -161,5 +163,3 @@ C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\refint\Rabbit
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\RabbitMQService.pdb
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\RabbitMQService.genruntimeconfig.cache
 C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\obj\Debug\net8.0\ref\RabbitMQService.dll
-C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\HtmlAgilityPack.dll
-C:\Users\wilbe\repos\NETCORE\SSMP\RabbitMQService\bin\Debug\net8.0\System.Xml.XPath.XmlDocument.dll

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CAPA_DATOS.Security; 
+using CAPA_DATOS.Security;
+using BusinessLogic.Security;
 
 namespace API.Controllers
 {
@@ -23,7 +24,7 @@ namespace API.Controllers
         }
         public object RecoveryPassword(UserModel Inst)
         {
-            return AuthNetCore.RecoveryPassword(Inst.mail);     
+            return AuthNetCoreImp.RecoveryPassword(Inst.mail);
         }
        
        

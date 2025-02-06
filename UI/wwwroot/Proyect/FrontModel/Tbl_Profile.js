@@ -17,12 +17,12 @@ class Tbl_Profile extends EntityClass {
             this[prop] = props[prop];
         }
     }
-    /**@type {ModelProperty}*/ Id_Perfil = { type: 'number', primary: true };
+    /**@type {ModelProperty}*/ Id_Perfil = { type: 'number', primary: true , hiddenFilter: true};
     /**@type {ModelProperty}*/ Nombres = { type: 'text' };
     /**@type {ModelProperty}*/ Apellidos = { type: 'text' };
-    /**@type {ModelProperty}*/ FechaNac = { type: 'date', label: "fecha de nacimiento" };
-    /**@type {ModelProperty}*/ Sexo = { type: "Select", Dataset: ["Masculino", "Femenino"] };
-    /**@type {ModelProperty}*/ Foto = { type: 'img', require: false };
+    /**@type {ModelProperty}*/ FechaNac = { type: 'date', label: "fecha de nacimiento" , hiddenFilter: true };
+    /**@type {ModelProperty}*/ Sexo = { type: "Select", Dataset: ["Masculino", "Femenino"]  , hiddenFilter: true};
+    /**@type {ModelProperty}*/ Foto = { type: 'img', require: false , hiddenFilter: true };
     /**@type {ModelProperty}*/ DNI = { type: 'text' };
 
     /**@type {ModelProperty}*/ Correo_institucional = { type: 'text', label: "correo", disabled: true, hidden: true };
@@ -30,7 +30,7 @@ class Tbl_Profile extends EntityClass {
 
     /** campos de investigaciones */
     //**@type {ModelProperty}*/ Tbl_Grupos_Profiles = { type: 'masterdetail', require: false , ModelObject: ()=> new Tbl_Grupos_Profiles_ModelComponent() };
-    /**@type {ModelProperty}*/ ORCID = { type: 'text', require: false };
+    /**@type {ModelProperty}*/ ORCID = { type: 'text', require: false  , hiddenFilter: true};
     //PROPIEDADES DE HELPDESK
     /**@type {ModelProperty}*/ Cat_Dependencias = {
         type: 'Multiselect', hiddenFilter: true,

@@ -7,8 +7,6 @@ using DataBaseModel;
 using IA.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using RabbitMQ;
-using RabbitMQService;
 
 
 namespace UI.SSMP_IA.ApiControllers

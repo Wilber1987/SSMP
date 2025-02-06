@@ -62,7 +62,7 @@
             }
 
             render() {
-                this.shadowRoot.innerHTML = `<style>
+                @* this.shadowRoot.innerHTML = `<style>
                     button {
                     padding: 10px 20px;
                     font-size: 16px;
@@ -74,7 +74,7 @@
                     transition: background-color 0.3s ease, color 0.3s ease;
                     }
                 </style>
-                <button>Cambiar Tema</button>`;
+                <button>Cambiar Tema</button>`; *@
             }
 
             toggleTheme() {
@@ -109,7 +109,7 @@
 </head>
 
 <body id="AdminTemplate">
-    <aside class="Aside">
+    <aside class="Aside navActive">
         <nav>
             <img src="~/Media/Image/close.webp" class="navIcon" onclick="displayNav()">
             <div class="logo-container">

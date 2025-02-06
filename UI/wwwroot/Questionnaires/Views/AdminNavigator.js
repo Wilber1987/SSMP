@@ -18,7 +18,6 @@ window.addEventListener("load", async () => {
         Aside.append(WRender.Create({ tagName: "h3", innerText: "Mantenimiento de Tests" }));
         // @ts-ignore
         Aside.append(new WAppNavigator({
-            Direction: "column",
             Elements: [
                 ElementTab(DOMManager, new Cat_Tipo_Preguntas_ModelComponent(), new Cat_Tipo_Preguntas()),
                 ElementTab(DOMManager, new Cat_Categorias_Test_ModelComponent(), new Cat_Categorias_Test())
