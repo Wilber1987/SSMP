@@ -158,7 +158,7 @@ namespace CAPA_NEGOCIO.IA
 				}
 				else
 				{
-					LoggerServices.AddMessageError("Error al enviar notificacion por whatsapp", new Exception(responseContent));
+					LoggerServices.AddMessageError($"Error al enviar notificacion por whatsapp ---- {content} ---- Error: {responseMessage.StatusCode} - {responseContent}", new Exception(responseContent));
 					// La solicitud falló, registra los detalles del error
 					return $"Error: {responseMessage.StatusCode} - {responseContent}";
 				}

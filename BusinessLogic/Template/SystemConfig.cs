@@ -1,3 +1,4 @@
+using CAPA_DATOS.Services;
 using iTextSharp.text.pdf;
 using Microsoft.Extensions.Configuration;
 namespace DataBaseModel
@@ -52,7 +53,7 @@ namespace DataBaseModel
 		public static bool IsQuestionnairesActive()
 		{
 			//TODO IMPLEMENTAR ESTE METODO
-			return true;
+			return false;
 		}
 		public static IConfigurationRoot AppConfiguration()
 		{
@@ -76,6 +77,21 @@ namespace DataBaseModel
 					.Build().GetSection(sectionName.ToString())[value];
 		}
 
+		internal static MailConfig? GetSMTPDefaultConfig()
+		{
+			string? domain = AppConfigurationValue(AppConfigurationList.Smtp, "Domain");
+			string? user = AppConfigurationValue(AppConfigurationList.Smtp, "User");
+			string? password = AppConfigurationValue(AppConfigurationList.Smtp, "Password");
+			string? port = AppConfigurationValue(AppConfigurationList.Smtp, "Port");
+			return new MailConfig()
+			{
+				HOST = domain,
+				PASSWORD = password,
+				USERNAME = user,
+				PORT = port != null ? Convert.ToInt32(port) : null,				
+				AutenticationType = AutenticationTypeEnum.BASIC				
+			};
+		}
 	}
 
 

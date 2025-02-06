@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CAPA_NEGOCIO.Gestion_Mensajes.Operations;
+using iText.Layout.Element;
 
 namespace WhatsAppApi
 {
@@ -14,7 +16,7 @@ namespace WhatsAppApi
 		public string type { get; set; } = "template";
 		public Template template { get; set; }
 
-		public WhatsAppMessage(string to, string templateName, string languageCode, params string?[] parameters)
+		public WhatsAppMessage(string to, string templateName, string languageCode, string? imageParam = null, params string?[] parameters)
 		{
 			this.to = to;
 			template = new Template
@@ -25,14 +27,53 @@ namespace WhatsAppApi
 				[
 					new Component
 					{
-						
+
 						type = "body",
 						parameters = CreateParameters(parameters)
 					}
 				]
 			};
+			if (imageParam != null)
+			{
+				template.components.Add(new Component
+				{
+
+					type = "header",
+					parameters = [new Parameter
+					{
+						type= "img",
+						image = imageParam
+					}]
+				});
+			}
 		}
-		public WhatsAppMessage(string to, string templateName, string languageCode, object dataSource)
+		public WhatsAppMessage(string to, string templateName, string languageCode, List<NotificationsParams>? dataSource, string? imageParam = null)
+		{
+			this.to = to;
+			var components = new List<Component> { };
+			if (imageParam != null)
+			{
+				components.Add(new Component
+				{
+
+					type = "header",
+					parameters = [new Parameter
+					{
+						type= "IMAGE",
+						image =  new { link= imageParam }
+					}]
+				});
+			}
+			components.Add(new Component { type = "body", parameters = CreateParameters(dataSource ?? []) });
+
+			template = new Template
+			{
+				name = templateName,
+				language = new Language { code = languageCode },
+				components = components
+			};
+		}
+		/*public WhatsAppMessage(string to, string templateName, string languageCode, object dataSource)
 		{
 			this.to = to;
 			template = new Template
@@ -49,7 +90,7 @@ namespace WhatsAppApi
 					}
 				}
 			};
-		}
+		}*/
 		private Parameter[] CreateParametersFromObject(object dataSource)
 		{
 			// Obtener las propiedades públicas de la clase y sus valores
@@ -68,6 +109,18 @@ namespace WhatsAppApi
 					text = value
 				};
 			}
+			return parameters;
+		}
+
+		private Parameter[] CreateParameters(List<NotificationsParams> values)
+		{
+			var parameters = new Parameter[values.Count];
+			int index = 0;
+			values.ForEach(param =>
+			{
+				parameters[index] = new Parameter { type = param.Type ?? "text", text = param.Value ?? "Desconocido" };
+				index++;
+			});
 			return parameters;
 		}
 
@@ -159,7 +212,7 @@ namespace WhatsAppApi
 	{
 		public string name { get; set; } // Nombre de la plantilla
 		public Language language { get; set; }
-		public Component[]? components { get; set; }
+		public List<Component> components { get; set; }
 	}
 
 	public class Language
@@ -175,8 +228,9 @@ namespace WhatsAppApi
 
 	public class Parameter
 	{
-		public string type { get; set; } // Tipo de parámetro (ejemplo: "text")
-		public string text { get; set; } // Valor del parámetro
+		public string? type { get; set; } // Tipo de parámetro (ejemplo: "text")
+		public string? text { get; set; } // Valor del parámetro
+		public object? image { get; set; }
 	}
 
 }

@@ -110,8 +110,31 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 			Inst.Id_User = user.UserId;
 			return Inst.Get<Notificaciones>();
 		}
+		public static List<Notificaciones> GetNotificaciones(Notificaciones Inst)
+		{
+			return Inst.Get<Notificaciones>();
+		}
 
+		public static ResponseService ReenvioNotificaciones(List<Notificaciones>? notificaciones)
+		{
+			notificaciones?.ForEach(n => 
+			{
+				n.Enviado = false;
+				n.Leido = false;
+				n.Update();
+			});
+			return new ResponseService
+			{
+				status= 200,
+				message= "NotificacionesReenviadas"	
+			};
+		}
 
+		public static List<Notificaciones> GetNotificacionesEnviadas(Notificaciones Inst)
+		{
+			Inst.orderData = [OrdeData.Asc("Fecha_Envio")];
+			return Inst.Where<Notificaciones>(FilterData.Equal("Enviado", true));
+		}
 	}
 
 	public class NotificactionDestinatarios
@@ -136,9 +159,18 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 
 		public string? Correo { get; set; }
 		public string? Telefono { get; set; }
-        public string? Dpi { get;  set; }
-        public string? NumeroPaquete { get;  set; }
-    }
+		public string? Dpi { get;  set; }
+		public string? NumeroPaquete { get;  set; }
+		public int? Reenvios { get;  set; }
+		public List<NotificationsParams>? Params { get; set; }
+	}
+	
+	public class NotificationsParams 
+	{
+		public string? Name { get; set; }
+		public string? Type { get; set; }
+		public string? Value { get; set; }
+	}
 }
 
 /* public bool enviarWhatsapp(){

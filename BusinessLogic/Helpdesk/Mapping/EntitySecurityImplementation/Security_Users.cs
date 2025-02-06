@@ -168,7 +168,7 @@ namespace CAPA_NEGOCIO.MAPEO
 				HostService = Enum.Parse<HostServices>(Cat_Dependencias?.HostService)
 			};
 			SMTPMailServices.Config = dependenciaConfig;
-			return AuthNetCore.RecoveryPassword(mail);
+			return AuthNetCore.RecoveryPassword(mail, dependenciaConfig);
 		}
 
 		public new object? changePassword(string? identfy)

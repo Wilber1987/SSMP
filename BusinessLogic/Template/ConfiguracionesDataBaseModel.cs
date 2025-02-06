@@ -43,6 +43,13 @@ namespace DataBaseModel
 			}
 			return this.Update();
 		}
+
+		internal int GetParamNumberTemplate()
+		{
+			return Convert.ToInt32(Find<Transactional_Configuraciones>(
+				FilterData.Equal("Nombre", ConfiguracionesTypeEnum.PARAM_NUMBER_TEMPLATE)
+			)?.Valor ?? "0");			   
+		}
 	}
 	public enum AppConfigurationList
 	{
@@ -50,12 +57,15 @@ namespace DataBaseModel
 		SQLCredentialsSeguiminento,
 		IAServices,
 		MettaApi,
-		XApi
-	}	
+		XApi,
+        Smtp,
+        AutomaticReports
+    }	
 
 	public enum ConfiguracionesTypeEnum
 	{
-		THEME, GENERAL_DATA, NUMBER
+		THEME, GENERAL_DATA, NUMBER,
+		PARAM_NUMBER_TEMPLATE
 	}
 
 	public enum ConfiguracionesThemeEnum

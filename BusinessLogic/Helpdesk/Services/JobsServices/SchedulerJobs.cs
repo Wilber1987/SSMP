@@ -94,5 +94,33 @@ namespace BackgroundJob.Cron.Jobs
 			return Task.CompletedTask;
 		}
 	}
+	
+	public class ReportSenderSchedulerJob : CronBackgroundJob
+	{
+		private readonly ILogger<ReportSenderSchedulerJob> _log;
+
+		public ReportSenderSchedulerJob(CronSettings<ReportSenderSchedulerJob> settings, ILogger<ReportSenderSchedulerJob> log)
+			: base(settings.CronExpression, settings.TimeZone)
+		{
+			_log = log;
+		}
+
+		protected override async Task<Task> DoWork(CancellationToken stoppingToken)
+		{
+			_log.LogInformation(":::::::::::Running...  ReportSenderSchedulerJob at {0}", DateTime.UtcNow);
+			//CARGA AUTOMATICA DE CASOS
+			try
+			{				
+				NotificationSenderOperation.SendNotificationReport();
+				await Task.Delay(60000);
+			}
+			catch (Exception ex)
+			{
+				_log.LogInformation(":::::::::::ERROR... at {0}", ex);
+			}
+
+			return Task.CompletedTask;
+		}
+	}
 }
 
