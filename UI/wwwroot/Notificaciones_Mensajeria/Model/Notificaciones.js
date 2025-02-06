@@ -5,7 +5,7 @@ import { ModelProperty } from "../../WDevCore/WModules/CommonModel.js";
 import { ModelFiles } from "../../WDevCore/WModules/CommonModel.js";
 import { EntityClass } from "../../WDevCore/WModules/EntityClass.js";
 import { DateTime } from "../../WDevCore/WModules/Types/DateTime.js";
-class Notificaciones extends EntityClass {	
+class Notificaciones extends EntityClass {
 	/** @param {Partial<Notificaciones>} [props] */
 	constructor(props) {
 		super(props, 'Notificaciones');
@@ -13,16 +13,18 @@ class Notificaciones extends EntityClass {
 			this[prop] = props[prop];
 		}
 	}
-   /**@type {Number}*/ Id;
-   /**@type {String}*/ Titulo;
-   /**@type {String}*/ Mensaje;
-   /**@type {Date}*/ Fecha;
-   /**@type {Date}*/ Fecha_Envio;
-   /**@type {Array<ModelFiles>}*/ Media;
-   /**@type {boolean}*/ Enviado;
-   /**@type {boolean}*/ Leido;
-   /**@type {string}*/ Tipo;
-   /**@type {NotificationData}*/ NotificationData;
+	/**@type {Number}*/ Id;
+	/**@type {String}*/ Titulo;
+	/**@type {String}*/ Mensaje;
+	/**@type {Date}*/ Fecha;
+	/**@type {Date}*/ Fecha_Envio;
+	/**@type {Array<ModelFiles>}*/ Media;
+	/**@type {boolean}*/ Enviado;
+	/**@type {boolean}*/ Leido;
+	/**@type {string}*/ Tipo;
+	/**@type {string}*/ Month;
+	/**@type {string}*/ Year;
+   	/**@type {NotificationData}*/ NotificationData;
 
 	//get Month() {return new DateTime(this.Fecha).getMonthFormatEs();}
 	//get Year() {return new DateTime(this.Fecha).getFullYear();}
@@ -31,7 +33,7 @@ class Notificaciones extends EntityClass {
 	}
 	GetParam(value) {
 		console.log(this.NotificationData?.Params);
-		
+
 		return this.NotificationData?.Params?.find(p => p.Name.toLowerCase() == value.toLowerCase())?.Value ?? "";
 	}
 }
