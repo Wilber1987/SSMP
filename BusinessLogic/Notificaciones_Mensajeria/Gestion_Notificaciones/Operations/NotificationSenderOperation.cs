@@ -44,7 +44,7 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 							var selectedParams = paramlist?.Take(paramsNumber).ToList();
 
 							string response = await new ResponseAPI().SendResponseToWhatsAppWithTemplate(new WhatsAppMessage(
-								$"{WhatsAppMessage.ObtenerExtensionPorDepartamento(notificacion?.NotificationData?.Departamento)}{notificacion?.Telefono}" ?? "",
+								notificacion!.Telefono,
 								TemplateName ?? "es",
 								TemplateLocation ?? "es",
 								selectedParams,
@@ -54,7 +54,7 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 							{
 								notificacion!.Fecha_Envio = DateTime.Now;
 								notificacion!.Enviado = true;
-								notificacion.Update();
+								notificacion.Update();								
 							}
 							else
 							{

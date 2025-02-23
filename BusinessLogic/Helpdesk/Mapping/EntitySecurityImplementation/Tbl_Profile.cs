@@ -182,7 +182,7 @@ namespace CAPA_NEGOCIO.MAPEO
 			List<Tbl_Profile> profiles = new List<Tbl_Profile>();
 			if (AuthNetCore.HavePermission(Permissions.ADMIN_ACCESS.ToString(), identity))
 			{
-				profiles.AddRange(Get<Tbl_Profile>());
+				profiles.AddRange(Where<Tbl_Profile>(FilterData.NotNull("IdUser")));
 			}
 			else if (AuthNetCore.HavePermission(Permissions.PERFIL_MANAGER.ToString(), identity))
 			{

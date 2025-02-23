@@ -5,7 +5,7 @@ import { StylesControlsV2, StylesControlsV3 } from "../../WDevCore/StyleModules/
 import { WCommentsComponent } from '../../WDevCore/WComponents/WCommentsComponent.js';
 import { WDetailObject } from '../../WDevCore/WComponents/WDetailObject.js';
 import { WFilterOptions } from "../../WDevCore/WComponents/WFilterControls.js";
-import { ModalMessege, WForm } from "../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, WForm } from "../../WDevCore/WComponents/WForm.js";
 import { WPaginatorViewer } from '../../WDevCore/WComponents/WPaginatorViewer.js';
 import { ComponentsManager, html, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
 import { Cat_Dependencias_ModelComponent } from "../FrontModel/Cat_Dependencias.js";
@@ -167,7 +167,7 @@ class MainSolicitudesView extends HTMLElement {
             ModelObject: this.ModelObject,
             AutoSave: true,
             SaveFunction: () => {
-                this.append(ModalMessege("Aviso", "Caso guardado correctamente", true))
+                this.append(ModalMessage("Aviso", "Caso guardado correctamente", true))
             }
         });
         //TODO REVISAR COMO HAYA UNA CARGA REAL DE FORMA SINCRONA

@@ -1,7 +1,7 @@
 //@ts-check
 import { StylesControlsV2, StylesControlsV3 } from '../../WDevCore/StyleModules/WStyleComponents.js';
 import { WFilterOptions } from '../../WDevCore/WComponents/WFilterControls.js';
-import { ModalMessege, ModalVericateAction } from '../../WDevCore/WComponents/WForm.js';
+import { ModalMessage, ModalVericateAction } from '../../WDevCore/WComponents/WForm.js';
 import { WModalForm } from '../../WDevCore/WComponents/WModalForm.js';
 import { WTableComponent } from '../../WDevCore/WComponents/WTableComponent.js';
 import { ComponentsManager, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
@@ -100,7 +100,7 @@ class PerfilManagerComponent extends HTMLElement {
         name: "Asignar a dependencia", action: async () => {
             // @ts-ignore
             if (this.mainTable.selectedItems.length <= 0) {
-                this.append(ModalMessege("Seleccione perfiles"));
+                this.append(ModalMessage("Seleccione perfiles"));
                 return;
             }
             //const dependencias = await new Cat_Dependencias().Get();
@@ -124,10 +124,10 @@ class PerfilManagerComponent extends HTMLElement {
                                 await new Tbl_Profile().AsignarDependencias(this.mainTable?.selectedItems,
                                     profile.Tbl_Dependencias_Usuarios);
                             if (response.status == 200) {
-                                this.append(ModalMessege("Asignación Correcta"));
+                                this.append(ModalMessage("Asignación Correcta"));
                                 this.update();
                             } else {
-                                this.append(ModalMessege("Error"));
+                                this.append(ModalMessage("Error"));
                             }
                             modal.close();
                         }, "Esta seguro que desea asignar a esta dependencia"))

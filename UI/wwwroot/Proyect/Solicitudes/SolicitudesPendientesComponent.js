@@ -5,7 +5,7 @@ import { Permissions, WSecurity } from '../../WDevCore/Security/WSecurity.js';
 import { StylesControlsV2, StylesControlsV3 } from "../../WDevCore/StyleModules/WStyleComponents.js";
 import { WCommentsComponent } from '../../WDevCore/WComponents/WCommentsComponent.js';
 import { WFilterOptions } from "../../WDevCore/WComponents/WFilterControls.js";
-import { ModalMessege, ModalVericateAction, WForm } from "../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, ModalVericateAction, WForm } from "../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from '../../WDevCore/WComponents/WModalForm.js';
 import { WTableComponent } from '../../WDevCore/WComponents/WTableComponent.js';
 import { ComponentsManager, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
@@ -180,7 +180,7 @@ class SolicitudesPendientesComponent extends HTMLElement {
             name: "Aprobar", action: async (/**@type {Tbl_Case_ModelComponent}*/element) => {
                 // @ts-ignore
                 if (this.mainTable.selectedItems.length <= 0) {
-                    this.append(ModalMessege("Seleccione solicitudes"));
+                    this.append(ModalMessage("Seleccione solicitudes"));
                     return;
                 }
                 const dependencias = await new Cat_Dependencias_ModelComponent().Get();
@@ -195,10 +195,10 @@ class SolicitudesPendientesComponent extends HTMLElement {
                             const response = await new Tbl_Case_ModelComponent({})
                                 .AprobarCaseList(this.mainTable?.selectedItems ?? [], table_case);
                             if (response.status == 200) {
-                                this.append(ModalMessege("Solicitudes aprobadas"));
+                                this.append(ModalMessage("Solicitudes aprobadas"));
                                 this.update();
                             } else {
-                                this.append(ModalMessege("Error"));
+                                this.append(ModalMessage("Error"));
                             }
                             modal.close();
                         })
@@ -209,7 +209,7 @@ class SolicitudesPendientesComponent extends HTMLElement {
             name: "Rechazar", action: async (/**@type {Tbl_Case_ModelComponent}*/element) => {
                 // @ts-ignore
                 if (this.mainTable.selectedItems.length <= 0) {
-                    this.append(ModalMessege("Seleccione solicitudes"));
+                    this.append(ModalMessage("Seleccione solicitudes"));
                     return;
                 }
                 this.append(new WModalForm({
@@ -224,10 +224,10 @@ class SolicitudesPendientesComponent extends HTMLElement {
                                 const response = await new Tbl_Case_ModelComponent()
                                     .RechazarCaseList(this.mainTable?.selectedItems ?? [], comentario);
                                 if (response.status == 200) {
-                                    this.append(ModalMessege("Solicitudes rechazadas"));
+                                    this.append(ModalMessage("Solicitudes rechazadas"));
                                     this.update();
                                 } else {
-                                    this.append(ModalMessege("Error"));
+                                    this.append(ModalMessage("Error"));
                                 }
                                 //modal.close();
                             }, "Esta seguro que desea rechazar estas solicitudes"));
@@ -240,7 +240,7 @@ class SolicitudesPendientesComponent extends HTMLElement {
             name: "Remitir a otra dependencia", action: async (/**@type {Tbl_Case_ModelComponent}*/element) => {
                 // @ts-ignore
                 if (this.mainTable.selectedItems.length <= 0) {
-                    this.append(ModalMessege("Seleccione solicitudes"));
+                    this.append(ModalMessage("Seleccione solicitudes"));
                     return;
                 }
                 const dependencias = await new Cat_Dependencias_ModelComponent().Get();
@@ -258,10 +258,10 @@ class SolicitudesPendientesComponent extends HTMLElement {
                                     await new Tbl_Case_ModelComponent().RemitirCasos(this.mainTable.selectedItems,
                                         table_case.Cat_Dependencias, table_case.Tbl_Comments, table_case);
                                 if (response.status == 200) {
-                                    this.append(ModalMessege("Solicitud remitida"));
+                                    this.append(ModalMessage("Solicitud remitida"));
                                     this.update();
                                 } else {
-                                    this.append(ModalMessege("Error"));
+                                    this.append(ModalMessage("Error"));
                                 }
                                 modal.close();
                             }, "Esta seguro que desea remitir esta solicitud"))

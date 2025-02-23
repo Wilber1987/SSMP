@@ -5,13 +5,8 @@ import { StylesControlsV2, StylesControlsV3, StyleScrolls } from "../../WDevCore
 import { WFilterOptions } from "../../WDevCore/WComponents/WFilterControls.js";
 import { WPrintExportToolBar } from "../../WDevCore/WComponents/WPrintExportToolBar.mjs";
 import { PageType } from "../../WDevCore/WComponents/WReportComponent.js";
-import { WTableComponent } from "../../WDevCore/WComponents/WTableComponent.js";
-import { FilterData } from "../../WDevCore/WModules/CommonModel.js";
-import { EntityClass } from "../../WDevCore/WModules/EntityClass.js";
 import { DateTime } from "../../WDevCore/WModules/Types/DateTime.js";
-import { WArrayF } from "../../WDevCore/WModules/WArrayF.js";
-import { ComponentsManager, ConvertToMoneyString, html, WRender } from "../../WDevCore/WModules/WComponentsTools.js";
-import { WOrtograficValidation } from "../../WDevCore/WModules/WOrtograficValidation.js";
+import { ComponentsManager, html, WRender } from "../../WDevCore/WModules/WComponentsTools.js";
 import { css } from "../../WDevCore/WModules/WStyledRender.js";
 import { Notificaciones_ModelComponent } from "../Model/ModelComponent/Notificacion_ModelComponent.js";
 import { Notificaciones } from "../Model/Notificaciones.js";
@@ -358,4 +353,4 @@ class Historial_NotificationsView extends HTMLElement {
 	`
 }
 customElements.define('w-component', Historial_NotificationsView);
-export { Historial_NotificationsView }
+export { Historial_NotificationsView };

@@ -1,7 +1,7 @@
 //@ts-check
 
 import { StylesControlsV2, StylesControlsV3, StyleScrolls } from "../WDevCore/StyleModules/WStyleComponents.js";
-import { ModalMessege, ModalVericateAction } from "../WDevCore/WComponents/WForm.js";
+import { ModalMessage, ModalVericateAction } from "../WDevCore/WComponents/WForm.js";
 import { WModalForm } from "../WDevCore/WComponents/WModalForm.js";
 import { WTableComponent } from "../WDevCore/WComponents/WTableComponent.js";
 import { ComponentsManager, WRender } from "../WDevCore/WModules/WComponentsTools.js";
@@ -94,7 +94,7 @@ class ProfileManager extends HTMLElement {
                         ProfileRequest.Estado = ESTADO;
                         ProfileRequest.Observacion = entity.observacion;
                         const response = await ProfileRequest.Update();
-                        document.body.appendChild(ModalMessege(response.message, undefined, true));
+                        document.body.appendChild(ModalMessage(response.message, undefined, true));
                         modal.close();
                     }, `¿Desea cambiar el estado de la solicitud a "${ESTADO.toLowerCase()}"?`));
                 }

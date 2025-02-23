@@ -4,6 +4,7 @@ using CAPA_DATOS.Services;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
 using DatabaseModelNotificaciones;
+using WhatsAppApi;
 
 namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 {
@@ -95,7 +96,7 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 					Leido = false,
 					Tipo = request.NotificationType.ToString(),
 					Email = item.Correo,
-					Telefono = item.Telefono,
+					Telefono = $"{WhatsAppMessage.ObtenerExtensionPorDepartamento(item?.NotificationData?.Departamento)}{item?.Telefono}" ?? "" ,
 					Fecha = DateTime.Now,
 					NotificationsServices = request.NotificationsServices,
 					NotificationData = item.NotificationData
@@ -126,7 +127,7 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 			return new ResponseService
 			{
 				status= 200,
-				message= "NotificacionesReenviadas"	
+				message= "Notificaciones Reenviadas"	
 			};
 		}
 

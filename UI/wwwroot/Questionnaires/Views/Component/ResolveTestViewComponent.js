@@ -5,7 +5,7 @@ import { css } from "../../../WDevCore/WModules/WStyledRender.js";
 import { Tests_ModelComponent } from "../../FrontModel/ModelComponent/Tests_ModelComponent.js";
 import { Tests } from "../../FrontModel/Tests.js";
 // @ts-ignore
-import { ModalMessege } from "../../../WDevCore/WComponents/WForm.js";
+import { ModalMessage } from "../../../WDevCore/WComponents/ModalMessage.js";
 import { WModalForm } from "../../../WDevCore/WComponents/WModalForm.js";
 // @ts-ignore
 import { ModelProperty } from "../../../WDevCore/WModules/CommonModel.js";
@@ -131,7 +131,7 @@ class ResolveTestViewComponent extends HTMLElement {
             Test.Resultados_Tests.push(resultado);
         }
         const response = await Test.SaveResultado();
-        this.append(ModalMessege(response.message));
+        this.append(ModalMessage(response.message));
     }
 
     SetOption() {

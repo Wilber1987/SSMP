@@ -6,6 +6,8 @@ using BusinessLogic.Rastreo.Operations;
 using CAPA_DATOS;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
+using DatabaseModelNotificaciones;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 
 namespace CAPA_NEGOCIO
@@ -16,6 +18,43 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
+				Notificaciones? notificacion = new Notificaciones().Find<Notificaciones>(
+					FilterData.Like("Telefono", question.UserId?.Replace("+", "")),
+					FilterData.Equal("Enviado", true)
+				//FilterData.Equal("Titulo", $"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete}")
+				);
+				if (notificacion != null)
+				{
+					var NotificationCase = new Tbl_Case().Find<Tbl_Case>(
+						FilterData.Like("Titulo", $"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete}"),
+						FilterData.Equal("Estado", Case_Estate.Finalizado)
+					);
+					if (NotificationCase == null && (question.Text == "1" || question.Text == "2" || question.Text == "3"))
+					{
+						string title = $@"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete} ({(question.Text == "1" ? "No utiliza servicio de desaduanaje" :  question.Text == "2" ? "Utiliza servicio de desaduanaje" : "Paquete retirado")})";
+						Tbl_Case? tbl_Case = new Tbl_Case().CreateAutomaticCaseNotification(notificacion, title);
+						question.MessageIA = question.Text == "1" || question.Text == "3" ? "Es un placer servirte, ¿te puedo ayudar en algo más?" : "Con mucho gusto atenderemos te petición";
+						//question.WithAgentResponse = true;	
+						question.Text = question.Text == "1" ? "Visitar el Palacio de Correos" : "Utilizar servicio de desaduanaje";
+						question.Id_case = tbl_Case?.Id_Case;
+						await AddComment(tbl_Case, question);
+						return question;
+					}
+					else if (NotificationCase == null && question.Text != "1" && question.Text != "2" &&  question.Text != "3")
+					{
+						question.MessageIA = $@"Tu paquete no. {notificacion?.NotificationData?.NumeroPaquete} esta a la espera de ser retirado, Si en caso se te dificulta venir, te ofrecemos el servicio de desaduanaje remoto el cual consiste en realizar, con tu debida autorización, todos los procesos por ti y entregarte el paquete en la dirección consignada en el mismo. 
+
+¿Qué opción has decidido? 
+1. Visitarnos en el Palacio de Correos
+2. Utilizar nuestro servicio de desaduanaje
+3. Ya lo retiré
+
+Selecciona una opción";
+						return question;
+					}
+				}
+
+				//PROCESAMIENTO SIN NOTIFICACION
 				string caseTitle = $"{question?.UserId} - {question?.Timestamp?.ToString("yyyy-MM-dd")}";
 				var instaCase = new Tbl_Case().Find<Tbl_Case>(
 					FilterData.Equal("Titulo", caseTitle),
@@ -28,13 +67,13 @@ namespace CAPA_NEGOCIO
 					instaCase.MimeMessageCaseData!.WithAgent = true;
 					await AddComment(instaCase, question);
 					return question;
-				}				
+				}
 				string? trakingNumber = TrackingOperation.FindTrackingNumber(question.Text);
 				question.Timestamp = DateTime.Now;
 				// evalua tipo de caso
-				string tipocaso = instaCase == null ? "INICIO":
-				trakingNumber != null 
-				? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()				
+				string tipocaso = instaCase == null ? "INICIO" :
+				trakingNumber != null
+				? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()
 				: CaseEvaluatorManager.DeterminarCategoria(question.Text, instaCase?.Tbl_Servicios?.Descripcion_Servicio);
 				question.TypeProcess = tipocaso;
 				var dCaso = GestionaCaso(question, caseTitle, instaCase);
@@ -50,21 +89,21 @@ namespace CAPA_NEGOCIO
 					question.WithAgentResponse = false;
 					await AddComment(dCaso, question, true);
 					return question;
-				} 
+				}
 				else if (tipocaso == "INICIO")
-				{ 
+				{
 					question.MessageIA = ProntManager.GetSaludo();
 					question.Id_case = dCaso.Id_Case;
-					await AddComment(dCaso, question);					
+					await AddComment(dCaso, question);
 					return question;
 				}
 				else if (tipocaso == "CIERRE_DE_CASO")
-				{ 
+				{
 					question.MessageIA = ProntManager.Get_Cierre();
-					question.Id_case = dCaso.Id_Case;					
-					await AddComment(dCaso, question);	
-					dCaso.Estado = Case_Estate.Finalizado.ToString();	
-					dCaso.Update();			
+					question.Id_case = dCaso.Id_Case;
+					await AddComment(dCaso, question);
+					dCaso.Estado = Case_Estate.Finalizado.ToString();
+					dCaso.Update();
 					return question;
 				}
 				else if (tipocaso == "SOLICITUD_DE_ASISTENCIA")
@@ -79,7 +118,7 @@ namespace CAPA_NEGOCIO
 				}
 				else
 				{
-					string? automaticResponse = ProntManager.GetAutomaticResponse(question.Text); 
+					string? automaticResponse = ProntManager.GetAutomaticResponse(question.Text);
 					if (automaticResponse != null)
 					{
 						question.MessageIA = automaticResponse;
@@ -133,7 +172,7 @@ namespace CAPA_NEGOCIO
 				temperature = 0.7, // Controla la creatividad de las respuestas
 				frequency_penalty = 0.2, // Reduce repeticiones en las respuestas
 				presence_penalty = 0.2, // Fomenta nuevas ideas sin desviarse del contexto
-				//max_tokens = 1 // Establece el número máximo de tokens permitidos en la respuesta
+										//max_tokens = 1 // Establece el número máximo de tokens permitidos en la respuesta
 			};
 			return requestBody;
 		}
@@ -150,7 +189,7 @@ namespace CAPA_NEGOCIO
 			historialMensajes.AddRange(tbl_Comments.Select(c =>
 				new
 				{
-					role = c.NickName == question.UserId ? "user" :  (c.NickName == "traking_system" ? "traking_system" : "asistant") ,
+					role = c.NickName == question.UserId ? "user" : (c.NickName == "traking_system" ? "traking_system" : "asistant"),
 					content = ProntManager.ProntAdapter(c.Body)
 				}
 			));
@@ -224,7 +263,7 @@ namespace CAPA_NEGOCIO
 			us.Save();
 			if (interaction.MessageIA != null)
 			{
-				if (isSystem)	 
+				if (isSystem)
 				{
 					Tbl_Comments ia = new Tbl_Comments()
 					{
@@ -236,7 +275,8 @@ namespace CAPA_NEGOCIO
 						Mail = "traking_system@soporte.net",
 					};
 					ia.Save();
-				} else 
+				}
+				else
 				{
 					Tbl_Comments ia = new Tbl_Comments()
 					{
@@ -249,7 +289,7 @@ namespace CAPA_NEGOCIO
 					};
 					ia.Save();
 				}
-				
+
 			}
 
 		}

@@ -7,7 +7,7 @@ import { WAppNavigator } from '../../../WDevCore/WComponents/WAppNavigator.js';
 import { GanttChart } from '../../../WDevCore/WComponents/WChartJSComponents.js';
 import { WCommentsComponent } from '../../../WDevCore/WComponents/WCommentsComponent.js';
 import { WDetailObject } from '../../../WDevCore/WComponents/WDetailObject.js';
-import { ModalMessege, ModalVericateAction, WForm } from "../../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, ModalVericateAction, WForm } from "../../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from '../../../WDevCore/WComponents/WModalForm.js';
 import { WTableComponent } from "../../../WDevCore/WComponents/WTableComponent.js";
 import { ComponentsManager, WRender } from '../../../WDevCore/WModules/WComponentsTools.js';
@@ -237,7 +237,7 @@ class CaseDetailComponent extends HTMLElement {
             const response = await new Tbl_VinculateCase({
                 Casos_Vinculados: [actividad]
             }).DesvincularCaso();
-            this.shadowRoot?.append(ModalMessege("Caso desvinculado exitosamente"));
+            this.shadowRoot?.append(ModalMessage("Caso desvinculado exitosamente"));
             table.Dataset = await modelVinculate.GetOwCase();
             table.DrawTable();
         }, "¿Está seguro que desea desvincular este caso?"))
@@ -247,10 +247,10 @@ class CaseDetailComponent extends HTMLElement {
         this.shadowRoot?.append(ModalVericateAction(async () => {
             const response = await new Tbl_Case_ModelComponent(actividad).CerrarCaso();
             if (response.status == 200) {
-                this.shadowRoot?.append(ModalMessege("Caso cerrado exitosamente"));
+                this.shadowRoot?.append(ModalMessage("Caso cerrado exitosamente"));
                 this.update();
             } else {
-                this.shadowRoot?.append(ModalMessege(response.message))
+                this.shadowRoot?.append(ModalMessage(response.message))
             }
 
         }, "¿Está seguro que desea cerrar este caso?"))
@@ -269,11 +269,11 @@ class CaseDetailComponent extends HTMLElement {
                     const response = await new Tbl_Case_ModelComponent()
                         .AprobarCaseList([actividad], table_case);
                     if (response.status == 200) {
-                        this.shadowRoot?.append(ModalMessege("Solicitud aprobada"));
+                        this.shadowRoot?.append(ModalMessage("Solicitud aprobada"));
                         actividad.Estado = "Activa";
                         this.update();
                     } else {
-                        this.shadowRoot?.append(ModalMessege("Error"));
+                        this.shadowRoot?.append(ModalMessage("Error"));
                     }
                     modal.close();
                 })
@@ -285,10 +285,10 @@ class CaseDetailComponent extends HTMLElement {
             actividad.Estado = "Activo"
             const response = await new Tbl_Case_ModelComponent(actividad).Update();
             if (response.status == 200) {
-                this.shadowRoot?.append(ModalMessege("Caso reabierto exitosamente"));
+                this.shadowRoot?.append(ModalMessage("Caso reabierto exitosamente"));
                 this.update();
             } else {
-                this.append(ModalMessege(response.message))
+                this.append(ModalMessage(response.message))
             }
         }, "¿Está seguro que desea reabrir este caso?"))
 

@@ -4,7 +4,7 @@ import { priorityStyles } from '../../../AppComponents/Styles.js';
 import { Permissions, WSecurity } from '../../../WDevCore/Security/WSecurity.js';
 import { StylesControlsV2, StylesControlsV3 } from "../../../WDevCore/StyleModules/WStyleComponents.js";
 import { WFilterOptions } from '../../../WDevCore/WComponents/WFilterControls.js';
-import { ModalMessege, ModalVericateAction, WForm } from "../../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, ModalVericateAction, WForm } from "../../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from '../../../WDevCore/WComponents/WModalForm.js';
 import { WPaginatorViewer } from '../../../WDevCore/WComponents/WPaginatorViewer.js';
 import { WTableComponent } from "../../../WDevCore/WComponents/WTableComponent.js";
@@ -54,7 +54,7 @@ class CaseManagerComponent extends HTMLElement {
                 value: 'Nuevo Proyecto Propio', onclick: () => {
                     this.TabManager.NavigateFunction("Tab-CaseFormBasicView", basicCaseForm(new Tbl_Case(), async (/**@type {Tbl_Case} */ entity) => {
                         const response = await entity.SaveOwCase();
-                        this.append(ModalMessege("Caso guardado correctamente", undefined, true))
+                        this.append(ModalMessage("Caso guardado correctamente", undefined, true))
                     }))
                 } 
             }))
@@ -148,7 +148,7 @@ class CaseManagerComponent extends HTMLElement {
             WRender.Create({
                 className: "CaseFormView", children: [CaseForm(undefined, this.Dependencias, () => {
                     console.log(false);
-                    this.append(ModalMessege("Caso guardado correctamente", undefined, true))
+                    this.append(ModalMessage("Caso guardado correctamente", undefined, true))
                 })]
             }));
     }

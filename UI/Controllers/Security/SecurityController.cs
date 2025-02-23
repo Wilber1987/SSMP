@@ -45,5 +45,5 @@ namespace API.Controllers
             return AuthNetCore.HavePermission(identfy, permission);
         }   
 
-    }
+	}
 }

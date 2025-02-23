@@ -2,7 +2,7 @@
 import { StylesControlsV2 } from "../../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from '../../WDevCore/WComponents/WAppNavigator.js';
 import { WDetailObject } from '../../WDevCore/WComponents/WDetailObject.js';
-import { ModalMessege, WForm } from "../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, WForm } from "../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from "../../WDevCore/WComponents/WModalForm.js";
 import { ComponentsManager, html, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
 import { css } from '../../WDevCore/WModules/WStyledRender.js';
@@ -116,7 +116,7 @@ class PerfilClass extends HTMLElement {
             StyleForm: "columnX1",
             ObjectOptions: {
                 SaveFunction: (ObjectF, response) => {
-                    document.body.appendChild(ModalMessege(response.message, undefined, true));
+                    document.body.appendChild(ModalMessage(response.message, undefined, true));
                 }
             }
         }));

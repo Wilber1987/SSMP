@@ -7,7 +7,7 @@ import { Cat_Dependencias, Cat_Dependencias_ModelComponent } from "../../Proyect
 import { Tbl_Profile } from "../../Proyect/FrontModel/Tbl_Profile.js";
 import { StylesControlsV2, StylesControlsV3, StyleScrolls } from "../../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from "../../WDevCore/WComponents/WAppNavigator.js";
-import { ModalMessege, ModalVericateAction } from "../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, ModalVericateAction } from "../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from "../../WDevCore/WComponents/WModalForm.js";
 import { WTableComponent } from "../../WDevCore/WComponents/WTableComponent.js";
 import { html, WRender } from "../../WDevCore/WModules/WComponentsTools.js";
@@ -140,7 +140,7 @@ class NotificacionesManagerView extends HTMLElement {
 							})
 							NotificationTable.Dataset = invitaciones.map(i => BuildDestinatario(i));
 							NotificationTable.DrawTable();
-							if (fail) document.body.append(ModalMessege("Error al cargar registros",
+							if (fail) document.body.append(ModalMessage("Error al cargar registros",
 								"Algunos registros no contenían el formato correcto y no han sido cargados como deberían"))
 						})
 					};
@@ -217,7 +217,7 @@ class NotificacionesManagerView extends HTMLElement {
 			const btnReenviar = html`<input type="button"  class="btn-success"
 				onclick="${async (ev) => {
 					const response = await new Notificaciones_ModelComponent().ReenvioNotificaciones(NotificationTable.selectedItems);
-					document.body.append(ModalMessege(response.messege, undefined, true));
+					document.body.append(ModalMessage(response.message, undefined, true));
 				}}" value="Reenviar notificaciones" />`
 
 			this.SendsFreeNotificationComponent = html`<div>
@@ -305,7 +305,7 @@ class NotificacionesManagerView extends HTMLElement {
 			entity.NotificationType = NotificationTypeEnum.LIBRE;
 			document.body.appendChild(ModalVericateAction(async () => {
 				const response = await new NotificationRequest(entity).Save();
-				document.body.appendChild(ModalMessege(response.message, undefined, true));
+				document.body.appendChild(ModalMessage(response.message, undefined, true));
 				//modal.close();
 			}, `¿Desea enviar la notificación?`));
 			return;
@@ -334,7 +334,7 @@ class NotificacionesManagerView extends HTMLElement {
 					}
 					document.body.appendChild(ModalVericateAction(async () => {
 						const response = await new NotificationRequest(entity).Save();
-						document.body.appendChild(ModalMessege(response.message, undefined, true));
+						document.body.appendChild(ModalMessage(response.message, undefined, true));
 						modal.close();
 					}, `¿Desea enviar la notificación ${mensaje}?`));
 				}

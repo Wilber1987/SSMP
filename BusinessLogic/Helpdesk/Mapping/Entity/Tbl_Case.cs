@@ -3,6 +3,8 @@ using CAPA_DATOS.Security;
 using API.Controllers;
 using CAPA_DATOS.Services;
 using MimeKit;
+using CAPA_NEGOCIO.Gestion_Mensajes.Operations;
+using DatabaseModelNotificaciones;
 
 namespace CAPA_NEGOCIO.MAPEO
 {
@@ -135,19 +137,18 @@ namespace CAPA_NEGOCIO.MAPEO
 			}
 
 		}
-		
+
 		/*Automatico caso con IA*/
 		public async Task<bool> CreateAutomaticCaseIA(UserMessage chat)
 		{
 			try
 			{
-                BeginGlobalTransaction();
+				BeginGlobalTransaction();
 
-                List<ModelFiles> Attach = new List<ModelFiles>();
- 
+				List<ModelFiles> Attach = new List<ModelFiles>();
+
 				Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = chat.UserId }.Find<Tbl_Profile>();
-
-			    if (tbl_Profile == null)
+				if (tbl_Profile == null)
 				{
 					tbl_Profile = new Tbl_Profile
 					{
@@ -156,7 +157,7 @@ namespace CAPA_NEGOCIO.MAPEO
 						Apellidos = chat?.UserId,
 						Estado = "ACTIVO",
 						Foto = "\\Media\\profiles\\avatar.png",
-						Sexo = "Masculino"
+						//Sexo = "Masculino"
 					};
 					tbl_Profile.Save();
 				}
@@ -165,10 +166,10 @@ namespace CAPA_NEGOCIO.MAPEO
 				//RecoveryEmbebedCidImages(chat);
 
 				//guarda en base de dato el caso
-                Save();
-               
-                CommitGlobalTransaction();
-                return true;
+				Save();
+
+				CommitGlobalTransaction();
+				return true;
 			}
 			catch (Exception ex)
 			{
@@ -180,8 +181,64 @@ namespace CAPA_NEGOCIO.MAPEO
 
 		}
 
+		public Tbl_Case? CreateAutomaticCaseNotification(Notificaciones notificacion, string title)
+		{
+			try
+            {
+                BeginGlobalTransaction();
 
-		private void RecoveryEmbebedCidImages(MimeMessage mail)
+                List<ModelFiles> Attach = new List<ModelFiles>();
+
+                Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = notificacion.Telefono }.Find<Tbl_Profile>();
+                var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = "WHATSAPP" };
+				Cat_Dependencias? dependencia = new Cat_Dependencias().Find<Cat_Dependencias>(FilterData.Equal("Id_Dependencia", 2));
+                var newCase = new Tbl_Case()
+                {
+                    Titulo = title,
+                    Descripcion = GetDescription(notificacion),
+                    Estado = Case_Estate.Finalizado.ToString(),
+                    Fecha_Inicio = notificacion.Fecha_Envio,
+                    Id_Dependencia = 3,
+                    Id_Servicio = 7,
+                    MimeMessageCaseData = mimeMessageCaseData
+                };
+
+                if (tbl_Profile == null)
+                {
+                    tbl_Profile = new Tbl_Profile
+                    {
+                        Correo_institucional = notificacion?.Telefono,
+                        Nombres = notificacion?.NotificationData?.Destinatario,
+                        //Apellidos = chat?.UserId,
+                        Estado = "ACTIVO",
+                        Foto = "\\Media\\profiles\\avatar.png",
+                        //Sexo = "Masculino"
+                    };
+                    tbl_Profile.Save();
+                }
+                Id_Perfil = tbl_Profile.Id_Perfil;
+                var response = newCase.Save();
+
+                CommitGlobalTransaction();
+                return (Tbl_Case?)response;
+            }
+            catch (Exception ex)
+			{
+				Console.Write("error al guardar");
+				RollBackGlobalTransaction();
+				LoggerServices.AddMessageError($"error al crear el caso de la notificaion {notificacion.Id}, con numero telefonico {notificacion.Telefono}", ex);
+				return null;
+			}
+
+		}
+
+        private static string GetDescription(Notificaciones notificaciones)
+        {
+            return $@"Ha llegado un paquete a nombre de {notificaciones.NotificationData?.Destinatario} y esta  resguardado en la oficina de Fardos Postales - SAT, ubicada en el Palacio de Correos, zona 1, 2do nivel. Of. 203
+con número {2}";
+        }
+
+        private void RecoveryEmbebedCidImages(MimeMessage mail)
 		{
 			foreach (var part in mail.BodyParts)
 			{
@@ -486,7 +543,7 @@ namespace CAPA_NEGOCIO.MAPEO
 			{
 				if (inst.Id_Vinculate != null)
 				{
-					return this.Where<Tbl_Case>( FilterData.NotIn( "Id_Vinculate",
+					return this.Where<Tbl_Case>(FilterData.NotIn("Id_Vinculate",
 					 [inst.Id_Vinculate.ToString()]))
 					 .Where(c => c.Estado != Case_Estate.Solicitado.ToString()
 					 && c.Estado != Case_Estate.Rechazado.ToString()
@@ -494,7 +551,7 @@ namespace CAPA_NEGOCIO.MAPEO
 				}
 				else
 				{
-					return this.Where<Tbl_Case>(FilterData.NotIn( "Id_Case",
+					return this.Where<Tbl_Case>(FilterData.NotIn("Id_Case",
 					 [inst.Id_Case.ToString()]))
 					 .Where(c => c.Estado != Case_Estate.Solicitado.ToString()
 					 && c.Estado != Case_Estate.Rechazado.ToString()
@@ -529,13 +586,13 @@ namespace CAPA_NEGOCIO.MAPEO
 			UserModel user = AuthNetCore.User(identity);
 			Tbl_Profile? profile = new Tbl_Profile { IdUser = user.UserId }.Find<Tbl_Profile>();
 			Id_Perfil = profile?.Id_Perfil;
-			
+
 			Id_Dependencia = profile?.Tbl_Dependencias_Usuarios?.First()?.Id_Dependencia;
 			Estado = Case_Estate.Activo.ToString();
 			if (Id_Dependencia != null)
 			{
-				Id_Servicio = new Tbl_Servicios { Id_Dependencia = Id_Dependencia}.Find<Tbl_Servicios>()?.Id_Servicio;
-			}			
+				Id_Servicio = new Tbl_Servicios { Id_Dependencia = Id_Dependencia }.Find<Tbl_Servicios>()?.Id_Servicio;
+			}
 			Save();
 			return new ResponseService
 			{
@@ -549,11 +606,12 @@ namespace CAPA_NEGOCIO.MAPEO
 	public class MimeMessageCaseData
 	{
 		public string? MessageId { get; set; }
-		public string? InReplyTo { get;  set; }
+		public string? InReplyTo { get; set; }
 		public string? PlatformType { get; set; }
-        public bool WithAgent { get;  set; }
-    }
-	enum PlatformTypeEnum {
+		public bool WithAgent { get; set; }
+	}
+	enum PlatformTypeEnum
+	{
 		WHATSAPP, MESSENGER, INSTAGRAM, WEBAPP, TELEGRAM, TWITTER, MAIL
 	}
 }

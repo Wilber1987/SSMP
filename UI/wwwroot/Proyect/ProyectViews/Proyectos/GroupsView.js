@@ -2,7 +2,7 @@
 
 import { StylesControlsV2 } from "../../../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from "../../../WDevCore/WComponents/WAppNavigator.js";
-import { ModalMessege, ModalVericateAction } from "../../../WDevCore/WComponents/WForm.js";
+import { ModalMessage, ModalVericateAction } from "../../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from "../../../WDevCore/WComponents/WModalForm.js";
 import { WTableComponent } from "../../../WDevCore/WComponents/WTableComponent.js";
 // @ts-ignore
@@ -52,7 +52,7 @@ class GroupView extends HTMLElement {
                     invitado.Estado =  GroupState.INVITADO;
                     document.body.appendChild(ModalVericateAction(async () => {
                         const response = await new Tbl_Grupos_Profile(invitado).Save();
-                        document.body.appendChild(ModalMessege(response.message, undefined, true));
+                        document.body.appendChild(ModalMessage(response.message, undefined, true));
                     }, "¿Desea invitar este usuario?"));
                 }
             }
@@ -87,7 +87,7 @@ class GroupView extends HTMLElement {
                                         Id_Grupo: group.Id_Grupo,
                                         Id_Perfil: this.Config.Profile.Id_Perfil, Estado: GroupState.INACTIVO
                                     }).Update();
-                                    document.body.appendChild(ModalMessege(response.message, undefined, true));
+                                    document.body.appendChild(ModalMessage(response.message, undefined, true));
                                 }, "¿Desea abandonar este grupo? perderá acceso a los proyectos creado por otros miembros y los otros miembros del grupo no podrán acceder a los proyectos creados por usted."));
                             }
                         },
@@ -98,7 +98,7 @@ class GroupView extends HTMLElement {
                                         Id_Grupo: group.Id_Grupo,
                                         Estado: GroupState.INACTIVO
                                     }).Update();
-                                    document.body.appendChild(ModalMessege(response.message, undefined, true));
+                                    document.body.appendChild(ModalMessage(response.message, undefined, true));
                                 }, "¿Dar de baja este grupo? todos los miembros de este grupo perderan acceso a los proyectos creados por otros miembros y los otros miembros del grupo no podran acceder a los proyectos creados por usted."));
                             }
                         } : "",,
@@ -120,7 +120,7 @@ class GroupView extends HTMLElement {
                                     Id_Grupo: group.Id_Grupo,
                                     Id_Perfil: this.Config.Profile.Id_Perfil, Estado: GroupState.SOLICITANTE
                                 }).Save();
-                                document.body.appendChild(ModalMessege(response.message, undefined, true));
+                                document.body.appendChild(ModalMessage(response.message, undefined, true));
                             }, "¿Desea unirse esta grupo?"));
                         }
                     }]
@@ -271,7 +271,7 @@ class GroupView extends HTMLElement {
                     document.body.appendChild(ModalVericateAction(async () => {
                         solicitud.Estado = GroupState.ACTIVO;
                         const response = await solicitud.Update();
-                        document.body.appendChild(ModalMessege(response.message, undefined, true));
+                        document.body.appendChild(ModalMessage(response.message, undefined, true));
                     }, "¿Desea aceptar esta solicitud?"));
                 }
             }, {
@@ -279,7 +279,7 @@ class GroupView extends HTMLElement {
                     document.body.appendChild(ModalVericateAction(async () => {
                         solicitud.Estado = GroupState.RECHAZADO;
                         const response = await solicitud.Update();
-                        document.body.appendChild(ModalMessege(response.message, undefined, true));
+                        document.body.appendChild(ModalMessage(response.message, undefined, true));
                     }, "¿Desea rechazar esta solicitud?"));
                 }
             }
@@ -294,7 +294,7 @@ class GroupView extends HTMLElement {
             EditObject: group, 
             ObjectOptions: {
                 SaveFunction: (ObjectF, response) => {
-                    document.body.appendChild(ModalMessege(response.message, undefined, true));
+                    document.body.appendChild(ModalMessage(response.message, undefined, true));
                 }
             }
         }));

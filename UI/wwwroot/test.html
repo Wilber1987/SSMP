@@ -1,50 +1,58 @@
-<div class='Notification-container'>
-    
-    <div>
-        <h1 style='color: #09559c'>2025</h1>
-        <h2 style='color: #0c3964; border-bottom: solid 1px #cccccc;'>Informe de notificaciones enviadas 2025</h2>
-    </div>
-    <div class='Notification-mes-container'></div>
-    <h3>FEBRERO</h3>
-    <table class='mes-container'>
-        <tr class='Notification-details-container'>
-            <td class='Notification-title'>Identificador</td>
-            <td class='Notification-title'>Cita</td>
-            <td class='Notification-title'>Nombre del destinatario</td>
-            <td class='Notification-title'>Dirección del destinatario</td>
-            <td class='Notification-title'>No de teléfono</td>
-            <td class='Notification-title'>Fecha de ingreso</td>
-            <td class='Notification-title'>Departamento</td>
-            <td class='Notification-title'>Municipio</td>
-            <td class='Notification-title'>Agencia</td>
-            <td class='Notification-title'>Correlativo</td>
-            <td class='Notification-title'>Fecha de ingreso de notificación</td>
-            <td class='Notification-title'>DPI</td>
-            <td class='Notification-title'>NIT</td>
-            <td class='Notification-title'>E-mail</td>
-        </tr>
-        <tr class='Notification-details-container'>
-            <td class='Notification-value'>UT744684413NL</td>
-            <td class='Notification-value'>10358</td>
-            <td class='Notification-value'>Saul</td>
-            <td class='Notification-value'></td>
-            <td class='Notification-value'></td>
-            <td class='Notification-value'>2/4/2025</td>
-            <td class='Notification-value'>Guatemala</td>
-            <td class='Notification-value'>Managua</td>
-            <td class='Notification-value'>managua</td>
-            <td class='Notification-value'>SAT-ENERO2024-00001</td>
-            <td class='Notification-value'>2/5/2025</td>
-            <td class='Notification-value'>0001</td>
-            <td class='Notification-value'></td>
-            <td class='Notification-value'></td>
-        </tr>
-        <div class='Notification-details-container total-container'>
-            <div class='Notification-title' style='grid-column: span 12'>Sub-Total</div>
-            <div class='Notification-title value'>1</div>
-        </div>
-        <div class='mes-container total-container'>
-            <div class='Notification-title' style='grid-column: span 12'>Total</div>
-            <div class='Notification-title total-cargos'>1</div>
-        </div>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Desplegable</title>
+    <style>
+        .menu {
+            list-style-type: none;
+            padding: 0;
+        }
+        .menu-item {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        .menu-item img {
+            margin-right: 10px;
+        }
+        .submenu {
+            list-style-type: none;
+            padding-left: 20px;
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleSubmenu(event) {
+            const submenu = event.currentTarget.nextElementSibling;
+            if (submenu.style.display === "none" || submenu.style.display === "") {
+                submenu.style.display = "block";
+            } else {
+                submenu.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <ul class="menu">
+        <li class="menu-item" onclick="toggleSubmenu(event)">
+            <img src="folder-icon.png" alt="Carpeta" width="20" height="20"> Carpeta 1
+        </li>
+        <ul class="submenu">
+            <li>Subcarpeta 1.1</li>
+            <li>Subcarpeta 1.2</li>
+        </ul>
+        <li class="menu-item" onclick="toggleSubmenu(event)">
+            <img src="folder-icon.png" alt="Carpeta" width="20" height="20"> Carpeta 2
+        </li>
+        <ul class="submenu">
+            <li>Subcarpeta 2.1</li>
+            <li>Subcarpeta 2.2</li>
+        </ul>
+    </ul>
+</body>
+</html>
