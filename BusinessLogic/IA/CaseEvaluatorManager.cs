@@ -42,7 +42,7 @@ namespace BusinessLogic.IA
 		private static string ExtractCategoryServices(string consulta, string[] palabras, Dictionary<string, int> coincidencias)
 		{
 			string category = "ASISTENCIA_GENERAL";
-			if (consulta == "8")
+			/*if (consulta == "8")
 			{
 				return "EVENTOS";
 			}
@@ -50,25 +50,25 @@ namespace BusinessLogic.IA
 			{
 				return "SOLICITUD_DE_ASISTENCIA";
 			}
-			else if (consulta == "6")
+			else  */if (consulta.ToUpper() == "MENU")
 			{
-				return "INFORMACION_SOBRE_DOCUMENTOS";
+				return "INICIO";
 			}
 			else if (consulta == "5")
 			{
-				return "CONSULTA_DE_CONTACTO";
+				return "SOLICITUD_DE_ASISTENCIA";
 			}
 			else if (consulta == "4")
 			{
-				return "QUEJAS_POR_ESTAFA";
+				return "CONSULTA_DE_CONTACTO";
 			}
 			else if (consulta == "3")
 			{
-				return "QUEJAS_POR_IMPORTES";
+				return "INFORMACION_SOBRE_DOCUMENTOS";
 			}
 			else if (consulta == "2")
 			{
-				return "QUEJAS_POR_RETRASOS";
+				return "INFORMACION_SOBRE_DOCUMENTOS";
 			}
 			else if (consulta == "1")
 			{

@@ -32,7 +32,7 @@ namespace BusinessLogic.IA
 			string pront = GetPront("SYSTEMPRONT")
 				.Replace("{request_type}", prontTypes)
 				.Replace("{rules}", GetPront(prontTypes));
-			string documents = GetDocumentsPront(prontTypes);
+			string documents = GetDocumentsProntCategory(prontTypes);
 			if (documents != "")
 			{
 				pront = pront.Replace("{documents}", $"- {prontTypes}: {documents}");
@@ -41,16 +41,41 @@ namespace BusinessLogic.IA
 			return pront;
 		}
 
-		private static string GetDocumentsPront(string? prontTypes)
+		private static string GetDocumentsProntCategory(string? prontTypes, string? ArticleName = null, bool isDocumentation = true)
 		{
 			var cat = new Category { Descripcion = prontTypes }.Find<Category>();
-			var articles = new Article().Where<Article>(
+			List<FilterData> filters = [
 				FilterData.In("Category_Id", cat?.Category_Id ?? -1)
-			).ToList();
-			var list = articles.Select(x => $"\n {articles.IndexOf(x) + 1} {x.Title}: {ExtractTextFromHtml(x.Body)}").ToList();
-			return string.Join("\n - ", list);
-		}
+			];
+			if (ArticleName != null)
+			{
+				filters.Add(FilterData.In("Title", ArticleName ?? "-1"));
+			}
+			var articles = new Article().Where<Article>(filters.ToArray()).ToList();
+			if (articles.Count == 0)
+			{
+				var article = new Article
+				{
+					Category_Id = cat?.Category_Id,
+					Title = ArticleName,
+					Body = "Información no definida!",
+					Publish_Date = DateTime.Now
+				};
+				article.Save();
+				articles.Add(article);
+			}
+			if (isDocumentation)
+			{
+				var list = articles.Select(x => $"\n {articles.IndexOf(x) + 1} {x.Title}: {ExtractTextFromHtml(x.Body)}").ToList();
+				return string.Join("\n - ", list);
+			}
+			else 
+			{
+			    var list = articles.Select(x => $"\n{x.Body}").ToList();
+				return string.Join("\n - ", list);
+			}
 
+		}
 		private static string ExtractTextFromHtml(string? html)
 		{
 			var doc = new HtmlAgilityPack.HtmlDocument();
@@ -122,18 +147,17 @@ namespace BusinessLogic.IA
 
 		internal static string? GetSaludo()
 		{
+
+
 			return @"¡Hola! Bienvenido a Correos de Guatemala. Soy tu asistente virtual, listo para ayudarte. Por favor, cuéntame en qué puedo asistirte hoy.					
-Puedes pedirme información sobre:
-	1 - El estado y ubicación de tus paquetes, incluyendo rastreo, procesos en aduanas.
-	2 - Quejas relacionadas con retrasos.
-	3 - Quejas relacionadas impuestos.
-	4 - Posibles estafas.
-	5 - Información de contacto, horarios de nuestras oficinas o detalles sobre eventos y actividades.
-	6 - Procedimientos de soporte técnico o los documentos necesarios para trámites.
-	7 - Te puedo comunicar con un agente de servicio al cliente. 
-	8 - Eventos. 
-						
-Por favor, selecciona una opción y cuéntame cómo puedo asistirte hoy.";
+Puedo ayudarte con lo siguiente:
+	1 - Consulta el estado de tu paquete.
+	2 - Consultar requisitos para recoger tu paquete. 
+	3 - Desaduanaje.
+	4 - Horario de atención en agencias.
+	5 - Comunicarme con un agente de servicio. 
+
+¡Ingresa un número de opción ¡";
 		}
 
 		internal static string? Get_Cierre()
@@ -142,7 +166,7 @@ Por favor, selecciona una opción y cuéntame cómo puedo asistirte hoy.";
 		}
 		public static string ProntAdapter(string? consulta)
 		{
-			if (consulta == "8")
+			/*if (consulta == "8")
 			{
 				return "¿puedo preguntar sobre los eventos de la oficina de correos?";
 			}
@@ -153,26 +177,30 @@ Por favor, selecciona una opción y cuéntame cómo puedo asistirte hoy.";
 			else if (consulta == "6")
 			{
 				return "¿Podrias informarme sobre los documentos para recepcionar paquetes?";
-			}
-			else if (consulta == "5")
+			}*/
+			if (consulta == "5")
 			{
-				return "¿Podrias informarme sobre los como contactarme con la oficina de correos y telegrafos?";
+				return "SOLICITUD_DE_ASISTENCIA";
 			}
 			else if (consulta == "4")
 			{
-				return "quiero presentar una queja por estafa";
+				return "Quiero saber sobre los horario de atención en agencias";
 			}
 			else if (consulta == "3")
 			{
-				return "quiero presentar una queja por importes no esperados";
+				return "Información sobre esaduanaje";
 			}
 			else if (consulta == "2")
 			{
-				return "quiero presentar una queja por un retrazo en mi entrega";
+				return "Consultar requisitos para recoger mi paquete";
 			}
 			else if (consulta == "1")
 			{
-				return "necesito información sobre la ubicación de mi paquete";
+				return "Necesito información sobre el estado de mi paquete";
+			}
+			else if (consulta?.ToUpper() == "MENU")
+			{
+				return "MENU";
 			}
 			else
 			{
@@ -183,7 +211,16 @@ Por favor, selecciona una opción y cuéntame cómo puedo asistirte hoy.";
 		{
 			return consulta switch
 			{
-				"1" => "Con mucho gusto puedo apoyarte con el rastreo y seguimiento. Por favor, proporcióname el número de seguimiento para poder ayudarte.",
+				"1" => "Ingresa tu número de tracking.",
+				"2" => GetDocumentsProntCategory("INFORMACION_SOBRE_DOCUMENTOS", "REQUICITOS_PAQUETES", false) + "\n Escribe \"Menu\" para más opciones",
+				"3" => GetDocumentsProntCategory("INFORMACION_SOBRE_DOCUMENTOS", "DESADUANAJE", false) + "\n Escribe \"Menu\" para más opciones",
+				"4" => GetDocumentsProntCategory("CONSULTA_DE_CONTACTO", "HORARIO", false) + "\n Escribe \"Menu\" para más opciones",
+				"5" => "Entendido. Te pondré en contacto con un agente de servicio al cliente para que puedan asistirte directamente. Por favor, espera un momento.",
+				_ => null
+			};
+			/*return consulta switch
+			{
+				"1" => "Con mucho gusto puedo apoyarte con el rastreo y seguimiento. Por favor, Ingresa tu número de tracking.",
 				"2" => "Lamento mucho el retraso en tu envío. Por favor, indícame el número de seguimiento para revisar el estado actual de tu paquete.",
 				"3" => "Entiendo tu preocupación sobre los impuestos. podrias darme mas detalles para poder ayudarte?",
 				"4" => "Gracias por tu reporte. Si sospechas de una posible estafa, por favor comparte todos los detalles del caso para que podamos investigarlo adecuadamente.",
@@ -192,7 +229,7 @@ Por favor, selecciona una opción y cuéntame cómo puedo asistirte hoy.";
 				"7" => "Entendido. Te pondré en contacto con un agente de servicio al cliente para que puedan asistirte directamente. Por favor, espera un momento.",
 				"8" => "¡Gracias por tu interés en nuestros eventos! Por favor, dime qué tipo de evento o actividad te interesa para brindarte más información.",
 				_ => null
-			};
+			};*/
 		}
 	}
 

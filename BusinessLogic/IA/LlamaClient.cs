@@ -18,6 +18,7 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
+				question.Text = question.Text?.Trim();
 				Notificaciones? notificacion = new Notificaciones().Find<Notificaciones>(
 					FilterData.Like("Telefono", question.UserId?.Replace("+", "")),
 					FilterData.Equal("Enviado", true)
@@ -90,7 +91,7 @@ Selecciona una opción";
 					await AddComment(dCaso, question, true);
 					return question;
 				}
-				else if (tipocaso == "INICIO")
+				else if (tipocaso == "INICIO" || question.Text.ToUpper() == "MENU")
 				{
 					question.MessageIA = ProntManager.GetSaludo();
 					question.Id_case = dCaso.Id_Case;

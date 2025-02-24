@@ -259,37 +259,6 @@ namespace CAPA_NEGOCIO.IA
 				return $"Exception while sending read receipt: {ex.Message}";
 			}
 		}
-		/*
-
-				public async Task<string> SendResponseToWhatsApp(string userId, string response)
-				{
-					try
-					{
-						var client = new HttpClient();
-						var content = new StringContent(JsonConvert.SerializeObject(new
-						{
-							messaging_product = "whatsapp",
-							to = "+"+userId.Replace("+",""),
-						   // recipient_type = "individual",
-							type = "text",
-							text = new { 
-								body = response,
-								//preview_url= false
-							}
-						}));                
-
-						client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverWhatsApp"));
-						client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"), content).Wait();
-
-						return "OK";
-					}
-					catch (Exception)
-					{
-
-						throw;
-					}
-
-				}*/
 
 		public async static Task<string> SendResponseToMessengerAsync(string userId, string response)
 		{
