@@ -3,9 +3,11 @@ import { CaseSearcherToVinculate } from '../../AppComponents/CaseSearcherToVincu
 import { priorityStyles } from '../../AppComponents/Styles.js';
 import { Permissions, WSecurity } from '../../WDevCore/Security/WSecurity.js';
 import { StylesControlsV2, StylesControlsV3 } from "../../WDevCore/StyleModules/WStyleComponents.js";
+import { ModalMessage } from '../../WDevCore/WComponents/ModalMessage.js';
+import { ModalVericateAction } from '../../WDevCore/WComponents/ModalVericateAction.js';
 import { WCommentsComponent } from '../../WDevCore/WComponents/WCommentsComponent.js';
 import { WFilterOptions } from "../../WDevCore/WComponents/WFilterControls.js";
-import { ModalMessage, ModalVericateAction, WForm } from "../../WDevCore/WComponents/WForm.js";
+import { WForm } from "../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from '../../WDevCore/WComponents/WModalForm.js';
 import { WTableComponent } from '../../WDevCore/WComponents/WTableComponent.js';
 import { ComponentsManager, WRender } from '../../WDevCore/WModules/WComponentsTools.js';

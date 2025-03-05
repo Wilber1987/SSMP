@@ -8,17 +8,36 @@
 }
 
 @* @if (SecurityController.HavePermission(Permissions.GESTION_RECIBOS.ToString(), Identify))
-{
+{<label></label>
 <a class="title-collapse" id="GestionRecibosMenu" onclick="changeActive(this)">GESTIÓN DE RECIBOS</a>
 <div class="collapse">
-<a class="menu-item" id="Gestion_Recibos" asp-area="" asp-page="/PagesViews/Gestion_Recibos">Nuevo
-Recibo</a>
+<a cla<label>ss="menu-item" id="Gestion_Recibos" asp-area="" asp-page="/PagesViews/Gestion_Recibos">Nuevo</label>
+Recibo</a><label></label>
 <a class="menu-item" id="Ver_Recibos" asp-area="" asp-page="/PagesViews/Ver_Recibos">Ver Recibos</a>
 </div>
 } *@
 <a class="menu-item" id="Home" asp-area="" asp-page="/home">
-    <svg viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#0d4c73" stroke-width="1.536"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212121" stroke-width="1.488"> <path opacity="0.5" d="M13.1061 22H10.8939C7.44737 22 5.72409 22 4.54903 20.9882C3.37396 19.9764 3.13025 18.2827 2.64284 14.8952L2.36407 12.9579C1.98463 10.3208 1.79491 9.00229 2.33537 7.87495C2.87583 6.7476 4.02619 6.06234 6.32691 4.69181L7.71175 3.86687C9.80104 2.62229 10.8457 2 12 2C13.1543 2 14.199 2.62229 16.2882 3.86687L17.6731 4.69181C19.9738 6.06234 21.1242 6.7476 21.6646 7.87495C22.2051 9.00229 22.0154 10.3208 21.6359 12.9579L21.3572 14.8952C20.8697 18.2827 20.626 19.9764 19.451 20.9882C18.2759 22 16.5526 22 13.1061 22Z" fill="#06a3ec"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75Z" fill="#06a3ec"></path> </g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" d="M13.1061 22H10.8939C7.44737 22 5.72409 22 4.54903 20.9882C3.37396 19.9764 3.13025 18.2827 2.64284 14.8952L2.36407 12.9579C1.98463 10.3208 1.79491 9.00229 2.33537 7.87495C2.87583 6.7476 4.02619 6.06234 6.32691 4.69181L7.71175 3.86687C9.80104 2.62229 10.8457 2 12 2C13.1543 2 14.199 2.62229 16.2882 3.86687L17.6731 4.69181C19.9738 6.06234 21.1242 6.7476 21.6646 7.87495C22.2051 9.00229 22.0154 10.3208 21.6359 12.9579L21.3572 14.8952C20.8697 18.2827 20.626 19.9764 19.451 20.9882C18.2759 22 16.5526 22 13.1061 22Z" fill="#06a3ec"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75Z" fill="#06a3ec"></path> </g></svg>
-    HOME
+    <svg viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#0d4c73" stroke-width="1.536">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212121"
+            stroke-width="1.488">
+            <path opacity="0.5"
+                d="M13.1061 22H10.8939C7.44737 22 5.72409 22 4.54903 20.9882C3.37396 19.9764 3.13025 18.2827 2.64284 14.8952L2.36407 12.9579C1.98463 10.3208 1.79491 9.00229 2.33537 7.87495C2.87583 6.7476 4.02619 6.06234 6.32691 4.69181L7.71175 3.86687C9.80104 2.62229 10.8457 2 12 2C13.1543 2 14.199 2.62229 16.2882 3.86687L17.6731 4.69181C19.9738 6.06234 21.1242 6.7476 21.6646 7.87495C22.2051 9.00229 22.0154 10.3208 21.6359 12.9579L21.3572 14.8952C20.8697 18.2827 20.626 19.9764 19.451 20.9882C18.2759 22 16.5526 22 13.1061 22Z"
+                fill="#06a3ec"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75Z"
+                fill="#06a3ec"></path>
+        </g>
+        <g id="SVGRepo_iconCarrier">
+            <path opacity="0.5"
+                d="M13.1061 22H10.8939C7.44737 22 5.72409 22 4.54903 20.9882C3.37396 19.9764 3.13025 18.2827 2.64284 14.8952L2.36407 12.9579C1.98463 10.3208 1.79491 9.00229 2.33537 7.87495C2.87583 6.7476 4.02619 6.06234 6.32691 4.69181L7.71175 3.86687C9.80104 2.62229 10.8457 2 12 2C13.1543 2 14.199 2.62229 16.2882 3.86687L17.6731 4.69181C19.9738 6.06234 21.1242 6.7476 21.6646 7.87495C22.2051 9.00229 22.0154 10.3208 21.6359 12.9579L21.3572 14.8952C20.8697 18.2827 20.626 19.9764 19.451 20.9882C18.2759 22 16.5526 22 13.1061 22Z"
+                fill="#06a3ec"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75Z"
+                fill="#06a3ec"></path>
+        </g>
+    </svg>
+    <label>HOME</label>
 </a>
 
 @if (SecurityController.HavePermission(Identify, Permissions.PERFIL_ACCESS))
@@ -39,7 +58,7 @@ Recibo</a>
                     fill="#c9c9c9"></path>
             </g>
         </svg>
-        Mi Perfil
+        <label>Mi Perfil</label>
     </a>
 }
 @if (SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(), Identify))
@@ -69,7 +88,7 @@ Recibo</a>
                     fill="#06a3ec"></path>
             </g>
         </svg>
-        Solicitudes Pendientes
+        <label>Solicitudes Pendientes</label>
     </a>
 }
 @if (SecurityController.HavePermission(Identify, Permissions.ADMINISTRAR_CASOS_DEPENDENCIA,
@@ -87,7 +106,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     style="fill: #4ba8e2;"></path>
             </g>
         </svg>
-        En Proceso
+        <label>En Proceso</label>
     </a>
 }
 @if (SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(), Identify)
@@ -115,7 +134,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     fill="#06a3ec"></path>
             </g>
         </svg>
-        Finalizados
+        <label>Finalizados</label>
     </a>
 }
 @if (SecurityController.HavePermission(Permissions.TECNICO_CASOS_DEPENDENCIA.ToString(), Identify))
@@ -138,8 +157,8 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     d="M14.5592 13.8899C14.4992 13.8899 14.4392 13.8799 14.3692 13.8699L11.4592 13.1299C11.0592 13.0299 10.8192 12.6199 10.9192 12.2199C11.0192 11.8199 11.4292 11.5799 11.8292 11.6799L14.7392 12.4199C15.1392 12.5199 15.3792 12.9299 15.2792 13.3299C15.1992 13.6699 14.8992 13.8899 14.5592 13.8899Z"
                     fill="#3b79c4"></path>
             </g>
-        </svg>
-        Tareas en Proceso</a>
+        </svg><label>Tareas en Proceso</label>
+        </a>
 }
 @if (SecurityController.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(), Identify))
 {
@@ -159,7 +178,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     fill="#296dae"></path>
             </g>
         </svg>
-        Administrador de perfiles
+        <label>Administrador de perfiles</label>
     </a>
 }
 @if (SecurityController.HavePermission(Permissions.GENERADOR_SOLICITUDES.ToString(), Identify))
@@ -187,15 +206,15 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     d="M20.8,58.2C19.6,47.5,28,36.4,38,34.5l2.7-0.6c0.5-0.1,0.9-0.6,0.8-1.2c0-0.3-0.2-0.5-0.4-0.6l-6.7-4.5 c-0.7-0.5-0.8-1.4-0.3-2c0,0,0,0,0-0.1l1.7-2.5c0.4-0.7,1.4-0.9,2-0.4c0,0,0,0,0.1,0L54,33.5c0.7,0.4,0.9,1.4,0.4,2c0,0,0,0,0,0.1 l-11,16.2c-0.4,0.7-1.4,0.9-2,0.4c0,0,0,0-0.1,0l-2.5-1.7c-0.7-0.4-0.9-1.4-0.4-2c0,0,0,0,0-0.1l4.4-6.7c0.3-0.4,0.3-1.1-0.2-1.4 c-0.2-0.2-0.5-0.3-0.8-0.2l-1.6,0.3c-7.8,1.5-14.4,10.3-13.7,17.9c0,0.7-1.1,1.7-1.9,1.9h-1.9C21.8,60.3,20.8,59.1,20.8,58.2z">
                 </path>
             </g>
-        </svg>
-        Solicitudes Realizadas</a>
+        </svg><label>Solicitudes Realizadas</label>
+        </a>
 }
 
 @if (SystemConfig.IsMessagesActive() || SystemConfig.IsNotificationsActive())
 {
 
     @if (SystemConfig.IsNotificationsActive() && SecurityController.HavePermission(Identify,
-   Permissions.NOTIFICACIONES_READER))
+    Permissions.NOTIFICACIONES_READER))
     {
         <a href="~/Mensajes/NotificationesView" id="NotificationesView" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -213,11 +232,11 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                         fill="#009bc2"></path>
                 </g>
             </svg>
-            Notificaciones
+            <label>Notificaciones</label>
         </a>
     }
     @if (SystemConfig.IsNotificationsActive() && SecurityController.HavePermission(Identify,
-   Permissions.NOTIFICACIONES_MANAGER))
+    Permissions.NOTIFICACIONES_MANAGER))
     {
         <a href="~/Mensajes/NotificacionesManager" id="NotificacionesManager" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -228,8 +247,23 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                         d="M8.25 3C8.66421 3 9 3.33579 9 3.75V4.5H15V3.75C15 3.33579 15.3358 3 15.75 3C16.1642 3 16.5 3.33579 16.5 3.75V4.5H18.75C19.9926 4.5 21 5.50736 21 6.75V18.75C21 19.9926 19.9926 21 18.75 21H5.25C4.00736 21 3 19.9926 3 18.75V6.75C3 5.50736 4.00736 4.5 5.25 4.5H7.5V3.75C7.5 3.33579 7.83579 3 8.25 3ZM4.5 9L19.5 9V6.75C19.5 6.33579 19.1642 6 18.75 6H16.5V6.75C16.5 7.16421 16.1642 7.5 15.75 7.5C15.3358 7.5 15 7.16421 15 6.75V6H9V6.75C9 7.16421 8.66421 7.5 8.25 7.5C7.83579 7.5 7.5 7.16421 7.5 6.75V6H5.25C4.83579 6 4.5 6.33579 4.5 6.75V9Z"
                         fill="#06a3ec"></path>
                 </g>
-            </svg>
-            notificaciones admin.</a>
+            </svg><label>notificaciones admin.</label>
+            </a>
+    }
+    @if (SystemConfig.IsNotificationsActive() && SecurityController.HavePermission(Identify,
+    Permissions.INFORME_NOTIFICACIONES))
+    {
+        <a href="~/Mensajes/ReporteNotificacionesManager" id="NotificacionesManager" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.25 3C8.66421 3 9 3.33579 9 3.75V4.5H15V3.75C15 3.33579 15.3358 3 15.75 3C16.1642 3 16.5 3.33579 16.5 3.75V4.5H18.75C19.9926 4.5 21 5.50736 21 6.75V18.75C21 19.9926 19.9926 21 18.75 21H5.25C4.00736 21 3 19.9926 3 18.75V6.75C3 5.50736 4.00736 4.5 5.25 4.5H7.5V3.75C7.5 3.33579 7.83579 3 8.25 3ZM4.5 9L19.5 9V6.75C19.5 6.33579 19.1642 6 18.75 6H16.5V6.75C16.5 7.16421 16.1642 7.5 15.75 7.5C15.3358 7.5 15 7.16421 15 6.75V6H9V6.75C9 7.16421 8.66421 7.5 8.25 7.5C7.83579 7.5 7.5 7.16421 7.5 6.75V6H5.25C4.83579 6 4.5 6.33579 4.5 6.75V9Z"
+                        fill="#06a3ec"></path>
+                </g>
+            </svg><label>reportes notificaciones.</label>
+            </a>
     }
     @if (SystemConfig.IsMessagesActive() && SecurityController.HavePermission(Identify, Permissions.SEND_MESSAGE))
     {
@@ -248,7 +282,9 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                         d="M5 13.5C2.79 13.5 1 15.29 1 17.5C1 18.25 1.20999 18.96 1.57999 19.56C2.26999 20.72 3.54 21.5 5 21.5C6.46 21.5 7.73001 20.72 8.42001 19.56C8.79001 18.96 9 18.25 9 17.5C9 15.29 7.21 13.5 5 13.5ZM6.97 17.17L4.84 19.14C4.7 19.27 4.50999 19.34 4.32999 19.34C4.13999 19.34 3.94999 19.27 3.79999 19.12L2.81 18.13C2.52 17.84 2.52 17.36 2.81 17.07C3.1 16.78 3.58 16.78 3.87 17.07L4.35001 17.55L5.95001 16.07C6.25001 15.79 6.73001 15.81 7.01001 16.11C7.29001 16.41 7.27 16.89 6.97 17.17Z"
                         fill="#06a3ec"></path>
                 </g>
-            </svg>Mensajes</a>
+            </svg>
+            <label>Mensajes</label>
+            </a>
     }
 }
 
@@ -267,8 +303,8 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                         d="M18,4V5a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1V4a2,2,0,0,1,2-2h4A2,2,0,0,1,18,4ZM3.69,8.29l-1.4,1.4a1,1,0,0,0,0,1.4L8.9,17.71a1,1,0,0,0,.71.29H11a1,1,0,0,0,1-1V15.61a1.05,1.05,0,0,0-.29-.71L5.09,8.29A1,1,0,0,0,3.69,8.29Z"
                         style="fill: #2e9ed6;"></path>
                 </g>
-            </svg>
-            Gestión de tests</a>
+            </svg><label>Gestión de tests</label>
+            </a>
     }
     @if (SecurityController.HavePermission(Permissions.QUESTIONNAIRES_USER.ToString(), Identify))
     {
@@ -354,8 +390,8 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                         d="M453.863,256l20.241-20.241c3.448-3.447,3.448-9.036,0-12.483c-3.447-3.447-9.036-3.447-12.483,0 l-20.241,20.241l-20.241-20.241c-3.447-3.447-9.036-3.447-12.483,0c-3.448,3.447-3.448,9.036,0,12.483L428.896,256l-20.241,20.241 c-3.448,3.447-3.448,9.036,0,12.483c1.724,1.724,3.982,2.585,6.242,2.585c2.26,0,4.519-0.862,6.242-2.585l20.239-20.241 l20.241,20.241c1.724,1.724,3.982,2.585,6.242,2.585c2.26,0,4.519-0.862,6.242-2.585c3.448-3.447,3.448-9.036,0-12.483L453.863,256z ">
                     </path>
                 </g>
-            </svg>
-            Resolver de tests</a>
+            </svg><label>Resolver de tests</label>
+            </a>
     }
 }
 
@@ -373,7 +409,7 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     fill="#06a3ec"></path>
             </g>
         </svg>
-        Panel Administrador
+        <label>Panel Administrador</label>
     </a>
     @* <a class="menu-item" id="AdminPanel" href="~/ProyectViews/InicializarUsuariosSIASMOP">
         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#000000">
@@ -385,6 +421,6 @@ Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
                     fill="#0a4580"></path>
             </g>
         </svg>
-        Información base
+    <label>   Información base</label>
     </a> *@
 }

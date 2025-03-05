@@ -4,7 +4,7 @@ import { priorityStyles } from '../../../AppComponents/Styles.js';
 import { Tbl_Case_ModelComponent } from '../../FrontModel/Tbl_CaseModule.js';
 import { StylesControlsV2, StylesControlsV3 } from "../../../WDevCore/StyleModules/WStyleComponents.js";
 import { WFilterOptions } from '../../../WDevCore/WComponents/WFilterControls.js';
-import { ModalMessage, ModalVericateAction } from "../../../WDevCore/WComponents/WForm.js";
+
 import { WPaginatorViewer } from '../../../WDevCore/WComponents/WPaginatorViewer.js';
 import { WTableComponent } from "../../../WDevCore/WComponents/WTableComponent.js";
 import { ComponentsManager, WRender } from '../../../WDevCore/WModules/WComponentsTools.js';

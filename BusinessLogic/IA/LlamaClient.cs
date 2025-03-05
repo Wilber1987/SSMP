@@ -1,13 +1,13 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using BusinessLogic.IA;
+using BusinessLogic.IA.RequestEvaluator;
 using BusinessLogic.Rastreo.Model;
 using BusinessLogic.Rastreo.Operations;
 using CAPA_DATOS;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
 using DatabaseModelNotificaciones;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 
 namespace CAPA_NEGOCIO
@@ -18,50 +18,47 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
+				bool isWithIaResponse = true;
+				bool isValidProcess = true;
+				if (question.IsMetaApi)
+				{
+					string? iaMetaIdentification = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "IANumberIdentification");
+					string? metaIdentification = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "NumberIdentification");
+					isWithIaResponse = question.ServicesIdentification == iaMetaIdentification;
+					isValidProcess = question.ServicesIdentification == iaMetaIdentification || question.ServicesIdentification == metaIdentification;
+				}
+				if (!isValidProcess)
+				{
+					var ex = new Exception($"Plataforma invalida {question.Source} - {question.ServicesIdentification}");
+					LoggerServices.AddMessageError($"ERROR:" + ex.Message, ex);
+					throw ex;
+				}
+
 				question.Text = question.Text?.Trim();
+				question.IsWithIaResponse = isWithIaResponse;
+
 				Notificaciones? notificacion = new Notificaciones().Find<Notificaciones>(
 					FilterData.Like("Telefono", question.UserId?.Replace("+", "")),
 					FilterData.Equal("Enviado", true)
-				//FilterData.Equal("Titulo", $"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete}")
 				);
+				//PROCESA LA SOLICITUD Y VERIFICA QUE NO HAYA UNA NBOTIFICACION PENDIENTE DE EVALUAR
 				if (notificacion != null)
 				{
-					var NotificationCase = new Tbl_Case().Find<Tbl_Case>(
-						FilterData.Like("Titulo", $"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete}"),
-						FilterData.Equal("Estado", Case_Estate.Finalizado)
-					);
-					if (NotificationCase == null && (question.Text == "1" || question.Text == "2" || question.Text == "3"))
+					(bool flowControl, UserMessage value) = await ProcessWhenIxistsNotification(question, notificacion);
+					if (!flowControl)
 					{
-						string title = $@"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete} ({(question.Text == "1" ? "No utiliza servicio de desaduanaje" :  question.Text == "2" ? "Utiliza servicio de desaduanaje" : "Paquete retirado")})";
-						Tbl_Case? tbl_Case = new Tbl_Case().CreateAutomaticCaseNotification(notificacion, title);
-						question.MessageIA = question.Text == "1" || question.Text == "3" ? "Es un placer servirte, ¿te puedo ayudar en algo más?" : "Con mucho gusto atenderemos te petición";
-						//question.WithAgentResponse = true;	
-						question.Text = question.Text == "1" ? "Visitar el Palacio de Correos" : "Utilizar servicio de desaduanaje";
-						question.Id_case = tbl_Case?.Id_Case;
-						await AddComment(tbl_Case, question);
-						return question;
-					}
-					else if (NotificationCase == null && question.Text != "1" && question.Text != "2" &&  question.Text != "3")
-					{
-						question.MessageIA = $@"Tu paquete no. {notificacion?.NotificationData?.NumeroPaquete} esta a la espera de ser retirado, Si en caso se te dificulta venir, te ofrecemos el servicio de desaduanaje remoto el cual consiste en realizar, con tu debida autorización, todos los procesos por ti y entregarte el paquete en la dirección consignada en el mismo. 
-
-¿Qué opción has decidido? 
-1. Visitarnos en el Palacio de Correos
-2. Utilizar nuestro servicio de desaduanaje
-3. Ya lo retiré
-
-Selecciona una opción";
-						return question;
+						return value;
 					}
 				}
 
-				//PROCESAMIENTO SIN NOTIFICACION
-				string caseTitle = $"{question?.UserId} - {question?.Timestamp?.ToString("yyyy-MM-dd")}";
+				//PROCESAMIENTO CUANDO NO EXISTE UNA  NOTIFICACION PENDIENTE
+				string caseTitle = $"{question?.UserId} - {(isWithIaResponse ? " WithBot" : "")} - {question?.Timestamp?.ToString("yyyy-MM-dd")} ";
 				var instaCase = new Tbl_Case().Find<Tbl_Case>(
 					FilterData.Equal("Titulo", caseTitle),
 					FilterData.Equal("Estado", Case_Estate.Activo)
 				);
-				if (instaCase != null && instaCase.MimeMessageCaseData?.WithAgent == true)
+				//PROCESA EL EMNSAJE Y NO AGREGA CONTESTACION DEL BOT
+				if (instaCase != null && (instaCase.MimeMessageCaseData?.WithAgent == true || !isWithIaResponse))
 				{
 					question!.WithAgentResponse = true;
 					question.Id_case = instaCase.Id_Case;
@@ -69,20 +66,41 @@ Selecciona una opción";
 					await AddComment(instaCase, question);
 					return question;
 				}
+
+				//EVALUACION DE TRAKING
 				string? trakingNumber = TrackingOperation.FindTrackingNumber(question.Text);
+
+				(bool isInvalidTraking, string? invalidTraking) =
+					TrackingOperation.FindInvalidCode(question.Text);
+
 				question.Timestamp = DateTime.Now;
-				// evalua tipo de caso
-				string tipocaso = instaCase == null ? "INICIO" :
-				trakingNumber != null
-				? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()
-				: CaseEvaluatorManager.DeterminarCategoria(question.Text, instaCase?.Tbl_Servicios?.Descripcion_Servicio);
+
+				string tipocaso = GetCaseType(question, instaCase, trakingNumber, isWithIaResponse);
 				question.TypeProcess = tipocaso;
-				var dCaso = GestionaCaso(question, caseTitle, instaCase);
+
+				var dCaso = GestionaCaso(question, caseTitle, instaCase, isWithIaResponse);
+
+				(bool isNegationTrakingRequest, string? invalidNegationTrakingResponse) =
+					NegacionTraking.ProcesarNegationTrackingResponse(question.Text, tipocaso, isInvalidTraking);
 
 				List<TrackingHistory> list = [];
-				if (trakingNumber != null)
+
+
+				#region RESPUESTAS CONTROLADAS
+				if (!isWithIaResponse)
 				{
-					list = new TrackingHistory { Tracking = trakingNumber }.Get<TrackingHistory>();
+					question!.WithAgentResponse = true;
+					question.Id_case = dCaso.Id_Case;
+					dCaso.MimeMessageCaseData!.WithAgent = true;
+					dCaso.Update();
+					await AddComment(dCaso, question);
+					return question;
+				}
+				else if (trakingNumber != null)
+				{
+					var traking = new TrackingHistory { Tracking = trakingNumber };
+					traking.TestConection();
+					list = traking.Get<TrackingHistory>();
 					//tipocaso = DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString();
 					string responseUltimaHubicacionText = ProntManager.BuildTrakingResponse(trakingNumber, list);
 					question.MessageIA = responseUltimaHubicacionText;
@@ -91,6 +109,21 @@ Selecciona una opción";
 					await AddComment(dCaso, question, true);
 					return question;
 				}
+				else if (isInvalidTraking)
+				{
+					question.MessageIA = ProntManager.GetInvalidTrackingResponse(invalidTraking);
+					question.Id_case = dCaso.Id_Case;
+					await AddComment(dCaso, question);
+					return question;
+				}
+				else if (isNegationTrakingRequest)
+				{
+					question.MessageIA = invalidNegationTrakingResponse;
+					question.Id_case = dCaso.Id_Case;
+					await AddComment(dCaso, question);
+					return question;
+				}
+				//CUANDO SE ESTA INICANDO UNA SOLICITUD
 				else if (tipocaso == "INICIO" || question.Text.ToUpper() == "MENU")
 				{
 					question.MessageIA = ProntManager.GetSaludo();
@@ -98,6 +131,7 @@ Selecciona una opción";
 					await AddComment(dCaso, question);
 					return question;
 				}
+				//CUANDO SE ESTA CERRANDO UNA SOLICITUD
 				else if (tipocaso == "CIERRE_DE_CASO")
 				{
 					question.MessageIA = ProntManager.Get_Cierre();
@@ -107,6 +141,7 @@ Selecciona una opción";
 					dCaso.Update();
 					return question;
 				}
+				//CUANDO PIDEN ATENCION AL CLIENTE
 				else if (tipocaso == "SOLICITUD_DE_ASISTENCIA")
 				{
 					question.MessageIA = "Con mucho gusto te comunicare con un asistente de servicio al cliente, por favor espera en linea";
@@ -117,6 +152,8 @@ Selecciona una opción";
 					dCaso.Update();
 					return question;
 				}
+				#endregion
+				//CUANDO ENTRA LA IA REALMENTE
 				else
 				{
 					string? automaticResponse = ProntManager.GetAutomaticResponse(question.Text);
@@ -127,33 +164,29 @@ Selecciona una opción";
 						await AddComment(dCaso, question);
 						return question;
 					}
-					// Crear el prompt estructurado para Ollama
-					string prompt = ProntManager.CrearPrompt(question.Text, trakingNumber, list, tipocaso);
-					List<object> historialMensajes = GetHistoryMessage(question, dCaso, prompt, tipocaso);
-					object requestBody = BuildLLamaConfig(historialMensajes);
-					var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-					// Realiza la solicitud POST
-					HttpResponseMessage response = await GetIAResponse(content);
-					if (response.IsSuccessStatusCode)
+					if (tipocaso == "RASTREO_Y_SEGUIMIENTOS")
 					{
-						// Si la solicitud es exitosa, lee la respuesta
-						var result = await response.Content.ReadAsStringAsync();
-
-						JsonResponse? jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(result);
-						string? messageContent = jsonResponse?.Message?.Content;
-						question.MessageIA = messageContent;
-
-						//guarda interaccion de mensaje
-						await AddComment(dCaso, question);
-						question.Id_case = dCaso.Id_Case;
-
-						return question; // Devuelve la respuesta del modelo Llama
-					}
-					else
+						(bool isProcesed, string? response) = TrakingUnindictableRequest.ProcessRequest();
+						if (isProcesed) 
+						{
+						    question.MessageIA = response;
+							question.Id_case = dCaso.Id_Case;
+							await AddComment(dCaso, question);
+							return question;
+						}
+					} else 
 					{
-						question.MessageIA = "Error al procesar la solicitud.";
-						return question; // Devuelve un mensaje de error si no fue exitosa
+					    (bool isProcesed, string? response) = UnindictableRequest.ProcessRequest();
+						if (isProcesed) 
+						{
+						    question.MessageIA = response;
+							question.Id_case = dCaso.Id_Case;
+							await AddComment(dCaso, question);
+							return question;
+						}
 					}
+					
+					return await iAProcess(question, trakingNumber, tipocaso, dCaso, list);
 				}
 			}
 			catch (Exception ex)
@@ -161,6 +194,84 @@ Selecciona una opción";
 				LoggerServices.AddMessageError($"ERROR: GenerateResponse", ex);
 				throw;
 			}
+		}
+
+		private async Task<UserMessage> iAProcess(UserMessage question, string? trakingNumber, string tipocaso, Tbl_Case dCaso, List<TrackingHistory> list)
+		{
+			
+			
+			// Crear el prompt estructurado para Ollama
+			string prompt = ProntManager.CrearPrompt(question.Text, trakingNumber, list, tipocaso);
+			List<object> historialMensajes = GetHistoryMessage(question, dCaso, prompt, tipocaso);
+			object requestBody = BuildLLamaConfig(historialMensajes);
+			var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+			// Realiza la solicitud POST
+			HttpResponseMessage response = await GetIAResponse(content);
+			if (response.IsSuccessStatusCode)
+			{
+				// Si la solicitud es exitosa, lee la respuesta
+				var result = await response.Content.ReadAsStringAsync();
+
+				JsonResponse? jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(result);
+				string? messageContent = jsonResponse?.Message?.Content;
+				question.MessageIA = messageContent;
+
+				//guarda interaccion de mensaje
+				await AddComment(dCaso, question);
+				question.Id_case = dCaso.Id_Case;
+
+				return question; // Devuelve la respuesta del modelo Llama
+			}
+			else
+			{
+				question.MessageIA = "Error al procesar la solicitud.";
+				return question; // Devuelve un mensaje de error si no fue exitosa
+			}
+		}
+
+		private static string GetCaseType(UserMessage question, Tbl_Case? instaCase, string? trakingNumber, bool isWithIaResponse)
+		{
+			if (!isWithIaResponse)
+			{
+				return "SOLICITUD_DE_ASISTENCIA";
+			}
+			// evalua tipo de caso
+			return instaCase == null ? "INICIO" : trakingNumber != null
+			? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()
+			: CaseEvaluatorManager.DeterminarCategoria(question.Text, instaCase?.Tbl_Servicios?.Descripcion_Servicio);
+		}
+
+		private async Task<(bool flowControl, UserMessage value)> ProcessWhenIxistsNotification(UserMessage question, Notificaciones notificacion)
+		{
+			var NotificationCase = new Tbl_Case().Find<Tbl_Case>(
+									FilterData.Like("Titulo", $"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete}"),
+									FilterData.Equal("Estado", Case_Estate.Finalizado)
+								);
+			if (NotificationCase == null && (question.Text == "1" || question.Text == "2" || question.Text == "3"))
+			{
+				string title = $@"Notificación de paquete {notificacion.NotificationData?.NumeroPaquete} ({(question.Text == "1" ? "No utiliza servicio de desaduanaje" : question.Text == "2" ? "Utiliza servicio de desaduanaje" : "Paquete retirado")})";
+				Tbl_Case? tbl_Case = new Tbl_Case().CreateAutomaticCaseNotification(notificacion, title);
+				question.MessageIA = question.Text == "1" || question.Text == "3" ? "Es un placer servirte, ¿te puedo ayudar en algo más?" : "Con mucho gusto atenderemos te petición";
+				//question.WithAgentResponse = true;	
+				question.Text = question.Text == "1" ? "Visitar el Palacio de Correos" : "Utilizar servicio de desaduanaje";
+				question.Id_case = tbl_Case?.Id_Case;
+				await AddComment(tbl_Case, question);
+				return (flowControl: false, value: question);
+			}
+			else if (NotificationCase == null && question.Text != "1" && question.Text != "2" && question.Text != "3")
+			{
+				question.MessageIA = $@"Tu paquete no. {notificacion?.NotificationData?.NumeroPaquete} esta a la espera de ser retirado, Si en caso se te dificulta venir, te ofrecemos el servicio de desaduanaje remoto el cual consiste en realizar, con tu debida autorización, todos los procesos por ti y entregarte el paquete en la dirección consignada en el mismo. 
+
+¿Qué opción has decidido? 
+1. Visitarnos en el Palacio de Correos
+2. Utilizar nuestro servicio de desaduanaje
+3. Ya lo retiré
+
+Selecciona una opción";
+				return (flowControl: false, value: question);
+			}
+
+			return (flowControl: true, value: null);
 		}
 
 		private static object BuildLLamaConfig(List<object> historialMensajes)
@@ -198,7 +309,7 @@ Selecciona una opción";
 			return historialMensajes;
 		}
 
-		public static Tbl_Case GestionaCaso(UserMessage data, string caseTitle, Tbl_Case? instaCase)
+		public static Tbl_Case GestionaCaso(UserMessage data, string caseTitle, Tbl_Case? instaCase, bool isCaseWithIABotResponse)
 		{
 			try
 			{
@@ -226,7 +337,7 @@ Selecciona una opción";
 				}
 				else
 				{
-					var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = data?.Source.ToUpper() };
+					var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = data!.Source?.ToUpper(), isWithIaResponse = isCaseWithIABotResponse };
 
 					var newCase = new Tbl_Case()
 					{
@@ -293,35 +404,7 @@ Selecciona una opción";
 
 			}
 
-		}
-
-		/*public async Task<string> EvaluaCaso(UserMessage question)
-		{
-
-			//string prompt = ProntManager.ServicesEvaluatorPrompt(question.Text);
-			List<object> historialMensajes = [
-				new { role = "system", content =  ProntManager.GetPront("SERVICES_PRONT_VALIDATOR_CONTEXT")},
-				new { role = "user", content = question.Text } // Se pasa el mensaje que el usuario envía
-			];
-			object requestBody = BuildLLamaConfig(historialMensajes);
-			var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await GetIAResponse(content);
-			if (response.IsSuccessStatusCode)
-			{
-				// Si la solicitud es exitosa, lee la respuesta
-				var result = await response.Content.ReadAsStringAsync();
-
-				var jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(result);
-				string messageContent = jsonResponse.Message.Content;
-
-				return messageContent; // Devuelve la respuesta del modelo Llama
-			}
-			else
-			{
-				return "Error al procesar la solicitud."; // Devuelve un mensaje de error si no fue exitosa
-			}
-
-		}*/
+		}		
 
 		private static async Task<HttpResponseMessage> GetIAResponse(StringContent content)
 		{
@@ -333,22 +416,7 @@ Selecciona una opción";
 			var response = await client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.IAServices, "IAHost"), content);
 			return response;
 		}
-		/*
-		static string ExtractAndValidateCode(string botResponse, string[] validCodes)
-		{
-			// Expresión regular para encontrar palabras exactas que coincidan con los códigos válidos
-			string pattern = string.Join("|", validCodes.Select(Regex.Escape));
-			Match match = Regex.Match(botResponse, $@"\b({pattern})\b");
-
-			if (match.Success)
-			{
-				return match.Value; // Retorna el código encontrado
-			}
-			else
-			{
-				return "ASISTENCIA_GENERAL"; // Retorna un código por defecto si no encuentra coincidencias
-			}
-		}*/
+		
 	}
 
 }

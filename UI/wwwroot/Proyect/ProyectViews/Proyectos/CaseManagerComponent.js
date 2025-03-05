@@ -4,7 +4,7 @@ import { priorityStyles } from '../../../AppComponents/Styles.js';
 import { Permissions, WSecurity } from '../../../WDevCore/Security/WSecurity.js';
 import { StylesControlsV2, StylesControlsV3 } from "../../../WDevCore/StyleModules/WStyleComponents.js";
 import { WFilterOptions } from '../../../WDevCore/WComponents/WFilterControls.js';
-import { ModalMessage, ModalVericateAction, WForm } from "../../../WDevCore/WComponents/WForm.js";
+import { WForm } from "../../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from '../../../WDevCore/WComponents/WModalForm.js';
 import { WPaginatorViewer } from '../../../WDevCore/WComponents/WPaginatorViewer.js';
 import { WTableComponent } from "../../../WDevCore/WComponents/WTableComponent.js";
@@ -19,8 +19,12 @@ import { caseGeneralData } from './CaseDetailComponent.js';
 import { Tbl_Comments_ModelComponent } from '../../FrontModel/Tbl_Comments.js';
 import { Tbl_Calendario_ModelComponent } from '../../FrontModel/Tbl_Calendario.js';
 import { Tbl_Servicios, Tbl_Servicios_ModelComponent } from '../../FrontModel/Tbl_Servicios.js';
+import { ModalMessage } from '../../../WDevCore/WComponents/ModalMessage.js';
+import { ModalVericateAction } from '../../../WDevCore/WComponents/ModalVericateAction.js';
+import { WCommentsComponent } from '../../../WDevCore/WComponents/WCommentsComponent.js';
 
 class CaseManagerComponent extends HTMLElement {
+
     /**
      * 
      * @param {Array<Tbl_Case_ModelComponent>} [Dataset]
@@ -34,6 +38,8 @@ class CaseManagerComponent extends HTMLElement {
         this.append(this.WStyle, StylesControlsV2.cloneNode(true), StylesControlsV3.cloneNode(true));
         this.TabContainer = WRender.createElement({ type: 'div', props: { class: "content-container", id: "TabContainer" } });
         this.TabManager = new ComponentsManager({ MainContainer: this.TabContainer });
+        this.CommentContainer = WRender.createElement({ type: 'div', props: { class: "content-container", id: "CommentsContainer" } });
+        this.CommentManager = new ComponentsManager({ MainContainer: this.CommentContainer });
         this.OptionContainer = WRender.Create({ className: "OptionContainer" });
         this.DrawCaseManagerComponent();
     }
@@ -56,12 +62,35 @@ class CaseManagerComponent extends HTMLElement {
                         const response = await entity.SaveOwCase();
                         this.append(ModalMessage("Caso guardado correctamente", undefined, true))
                     }))
-                } 
+                }
             }))
         }
-        this.append(this.OptionContainer, this.TabContainer);
+        this.append(
+            this.TabContainer, this.CommentContainer
+            // , this.OptionContainer
+        );
         //this.dashBoardView();
         this.actividadesManager();
+    }
+    CommentsDetail(/**@type {Tbl_Case} */ actividad) {
+        if (!this.CommentManager.Exists("Comment" + actividad.Id_Case)) {
+            const commentsContainer = new WCommentsComponent({
+                Dataset: [],
+                ModelObject: new Tbl_Comments_ModelComponent(),
+                User: WSecurity.UserData,
+                UserIdProp: "Id_User",
+                CommentsIdentify: actividad.Id_Case,
+                CommentsIdentifyName: "Id_Case",
+                UrlSearch: "../api/ApiEntityHelpdesk/getTbl_Comments",
+                UrlAdd: "../api/ApiEntityHelpdesk/saveTbl_Comments",
+                AddObject: actividad?.MimeMessageCaseData?.PlatformType != "WHATSAPP" && actividad?.MimeMessageCaseData?.PlatformType != "WEBAPI",
+                UseDestinatarios: actividad?.MimeMessageCaseData?.PlatformType != "WHATSAPP" && actividad?.MimeMessageCaseData?.PlatformType != "WEBAPI",
+                isRichTextActive: actividad?.MimeMessageCaseData?.PlatformType != "WHATSAPP"
+            });
+
+            this.CommentManager.NavigateFunction("Comment" + actividad.Id_Case, commentsContainer)
+        }
+        this.CommentManager.NavigateFunction("Comment" + actividad.Id_Case);
     }
     actividadesManager = async () => {
         // @ts-ignore
@@ -70,7 +99,7 @@ class CaseManagerComponent extends HTMLElement {
             Dataset: [],
             UseEntityMethods: false,
             AutoFilter: true,
-            Display: true,
+            //Display: true,
             AutoSetDate: true,
             ModelObject: new Tbl_Case_ModelComponent(),
             FilterFunction: async (/** @type {Array | undefined} */ DFilt) => {
@@ -98,19 +127,18 @@ class CaseManagerComponent extends HTMLElement {
         return WRender.Create({
             className: "actividad", object: actividad, children: [
                 {
-                    tagName: 'h4', innerText: `#${actividad.Id_Case} - ${actividad.Titulo} (${actividad.Tbl_Servicios?.Descripcion_Servicio ?? ""})`, children: [
+                    tagName: 'h4', innerText: `#${actividad.Id_Case} - ${actividad.Titulo} ${actividad.Tbl_Servicios?.Descripcion_Servicio ?? ""}`, children: [
                         {
                             className: "options", children: [
-                                { tagName: 'button', className: 'Btn-Mini', innerText: "Detalle", onclick: async () => await this.actividadDetail(actividad) },
-                                WSecurity.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA) ?
-                                    { tagName: 'button', className: 'Btn-Mini', innerText: 'Vincular Caso', onclick: () => this.Vincular(actividad) } :
-                                    ""
+                                { tagName: 'button', className: 'Btn-Mini', innerText: "Administrar", onclick: async () => await this.actividadDetail(actividad) },
+                                // WSecurity.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA) ?  { tagName: 'button', className: 'Btn-Mini', innerText: 'Vincular //Caso', onclick: () => this.Vincular(actividad) } :    "",
+                                { tagName: 'button', className: 'Btn-Mini', innerText: "Detalle", onclick: async () => await this.CommentsDetail(actividad) },
                             ]
                         }
                     ]
                 },
                 , caseGeneralData(actividad),
-                { tagName: 'h4', innerText: "Progreso" },
+                //{ tagName: 'h4', innerText: "Progreso" },
                 ControlBuilder.BuildProgressBar(actividad.Progreso,
                     actividad.Tbl_Tareas?.filter(tarea => !tarea.Estado?.includes("Inactivo"))?.length)
             ]

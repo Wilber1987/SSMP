@@ -7,9 +7,11 @@ using BusinessLogic.Rastreo.Model;
 using CAPA_NEGOCIO.MAPEO;
 using UI;
 using BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operations;
+using CAPA_DATOS.Security;
 
 
 new BDConnection().IniciarMainConecction();
+//Security_Permissions.PrepareDefaultPermissions();
 Cat_Dependencias.PrepareDefaultDependencys();//crea las dependencias por defecto TODO REPARAR EN PRODUCTIVO
 //SqlADOConexion.IniciarConexion("sa", "admin", "localhost", "PROYECT_MANAGER_BD");
 

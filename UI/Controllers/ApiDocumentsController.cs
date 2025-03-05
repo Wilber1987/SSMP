@@ -9,6 +9,7 @@ using iText.Layout;
 using iText.Html2pdf;
 using iText.Layout.Properties;
 using iText.Kernel.Geom;
+using CAPA_DATOS.Services;
 //using Microsoft.Playwright;
 
 namespace UI.Controllers
@@ -29,7 +30,8 @@ namespace UI.Controllers
 			try
 			{
 				// Convertir HTML a PDF utilizando wkhtmltopdf
-				byte[] pdfBytes = ConvertHtmlToPdf(request.HtmlContent, request.PageType);
+				//byte[] pdfBytes = ConvertHtmlToPdf(request.HtmlContent, request.PageType);
+				byte[] pdfBytes = PdfService.ConvertHtmlToPdf(request.HtmlContent, request.PageType);
 
 				// Devolver el archivo PDF como respuesta
 				return File(pdfBytes, "application/pdf", "generated.pdf");

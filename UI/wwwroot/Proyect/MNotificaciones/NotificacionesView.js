@@ -1,7 +1,9 @@
+// @ts-check
 import { Tbl_Investigaciones } from '../../ModelProyect/ModelDatabase.js';
 import { basicButtons, StylesControlsV2 } from "../../WDevCore/StyleModules/WStyleComponents.js";
+import { ModalVericateAction } from '../../WDevCore/WComponents/ModalVericateAction.js';
 import { WAppNavigator } from '../../WDevCore/WComponents/WAppNavigator.js';
-import { ModalVericateAction } from '../../WDevCore/WComponents/WForm.js';
+
 import { WAjaxTools } from "../../WDevCore/WModules/WAjaxTools.js";
 import { ComponentsManager, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
 import { css } from '../../WDevCore/WModules/WStyledRender.js';

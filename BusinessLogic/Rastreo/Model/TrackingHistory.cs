@@ -68,5 +68,9 @@ namespace BusinessLogic.Rastreo.Model
 				WHERE L_MAILITMS.MAILITM_FID = '" + Tracking + "'";
 		}
 
-	}
+        internal void TestConection()
+        {
+            this.MDataMapper.GDatos.TestConnection();
+        }
+    }
 }

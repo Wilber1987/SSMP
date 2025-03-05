@@ -15,6 +15,26 @@ namespace DataBaseModel
 			Nombre = prop;
 			return Find<Transactional_Configuraciones>();
 		}
+		public static Transactional_Configuraciones GetParam(ConfiguracionesThemeEnum prop, string defaultValor = "", ConfiguracionesTypeEnum TYPE = ConfiguracionesTypeEnum.THEME)
+		{
+
+			var find = new Transactional_Configuraciones
+			{
+				Nombre = prop.ToString(),
+			}.Find<Transactional_Configuraciones>();
+			if (find == null)
+			{
+				find = new Transactional_Configuraciones
+				{
+					Valor = defaultValor,
+					Descripcion = prop.ToString(),
+					Nombre = prop.ToString(),
+					Tipo_Configuracion = TYPE.ToString()
+				};
+				find.Save();
+			}
+			return find;
+		}
 		public List<Transactional_Configuraciones> GetTheme()
 		{
 			return Get<Transactional_Configuraciones>()
@@ -47,8 +67,8 @@ namespace DataBaseModel
 		internal int GetParamNumberTemplate()
 		{
 			return Convert.ToInt32(Find<Transactional_Configuraciones>(
-				FilterData.Equal("Nombre", ConfiguracionesTypeEnum.PARAM_NUMBER_TEMPLATE)
-			)?.Valor ?? "0");			   
+				FilterData.Equal("Nombre", ConfiguracionesThemeEnum.PARAM_NUMBER_TEMPLATE)
+			)?.Valor ?? "0");
 		}
 	}
 	public enum AppConfigurationList
@@ -58,21 +78,25 @@ namespace DataBaseModel
 		IAServices,
 		MettaApi,
 		XApi,
-        Smtp,
-        AutomaticReports
-    }	
+		Smtp,
+		AutomaticReports
+	}
 
 	public enum ConfiguracionesTypeEnum
 	{
-		THEME, GENERAL_DATA, NUMBER,
-		PARAM_NUMBER_TEMPLATE
-	}
+		THEME, GENERAL_DATA, NUMBER, SELECT,
+        IMAGE
+    }
+    
 
 	public enum ConfiguracionesThemeEnum
 	{
 		TITULO, SUB_TITULO, NOMBRE_EMPRESA, LOGO_PRINCIPAL, LOGO, MEDIA_IMG_PATH,
-		VERSION
-	}
+		VERSION, PARAM_NUMBER_TEMPLATE, MESSAGE_TEMPLATE, AUTOMATIC_SENDER_REPORT,
+        DESTINATARIOS_AUTOMATIC_SENDER_REPORT,
+        MEMBRETE_HEADER,
+        MEMBRETE_FOOTHER
+    }
 
 	public class Config
 	{

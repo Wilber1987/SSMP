@@ -19,7 +19,7 @@ namespace UI.SSMP_IA.ApiControllers
 
 		[HttpPost]
 		[AuthController] // TODO: QUITAR
-		public IActionResult ReceiveMessage([FromBody] dynamic message, [FromHeader(Name = "X-Platform")] string platform = null)
+		public IActionResult ReceiveMessage([FromBody] dynamic message, [FromHeader(Name = "X-Platform")] string? platform = null)
 		{
 			try
 			{

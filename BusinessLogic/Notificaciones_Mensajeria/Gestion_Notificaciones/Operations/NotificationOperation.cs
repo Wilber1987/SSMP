@@ -1,9 +1,11 @@
+using System.Reflection;
 using API.Controllers;
 using CAPA_DATOS;
 using CAPA_DATOS.Services;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
 using DatabaseModelNotificaciones;
+using Org.BouncyCastle.Asn1.Ocsp;
 using WhatsAppApi;
 
 namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
@@ -85,24 +87,53 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 		}
 		private static void SaveNotificacionDestinatarios(NotificationRequest request)
 		{
+			Transactional_Configuraciones defaultMessageTemplate = Transactional_Configuraciones.GetParam(ConfiguracionesThemeEnum.MESSAGE_TEMPLATE, defaultTemplate);
+
 			foreach (var item in request.Destinatarios ?? [])
 			{
 				var newNotificaciones = new Notificaciones
 				{
-					Mensaje = request.Mensaje,
+					Mensaje = GetMensaje(request, item, defaultMessageTemplate),
 					Titulo = request.Titulo,
 					Media = request.Files,
 					Enviado = false,
 					Leido = false,
 					Tipo = request.NotificationType.ToString(),
 					Email = item.Correo,
-					Telefono = $"{WhatsAppMessage.ObtenerExtensionPorDepartamento(item?.NotificationData?.Departamento)}{item?.Telefono}" ?? "" ,
+					Telefono = $"{WhatsAppMessage.ObtenerExtensionPorDepartamento(item?.NotificationData?.Departamento)}{item?.Telefono}" ?? "",
 					Fecha = DateTime.Now,
 					NotificationsServices = request.NotificationsServices,
 					NotificationData = item.NotificationData
 				};
 				newNotificaciones.Save();
 			}
+		}
+
+		private static string GetMensaje(NotificationRequest request, NotificactionDestinatarios item, Transactional_Configuraciones defaultMessageTemplate)
+		{
+
+			if (request.Mensaje == null && SystemConfig.IsWhatsAppActive() == true)
+			{
+				string messageTemplate = defaultMessageTemplate.Valor ?? "";
+				
+				PropertyInfo[] properties = item.NotificationData?.GetType()?.GetProperties() ?? [];
+				foreach (PropertyInfo property in properties)
+				{
+					string propertyName = property.Name;
+					object? propertyValue = property?.GetValue(item.NotificationData, null);
+					string placeholder = "{{"+propertyName+"}}";
+					if (propertyValue != null)
+					{
+						messageTemplate  = messageTemplate.Replace(placeholder, propertyValue.ToString());
+					}
+					else
+					{
+						messageTemplate = messageTemplate.Replace(placeholder, "");
+					}
+				}
+				return messageTemplate;
+			}
+			return request.Mensaje?.ToString() ?? "";
 		}
 
 		public static List<Notificaciones> GetNotificaciones(Notificaciones Inst, string identity)
@@ -118,16 +149,17 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 
 		public static ResponseService ReenvioNotificaciones(List<Notificaciones>? notificaciones)
 		{
-			notificaciones?.ForEach(n => 
+			notificaciones?.ForEach(n =>
 			{
 				n.Enviado = false;
 				n.Leido = false;
+				n.NotificationData!.Reenvios = 0;
 				n.Update();
 			});
 			return new ResponseService
 			{
-				status= 200,
-				message= "Notificaciones Reenviadas"	
+				status = 200,
+				message = "Notificaciones Reenviadas"
 			};
 		}
 
@@ -136,6 +168,18 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 			Inst.orderData = [OrdeData.Asc("Fecha_Envio")];
 			return Inst.Where<Notificaciones>(FilterData.Equal("Enviado", true));
 		}
+		static string defaultTemplate = @"¡Hola {{Destinatario}}! En Correos nos encanta servirte. <br> <br> 
+Ha llegado un paquete a tu nombre y lo tenemos resguardado en la oficina de Fardos Postales - SAT, ubicada en el Palacio de Correos, zona 1, 2do nivel. Of. 203
+<br> <br> 
+Recuerda traer tu DPI y brindar el número {{NumeroPaquete}} para el respectivo pago de los impuestos, que apliquen segun las disposiciones de la SAT y así continuar el proceso de entrega.
+<br> <br> 
+Si en caso se te dificulta venir, te ofrecemos el servicio de desaduanaje remoto el cual consiste en realizar, con tu debida autorización, todos los procesos por ti y entregarte el paquete en la dirección consignada en el mismo. 
+<br> <br> 
+¿Qué opción has decidido? 
+1. Visitarnos en el Palacio de Correos
+2. Utilizar nuestro servicio de desaduanaje
+<br> <br> 
+¡Qué tengas un estupendo dia!";
 	}
 
 	public class NotificactionDestinatarios
@@ -159,14 +203,18 @@ namespace CAPA_NEGOCIO.Gestion_Mensajes.Operations
 		public string? Agencia { get; set; }
 
 		public string? Correo { get; set; }
+		public string? Email { get; set; }
 		public string? Telefono { get; set; }
-		public string? Dpi { get;  set; }
-		public string? NumeroPaquete { get;  set; }
-		public int? Reenvios { get;  set; }
+		public string? Dpi { get; set; }
+		public string? Nit { get; set; }
+		public string? NumeroPaquete { get; set; }
+		public string? Fecha_del_envio_de_notificacion { get; set; }
+		public string? NumeroAduana { get; set; }
+		public int? Reenvios { get; set; }
 		public List<NotificationsParams>? Params { get; set; }
 	}
-	
-	public class NotificationsParams 
+
+	public class NotificationsParams
 	{
 		public string? Name { get; set; }
 		public string? Type { get; set; }

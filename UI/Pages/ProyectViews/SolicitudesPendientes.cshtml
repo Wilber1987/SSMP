@@ -1,15 +1,11 @@
 @page
 @using API.Controllers
+@using CAPA_DATOS.Security
 @{
-    // Layout = null;
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    
+    if (!SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(), HttpContext.Session.GetString("seassonKey")))
     {
         Response.Redirect("../Security/login");
-        return;
-    }
-    if (!SecurityController.HavePermission("PERFIL_ACCESS", HttpContext.Session.GetString("seassonKey")))
-    {
-        Response.Redirect("../Security/permission_error");
         return;
     }
 }

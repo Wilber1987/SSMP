@@ -202,7 +202,7 @@ class Tbl_Case extends EntityClass {
     /**@type {Date}*/ Fecha_Final;
     /**@type {String}*/ Mail;
     /**@type {String}*/ Case_Priority;
-    /**@type {String}*/ MimeMessageCaseData;
+    /**@type {Object}*/ MimeMessageCaseData;
     /**@type {Tbl_Profile} ManyToOne*/ Tbl_Profile;
     /**@type {Cat_Dependencias} ManyToOne*/ Cat_Dependencias;
     /**@type {Tbl_Servicios} ManyToOne*/ Tbl_Servicios;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers;
+using BusinessLogic.IA.Model;
 using BusinessLogic.SystemDocuments.Models;
 using BusinessLogic.SystemDocuments.Operations;
 using CAPA_DATOS;
@@ -59,6 +60,27 @@ namespace UI.Controllers
 		[HttpPost]
 		[AuthController(Permissions.MANAGE_ARTICLES)]
 		public ResponseService UpdateCategory(Category inst)
+		{
+			return  inst.Update();
+		}
+
+		[HttpPost]
+		[AuthController(Permissions.ADMIN_ACCESS)]
+		public List<Tbl_Pronts> GetTbl_Pronts(Tbl_Pronts inst)
+		{
+			return inst.Get<Tbl_Pronts>();
+		}
+
+		[HttpPost]
+		[AuthController(Permissions.ADMIN_ACCESS)]
+		public object? SaveTbl_Pronts(Tbl_Pronts inst)
+		{
+			return inst.Save();
+		}
+
+		[HttpPost]
+		[AuthController(Permissions.ADMIN_ACCESS)]
+		public ResponseService UpdateTbl_Pronts(Tbl_Pronts inst)
 		{
 			return  inst.Update();
 		}

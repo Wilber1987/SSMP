@@ -11,9 +11,10 @@ class Notificaciones_ModelComponent extends EntityClass {
 			this[prop] = props[prop];
 		}
 	}
-   /**@type {ModelProperty}*/ Id = { type: 'number', primary: true , hiddenFilter: true};
-   /**@type {ModelProperty}*/ Mensaje = { type: 'richtext' };
-   /**@type {ModelProperty}*/ Fecha = { type: 'date' };
+	/**@type {ModelProperty}*/ Telefono = { type: 'tel' };
+    /**@type {ModelProperty}*/ Id = { type: 'number', primary: true , hiddenFilter: true};
+    /**@type {ModelProperty}*/ Mensaje = { type: 'richtext', disabled: true, require: false };
+    /**@type {ModelProperty}*/ Fecha = { type: 'date' };   
    /**@type {ModelProperty}*/ Media = { type: 'masterdetail', hidden: true };
    /**@type {ModelProperty}*/ Enviado = { type: 'checkbox', hidden: true };
    /**@type {ModelProperty}*/ Leido = { type: 'checkbox', hidden: true };
@@ -29,16 +30,19 @@ export { Notificaciones_ModelComponent }
 
 export class Notificaciones_Data {
 	Departamento = { type: "text" };
+	NumeroPaquete = { type: "text" };
 	Direccion = { type: "text" };
 	Destinatario = { type: "text" };
-	Identificacion = { type: "text" };
+	Identificacion = { type: "text", hidden: true };
 	Correlativo = { type: "text" };
 	Fecha = { type: "text" };
+	Fecha_del_envio_de_notificacion = { type: "text" };
 	Municipio = { type: "text" };
 	Agencia = { type: "text" };
-	Correo = { type: "text" };
-	Telefono = { type: "text" };
+	NumeroAduana = { type: "text" };
+	Correo = { type: "text", hidden: true };
+	Telefono = { type: "text", hidden: true };
 	Dpi = { type: "text" };
-	NumeroPaquete = { type: "text" };
-	Reenvios = { type: "text" };
+	Nit = { type: "text" };	
+	Reenvios = { type: "text" , hidden: true};
 }

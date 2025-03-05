@@ -7,7 +7,7 @@ import { Cat_Dependencias, Cat_Dependencias_ModelComponent } from "../../Proyect
 import { Tbl_Profile } from "../../Proyect/FrontModel/Tbl_Profile.js";
 import { StylesControlsV2, StylesControlsV3, StyleScrolls } from "../../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from "../../WDevCore/WComponents/WAppNavigator.js";
-import { ModalMessage, ModalVericateAction } from "../../WDevCore/WComponents/WForm.js";
+
 import { WModalForm } from "../../WDevCore/WComponents/WModalForm.js";
 import { WTableComponent } from "../../WDevCore/WComponents/WTableComponent.js";
 import { html, WRender } from "../../WDevCore/WModules/WComponentsTools.js";
@@ -19,6 +19,9 @@ import "../../WDevCore/libs/xlsx.full.min.js"
 import { Notificaciones_ModelComponent } from "../Model/ModelComponent/Notificacion_ModelComponent.js";
 import { EntityClass } from "../../WDevCore/WModules/EntityClass.js";
 import { Historial_NotificationsView } from "./Historial_NotificationsView.mjs";
+import { ModalMessage } from "../../WDevCore/WComponents/ModalMessage.js";
+import { ModalVericateAction } from "../../WDevCore/WComponents/ModalVericateAction.js";
+import { BuildReportMessage } from "./ReporteMessageBuilder.js";
 
 
 /**
@@ -102,6 +105,8 @@ class NotificacionesManagerView extends HTMLElement {
 		if (!this.FreeNotificationComponent) {
 			const NotificationTable = new WTableComponent({
 				ModelObject: new NotificactionDestinatarios_ModelComponent(),
+				paginate: false,
+				maxElementByPage: 200,
 				Options: {
 					Delete: true,
 					Edit: true,
@@ -173,20 +178,23 @@ class NotificacionesManagerView extends HTMLElement {
 
 		function BuildDestinatario(i) {
 			return {
-				Telefono: i["N.º de teléfono"],
-				Correo: i["Correo"],
+				Telefono: i["N.º de teléfono"] ?? i["No. de teléfono"] ?? i["No. de Teléfono"],
+				Correo: i["Correo"] ?? i["E-mail"],
 				NotificationData: {
 					Direccion: i["Dirección del destinatario"],
 					Destinatario: i["Destinatario"] ?? "DESCONOCIDO..",
-					Telefono: i["N.º de teléfono"],
+					Telefono: i["N.º de teléfono"] ?? i["No. de teléfono"] ?? i["No. de Teléfono"],
 					Fecha: i["Fecha de ingreso"],
+					Fecha_del_envio_de_notificacion: i["fecha del envió de notificación"] ?? i["Fecha del envió de notificación"] ?? "-",
 					Departamento: i["Departamento"],
 					Municipio: i["Municipio"],
-					Agenda: i["Agencia"],
+					Agencia: i["Agencia"],
 					Correlativo: i["Correlativo"],
-					NumeroPaquete: i["N.º de paquete"] ?? "DESCONOCIDO..",
-					Dpi: i["Dpi"] ?? "DESCONOCIDO..",
-					Correo: i["Correo"],
+					NumeroPaquete: i["N.º de paquete"] ?? i["No. de paquete"] ?? "DESCONOCIDO..",
+					NumeroAduana: i["N.º de Aduana"] ?? i["No. de Aduana"] ?? "DESCONOCIDO..",
+					Dpi: i["Dpi"] ?? i["DPI"] ?? i["dpi"] ?? "DESCONOCIDO..",
+					Nit: i["nit"] ?? i["NIT"] ?? i["Nit"],
+					//Nit: i["Correo"],
 					Params: Object.keys(i).map(prop => {
 						return { Type: "text", Name: prop.trim(), Value: i[prop].trim() }
 					})
@@ -208,9 +216,15 @@ class NotificacionesManagerView extends HTMLElement {
 				ModelObject: model,
 				Options: {
 					MultiSelect: true,
+					Edit: true,
 					Filter: true,
 					AutoSetDate: true,
 					FilterDisplay: true,
+					UserActions: [{
+						name: "Reporte", action: (notificacion) => {
+							this.append(BuildReportMessage(notificacion))
+						}
+					}]
 				}
 			});
 			this.SendsNotificationTable = NotificationTable;
@@ -240,7 +254,7 @@ class NotificacionesManagerView extends HTMLElement {
 		}
 		return this.SendsFreeNotificationComponent;
 	}
-	static BuildDestinatario(i) {
+	/*static BuildDestinatario(i) {
 		return {
 			Telefono: i["N.º de teléfono"],
 			Correo: i["Correo"],
@@ -258,7 +272,7 @@ class NotificacionesManagerView extends HTMLElement {
 				Correo: i["Correo"]
 			}
 		};
-	}
+	}*/
 	DependenciasComponent() {
 		this.NotificationType = NotificationTypeEnum.DEPENDENCIA;
 		if (!this.DependenciaComponent) {
@@ -353,15 +367,21 @@ class NotificactionDestinatarios_ModelComponent {
 	};
 }
 class NotificationData_ModelComponent {
-	/**@type {ModelProperty} */  Direccion = { type: "text" };
-	/**@type {ModelProperty} */  Telefono = { type: "text" };
-	/**@type {ModelProperty} */  Destinatario = { type: "text" };
-	/**@type {ModelProperty} */  Fecha = { type: "text" };
-	/**@type {ModelProperty} */  Departamento = { type: "text" };
-	/**@type {ModelProperty} */  Municipio = { type: "text" };
-	/**@type {ModelProperty} */  Agenda = { type: "text" };
-	/**@type {ModelProperty} */  Correlativo = { type: "text" };
-	/**@type {ModelProperty} */  Correo = { type: "text" };
+	Departamento = { type: "text" };
+	NumeroPaquete = { type: "text" };
+	Direccion = { type: "text" };
+	Destinatario = { type: "text" };
+	Identificacion = { type: "text", hidden: true };
+	Correlativo = { type: "text" };
+	Fecha = { type: "text" };
+	Fecha_del_envio_de_notificacion = { type: "text" };
+	Municipio = { type: "text" };
+	Agencia = { type: "text" };
+	NumeroAduana = { type: "text" };
+	Correo = { type: "text", hidden: true };
+	Telefono = { type: "text", hidden: true };
+	Dpi = { type: "text" };
+	Nit = { type: "text" };
 }
 customElements.define('w-notificaciones-manager-view', NotificacionesManagerView);
 export { NotificacionesManagerView }

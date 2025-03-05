@@ -69,9 +69,9 @@ namespace BusinessLogic.IA
 				var list = articles.Select(x => $"\n {articles.IndexOf(x) + 1} {x.Title}: {ExtractTextFromHtml(x.Body)}").ToList();
 				return string.Join("\n - ", list);
 			}
-			else 
+			else
 			{
-			    var list = articles.Select(x => $"\n{x.Body}").ToList();
+				var list = articles.Select(x => $"\n{x.Body}").ToList();
 				return string.Join("\n - ", list);
 			}
 
@@ -166,18 +166,6 @@ Puedo ayudarte con lo siguiente:
 		}
 		public static string ProntAdapter(string? consulta)
 		{
-			/*if (consulta == "8")
-			{
-				return "¿puedo preguntar sobre los eventos de la oficina de correos?";
-			}
-			else if (consulta == "7")
-			{
-				return "SOLICITUD_DE_ASISTENCIA";
-			}
-			else if (consulta == "6")
-			{
-				return "¿Podrias informarme sobre los documentos para recepcionar paquetes?";
-			}*/
 			if (consulta == "5")
 			{
 				return "SOLICITUD_DE_ASISTENCIA";
@@ -218,19 +206,48 @@ Puedo ayudarte con lo siguiente:
 				"5" => "Entendido. Te pondré en contacto con un agente de servicio al cliente para que puedan asistirte directamente. Por favor, espera un momento.",
 				_ => null
 			};
-			/*return consulta switch
-			{
-				"1" => "Con mucho gusto puedo apoyarte con el rastreo y seguimiento. Por favor, Ingresa tu número de tracking.",
-				"2" => "Lamento mucho el retraso en tu envío. Por favor, indícame el número de seguimiento para revisar el estado actual de tu paquete.",
-				"3" => "Entiendo tu preocupación sobre los impuestos. podrias darme mas detalles para poder ayudarte?",
-				"4" => "Gracias por tu reporte. Si sospechas de una posible estafa, por favor comparte todos los detalles del caso para que podamos investigarlo adecuadamente.",
-				"5" => "Con gusto puedo proporcionarte información de contacto, horarios de nuestras oficinas o detalles sobre eventos y actividades. Por favor, indícame qué información necesitas específicamente.",
-				"6" => "Claro, puedo ayudarte con procedimientos de soporte técnico o detalles sobre los documentos necesarios para trámites. Por favor, dime qué trámite o soporte necesitas.",
-				"7" => "Entendido. Te pondré en contacto con un agente de servicio al cliente para que puedan asistirte directamente. Por favor, espera un momento.",
-				"8" => "¡Gracias por tu interés en nuestros eventos! Por favor, dime qué tipo de evento o actividad te interesa para brindarte más información.",
-				_ => null
-			};*/
-		}
-	}
 
+		}
+
+
+		
+
+		internal static string GetInvalidTrackingResponse(string? invalidTracking)
+		{
+			string validNumberInstructions = "\n\n Los números de rastreo válidos contienen 2 letras, 9 números y 2 letras al final (por ejemplo, AA123456789TW).";
+			if (string.IsNullOrWhiteSpace(invalidTracking))
+			{
+				return "No pude encontrar un número de seguimiento en tu mensaje. ¿Puedes verificarlo?" + validNumberInstructions;
+			}
+
+			// Seleccionar una respuesta aleatoria
+			Random random = new Random();
+			int index = random.Next(InvalidTrackingMessages.Length);
+
+			return string.Format(InvalidTrackingMessages[index], invalidTracking) + validNumberInstructions;
+		}
+		private static readonly string[] InvalidTrackingMessages =
+		{
+			"El número de seguimiento \"{0}\" no es válido. Por favor, revísalo e intenta nuevamente.",
+			"Parece que \"{0}\" no es un número de rastreo válido. Verifica y vuelve a intentarlo.",
+			"El código \"{0}\" no coincide con un formato válido. Por favor, confirma tu número de tracking.",
+			"Oops, \"{0}\" no parece ser un número de seguimiento correcto. ¿Puedes revisarlo?",
+			"El tracking \"{0}\" ingresado no es válido. Por favor, verifica e intenta de nuevo.",
+			"Lamentablemente, \"{0}\" no es un número de seguimiento reconocido. Asegúrate de ingresarlo correctamente.",
+			"El código que ingresaste, \"{0}\", no parece correcto. ¿Podrías revisarlo?",
+			"¡Vaya! \"{0}\" no es un número de rastreo válido. ¿Seguro que está bien escrito?",
+			"No encuentro información para el código \"{0}\". Por favor, verifica y prueba otra vez.",
+			"Hmm... \"{0}\" no parece ser un código de seguimiento válido. Asegúrate de que esté correcto.",
+			"El número \"{0}\" no es válido. Intenta nuevamente con el código correcto.",
+			"Tu código \"{0}\" no sigue el formato correcto. Por favor, revisa e intenta otra vez.",
+			"El código \"{0}\" no parece ser un número de tracking válido. Verifícalo e inténtalo de nuevo.",
+			"Parece que el código \"{0}\" no es correcto. Asegúrate de que no haya errores al escribirlo.",
+			"El número de seguimiento \"{0}\" no es reconocido. Comprueba que lo escribiste bien.",
+			"No logré encontrar información sobre \"{0}\". ¿Puedes verificarlo?",
+			"El código \"{0}\" no es un número de rastreo válido. Inténtalo nuevamente con el correcto.",
+			"El número \"{0}\" no está en el formato adecuado. Por favor, revísalo e ingrésalo otra vez.",
+			"Parece que \"{0}\" no es un código de seguimiento correcto. ¿Puedes intentarlo de nuevo?",
+			"Lamentamos el inconveniente, pero \"{0}\" no parece ser un código de rastreo válido. Verifícalo y vuelve a intentarlo."
+		};
+	}
 }

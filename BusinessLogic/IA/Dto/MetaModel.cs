@@ -32,8 +32,8 @@ namespace IA.Dto
 
     public class Metadata
     {
-        public string DisplayPhoneNumber { get; set; }
-        public string PhoneNumberId { get; set; }
+        public string? Display_phone_number { get; set; }
+        public string? Phone_number_id { get; set; }
     }
 
     public class Contact

@@ -1,9 +1,8 @@
 //@ts-check
-import { LogErrorView } from "../Admin/LogErrorView.js";
+
 import { StylesControlsV2 } from "../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from "../WDevCore/WComponents/WAppNavigator.js";
 import { WTableComponent } from "../WDevCore/WComponents/WTableComponent.js";
-import { WAjaxTools } from "../WDevCore/WModules/WAjaxTools.js";
 import { ComponentsManager, WRender } from '../WDevCore/WModules/WComponentsTools.js';
 import { WOrtograficValidation } from "../WDevCore/WModules/WOrtograficValidation.js";
 import { Cat_Cargos_Dependencias_ModelComponent } from "./FrontModel/Cat_Cargos_Dependencias.js";

@@ -10,7 +10,7 @@ namespace API.Controllers
     {
         [HttpPost]
         [AuthController]
-        public object getLogError(Log Inst)
+        public object getLog(Log Inst)
         {           
             return Inst.Get<Log>();
         }

@@ -1,5 +1,4 @@
 using CAPA_DATOS.Services;
-using iTextSharp.text.pdf;
 using Microsoft.Extensions.Configuration;
 namespace DataBaseModel
 {
@@ -20,6 +19,10 @@ namespace DataBaseModel
 				c.Nombre.Equals(ConfiguracionesThemeEnum.MEDIA_IMG_PATH.ToString()))?.Valor ?? MEDIA_IMG_PATH;
 			VERSION = configuraciones.Find(c => c.Nombre != null &&
 				c.Nombre.Equals(ConfiguracionesThemeEnum.VERSION.ToString()))?.Valor ?? VERSION;
+			MEMBRETE_HEADER = configuraciones.Find(c => c.Nombre != null &&
+				c.Nombre.Equals(ConfiguracionesThemeEnum.MEMBRETE_HEADER.ToString()))?.Valor ?? VERSION;
+			MEMBRETE_FOOTHER = configuraciones.Find(c => c.Nombre != null &&
+				c.Nombre.Equals(ConfiguracionesThemeEnum.MEMBRETE_FOOTHER.ToString()))?.Valor ?? VERSION;
 
 		}
 		public string TITULO = "TEMPLATE";
@@ -28,6 +31,8 @@ namespace DataBaseModel
 		public string LOGO_PRINCIPAL = "logo.png";
 		public string MEDIA_IMG_PATH = "/media/img/";
 		public string VERSION = "2024.07";
+		public string MEMBRETE_HEADER = "";
+		public string MEMBRETE_FOOTHER = "";
 		public List<Transactional_Configuraciones> configuraciones = new List<Transactional_Configuraciones>();
 
 		public static bool IsAutomaticCaseActive()
@@ -88,8 +93,8 @@ namespace DataBaseModel
 				HOST = domain,
 				PASSWORD = password,
 				USERNAME = user,
-				PORT = port != null ? Convert.ToInt32(port) : null,				
-				AutenticationType = AutenticationTypeEnum.BASIC				
+				PORT = port != null ? Convert.ToInt32(port) : null,
+				AutenticationType = AutenticationTypeEnum.BASIC
 			};
 		}
 	}

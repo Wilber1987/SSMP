@@ -1,11 +1,13 @@
 
+//@ts-check
 import { priorityStyles } from '../../AppComponents/Styles.js';
 import { WSecurity } from '../../WDevCore/Security/WSecurity.js';
 import { StylesControlsV2, StylesControlsV3 } from "../../WDevCore/StyleModules/WStyleComponents.js";
+import { ModalMessage } from '../../WDevCore/WComponents/ModalMessage.js';
 import { WCommentsComponent } from '../../WDevCore/WComponents/WCommentsComponent.js';
 import { WDetailObject } from '../../WDevCore/WComponents/WDetailObject.js';
 import { WFilterOptions } from "../../WDevCore/WComponents/WFilterControls.js";
-import { ModalMessage, WForm } from "../../WDevCore/WComponents/WForm.js";
+import { WForm } from "../../WDevCore/WComponents/WForm.js";
 import { WPaginatorViewer } from '../../WDevCore/WComponents/WPaginatorViewer.js';
 import { ComponentsManager, html, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
 import { Cat_Dependencias_ModelComponent } from "../FrontModel/Cat_Dependencias.js";

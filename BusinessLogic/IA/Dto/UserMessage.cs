@@ -1,10 +1,13 @@
-﻿using IA.Dto;
+﻿using CAPA_DATOS;
+using IA.Dto;
 using Newtonsoft.Json;
 
 namespace CAPA_NEGOCIO
 {
 	public class UserMessage
 	{
+		public string? ServicesIdentification;
+
 		public string? Id { get; set; } // Identificador único del mensaje
 		public string? Text { get; set; } // Contenido del mensaje del usuario
 		public string? Source { get; set; } // Fuente del mensaje (WebAPI, WhatsApp, Messenger)
@@ -16,13 +19,18 @@ namespace CAPA_NEGOCIO
 		public bool? WithAgentResponse { get; set; } = false;
 		public int? Id_case { get; set; }
 
-		public static UserMessage ProcessWhatsAppMessage(dynamic message)
+		public bool IsMetaApi { get { return Source == "WhatsApp"; } }
+
+        public bool IsWithIaResponse { get;  set; }
+
+        public static UserMessage ProcessWhatsAppMessage(dynamic message)
 		{
 			try
 			{
 				//string whatsAppMessagestringg = message.ToString();
 
 				//var whatsAppMessage = message?.entry[0]?.changes[0]?.value?.messages[0];
+				LoggerServices.AddAction("nuevo mensaje: \n" + message.ToString(), 1);
 				WhatsappBusinessAccount whatsAppMessage = JsonConvert.DeserializeObject<WhatsappBusinessAccount>(message.ToString());
 				var messageEv = whatsAppMessage.Entry[0].Changes[0].Value.Messages[0];
 				if (whatsAppMessage == null)
@@ -33,7 +41,8 @@ namespace CAPA_NEGOCIO
 					Source = "WhatsApp",
 					UserId = messageEv?.From,
 					Text = messageEv?.Text?.Body,
-					Timestamp = DateTime.Now // O extraer del mensaje
+					Timestamp = DateTime.Now, // O extraer del mensaje
+					ServicesIdentification = whatsAppMessage?.Entry[0]?.Changes[0]?.Value?.Metadata?.Phone_number_id
 				};
 			}
 			catch (Exception ex)

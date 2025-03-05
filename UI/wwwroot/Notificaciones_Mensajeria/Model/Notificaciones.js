@@ -32,8 +32,6 @@ class Notificaciones extends EntityClass {
 		return await this.GetData("ApiNotificaciones/MarcarComoLeido");
 	}
 	GetParam(value) {
-		console.log(this.NotificationData?.Params);
-
 		return this.NotificationData?.Params?.find(p => p.Name.toLowerCase() == value.toLowerCase())?.Value ?? "";
 	}
 }
@@ -51,7 +49,9 @@ export class NotificationData {
 	/**@type {String} */Correo;
 	/**@type {String} */Telefono;
 	/**@type {String} */Dpi;
+	/**@type {String} */Nit;
 	/**@type {String} */NumeroPaquete;
+	/**@type {String} */NumeroAduana;
 	/**@type {Number}*/ Reenvios
 	/**@type {Array<NotificationsParams>} */  Params;
 }

@@ -6,6 +6,7 @@ import { WTableComponent } from "../WDevCore/WComponents/WTableComponent.js";
 import { EntityClass } from "../WDevCore/WModules/EntityClass.js";
 import { WRender } from "../WDevCore/WModules/WComponentsTools.js";
 class Transactional_ConfiguracionesView extends HTMLElement {
+    
     constructor(props) {
         super();
         this.Draw();
@@ -23,7 +24,7 @@ class Transactional_ConfiguracionesView extends HTMLElement {
                             this.append(new WModalForm({
                                 AutoSave: true,
                                 ModelObject: new Transactional_Configuraciones({
-                                    Valor: { type: this.ConfigType(element) }
+                                    Valor: { type: this.ConfigType(element), Dataset : this.GetDataset(element)}
                                 }),
                                 EditObject: element, ObjectOptions: {
                                     SaveFunction: () => {
@@ -52,6 +53,7 @@ class Transactional_ConfiguracionesView extends HTMLElement {
             this.TabContainer
         );
     }
+
     ConfigType(element) {
         if (this.IsImage(element)) {
             return "IMG";
@@ -59,8 +61,21 @@ class Transactional_ConfiguracionesView extends HTMLElement {
             return "DRAW";
         } else if (this.IsNumber(element)) {
             return "NUMBER";
+        } else if (this.IsSelectRadio(element)) {
+            return "RADIO";
         }
         return "TEXT"
+    }
+    IsSelectRadio(element) {
+        return element.Tipo_Configuracion == "RADIO" || element.Tipo_Configuracion == "SELECT"
+    }
+    GetDataset(element) {
+        if (this.IsSelectRadio(element)) {
+            if (element.Nombre == "AUTOMATIC_SENDER_REPORT") {
+                return ["AUTOMATICO", "MANUAL"];
+            }
+        }
+        return undefined;
     }
 
     IsNumber(element) {
@@ -73,7 +88,7 @@ class Transactional_ConfiguracionesView extends HTMLElement {
             element.Nombre == "FIRMA_DIGITAL_APODERADO_VICEPRESIDENTE"
     }
     IsImage(element) {
-        return element.Nombre == "LOGO"
+        return element.Nombre == "LOGO" || element.Tipo_Configuracion == "IMAGE";
     }
 }
 customElements.define('w-transactional_configuraciones', Transactional_ConfiguracionesView);

@@ -73,7 +73,7 @@ namespace BusinessLogic.IA
 			else if (consulta == "1")
 			{
 				return "RASTREO_Y_SEGUIMIENTOS";
-			}
+			} 
 
 			foreach (var categoria in Categorias)
 			{
@@ -115,6 +115,10 @@ namespace BusinessLogic.IA
 			if (coincidencias.Any())
 			{
 				category = coincidencias.OrderByDescending(c => c.Value).First().Key;
+			}
+			if (category != "CIERRE_DE_CASO")
+			{
+				return "INICIO";
 			}
 
 			return category;

@@ -36,7 +36,7 @@ namespace CAPA_NEGOCIO.MAPEO
 			return null;
 		}
 
-		public new object SaveUser(string identity)
+		public object SaveUserT(string identity)
 		{
 			if (!AuthNetCore.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(), identity))
 			{
@@ -44,16 +44,21 @@ namespace CAPA_NEGOCIO.MAPEO
 			}
 			try
 			{
-				this.BeginGlobalTransaction();
+				BeginGlobalTransaction();
 				if (this.Password != null)
 				{
 					this.Password = EncrypterServices.Encrypt(this.Password);
 				}
 				if (this.Id_User == null)
 				{
-					if (new Security_Users() { Mail = this.Mail }.Exists())
+					if (new Security_Users() { Mail = this.Mail }.Count() > 0)
 					{
-						throw new Exception("Correo en uso");
+						RollBackGlobalTransaction();
+						return new ResponseService 
+						{
+						    status = 500,
+						    message = "Correo en uso"
+						};
 					}
 					var user = Save();
 					if (Tbl_Profiles != null)
@@ -83,37 +88,16 @@ namespace CAPA_NEGOCIO.MAPEO
 							Foto = "\\Media\\profiles\\avatar.png",
 							IdUser = Id_User
 						};
-
+						Profile.Save();
+						Profile?.SaveDependenciesAndservices();
 						Tbl_Profiles = [Profile];
 					}
-
 				}
 				else
-				{
-					if (this.Estado == null)
-					{
-						this.Estado = "ACTIVO";
-					}
-					if (Tbl_Profiles != null)
-					{
-						Tbl_Profiles?.ForEach(Tbl_Profile =>
-						{
-							if (Tbl_Profile.Id_Perfil == null)
-							{
-								Tbl_Profile.IdUser = Id_User;
-								Tbl_Profile.Save();
-							}
-							else
-							{
-								Tbl_Profile.Update();
-							}
-							Tbl_Profile?.SaveDependenciesAndservices();
-						});
-
-					}
-					this.Update();
-				}
-				if (this.Security_Users_Roles != null)
+                {
+                    UpdateUser();
+                }
+                if (this.Security_Users_Roles != null)
 				{
 					Security_Users_Roles IdI = new Security_Users_Roles();
 					IdI.Id_User = this.Id_User;
@@ -124,7 +108,7 @@ namespace CAPA_NEGOCIO.MAPEO
 						obj.Save();
 					}
 				}
-				this.CommitGlobalTransaction();
+				CommitGlobalTransaction();
 				return this;
 			}
 			catch (System.Exception)
@@ -135,8 +119,33 @@ namespace CAPA_NEGOCIO.MAPEO
 
 		}
 
+        private void UpdateUser()
+        {
+            if (this.Estado == null)
+            {
+                this.Estado = "ACTIVO";
+            }
+            if (Tbl_Profiles != null)
+            {
+                Tbl_Profiles?.ForEach(Tbl_Profile =>
+                {
+                    if (Tbl_Profile.Id_Perfil == null)
+                    {
+                        Tbl_Profile.IdUser = Id_User;
+                        Tbl_Profile.Save();
+                    }
+                    else
+                    {
+                        Tbl_Profile.Update();
+                    }
+                    Tbl_Profile?.SaveDependenciesAndservices();
+                });
 
-		public new object GetUsers()
+            }
+            this.Update();
+        }
+
+        public new object GetUsers()
 		{
 			var Security_Users_List = this.Get<Security_Users>();
 			foreach (Security_Users User in Security_Users_List)

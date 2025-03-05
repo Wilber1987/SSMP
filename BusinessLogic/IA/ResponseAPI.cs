@@ -14,19 +14,19 @@ namespace CAPA_NEGOCIO.IA
 	public class ResponseAPI
 	{
 
-		public async Task<string> SendResponseToUser(UserMessage userMessage, string response)
+		public async Task<string> SendResponseToUser(UserMessage userMessage, string response, bool isWithIaResponse)
 		{
 			try
 			{
-				switch (userMessage.Source)
+				switch (userMessage.Source?.ToUpper())
 				{
-					case "WebAPI":
+					case "WEBAPI":
 						await SendResponseToWebAPIAsync(userMessage.UserId, response);
 						break;
-					case "WhatsApp":
-						await SendResponseToWhatsApp(userMessage.UserId, response);
+					case "WHATSAPP":
+						await SendResponseToWhatsApp(userMessage.UserId, response, isWithIaResponse);
 						break;
-					case "Messenger":
+					case "MESSENGER":
 						await SendResponseToMessengerAsync(userMessage.UserId, response);
 						break;
 					default:
@@ -70,7 +70,7 @@ namespace CAPA_NEGOCIO.IA
 			}
 
 		}
-		public async Task<string> SendResponseToWhatsApp(string userId, string response)
+		public async Task<string> SendResponseToWhatsApp(string userId, string response, bool isCaseWithBotResponse = true)
 		{
 			try
 			{
@@ -87,19 +87,17 @@ namespace CAPA_NEGOCIO.IA
 						body = response
 					}
 				}), Encoding.UTF8, "application/json");
-				
+
 
 				// Configurar el encabezado de autorización
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
 					"Bearer",
 					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverWhatsApp")
 				);
+				string numberIdentification = isCaseWithBotResponse ? "IANumberIdentification" : "NumberIdentification";
 
 				// Enviar la solicitud y capturar la respuesta
-				var responseMessage = await client.PostAsync(
-					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"),
-					content
-				);
+				var responseMessage = await client.PostAsync(GetMetaApiRoute(numberIdentification), content);
 
 				// Leer el contenido de la respuesta
 				var responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -121,14 +119,21 @@ namespace CAPA_NEGOCIO.IA
 				return $"Exception: {ex.Message}";
 			}
 		}
+
+		private static string? GetMetaApiRoute(string numberIdentification)
+		{
+			return SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices")?
+					.Replace("{Identification}", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, numberIdentification));
+		}
+
 		//{"error":{"message":"(#132001) Template name does not exist in the translation","type":"OAuthException","code":132001,"error_data":{"messaging_product":"whatsapp","details":"template name (notificacion_paquete) does not exist in es"},"fbtrace_id":"AKCYcYG8nDBghnNaaYAQx3M"}}
 		//{"error":{"message":"(#100) The parameter messaging_product is required.","type":"OAuthException","code":100,"fbtrace_id":"ABuwLf-MvFCEZAEGKA-c8m_"}}
-		public async Task<string> SendResponseToWhatsAppWithTemplate(WhatsAppMessage message)
+		public async Task<string> SendResponseToWhatsAppWithTemplate(WhatsAppMessage message, bool isCaseWithBotResponse = true)
 		{
 			try
 			{
 				using var client = new HttpClient();
-				
+
 				/*message.template.name = "hello_world";
 				message.template.language.code = "en_US";
 				message.template.components = null;*/
@@ -143,11 +148,10 @@ namespace CAPA_NEGOCIO.IA
 				);
 
 				// Enviar la solicitud y capturar la respuesta
-				var responseMessage = await client.PostAsync(
-					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"),
-					content
-				);
+				string numberIdentification = isCaseWithBotResponse ? "IANumberIdentification" : "NumberIdentification";
 
+				// Enviar la solicitud y capturar la respuesta
+				var responseMessage = await client.PostAsync(GetMetaApiRoute(numberIdentification), content);
 				// Leer el contenido de la respuesta
 				var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
@@ -365,8 +369,8 @@ namespace CAPA_NEGOCIO.IA
 					client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverTelegram"));
 
 
- 					string url = $"https://api.telegram.org/bot{SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverTelegram")}/sendMessage";
-            		var content = new StringContent($"{{\"chat_id\": \"{userId}\", \"text\": \"{message}\"}}", Encoding.UTF8, "application/json");
+					string url = $"https://api.telegram.org/bot{SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverTelegram")}/sendMessage";
+					var content = new StringContent($"{{\"chat_id\": \"{userId}\", \"text\": \"{message}\"}}", Encoding.UTF8, "application/json");
 
 					HttpResponseMessage response = await client.PostAsync(url, content);
 					if (response.IsSuccessStatusCode)
@@ -374,11 +378,11 @@ namespace CAPA_NEGOCIO.IA
 						return "Ok";
 					}
 					else
-					{ 
+					{
 						var errorResponse = await response.Content.ReadAsStringAsync();
 						throw new Exception($"Error al enviar mensaje: {errorResponse}");
 					}
-					
+
 				}
 			}
 			catch (Exception ex)

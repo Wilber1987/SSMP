@@ -138,50 +138,46 @@ namespace CAPA_NEGOCIO.MAPEO
 
 		}
 
-		/*Automatico caso con IA*/
-		public async Task<bool> CreateAutomaticCaseIA(UserMessage chat)
-		{
-			try
-			{
-				BeginGlobalTransaction();
+        /*Automatico caso con IA*/
+        public bool CreateAutomaticCaseIA(UserMessage chat)
+        {
+            try
+            {
+                BeginGlobalTransaction();
+                List<ModelFiles> Attach = new List<ModelFiles>();
 
-				List<ModelFiles> Attach = new List<ModelFiles>();
+                Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = chat.UserId }.Find<Tbl_Profile>();
+                if (tbl_Profile == null)
+                {
+                    tbl_Profile = new Tbl_Profile
+                    {
+                        Correo_institucional = chat?.UserId,
+                        Nombres = chat?.UserId,
+                        Apellidos = chat?.UserId,
+                        Estado = "ACTIVO",
+                        Foto = "\\Media\\profiles\\avatar.png",
+                        //Sexo = "Masculino"
+                    };
+                    tbl_Profile.Save();
+                }
+                Id_Perfil = tbl_Profile.Id_Perfil;
+                //RecoveryEmbebedCidImages(chat);
+                //guarda en base de dato el caso
+                Save();
+                CommitGlobalTransaction();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.Write("error al guardar");
+                RollBackGlobalTransaction();
+                LoggerServices.AddMessageError($"error al crear el caso de: {chat.UserId}, {chat.Text}", ex);
+                return false;
+            }
 
-				Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = chat.UserId }.Find<Tbl_Profile>();
-				if (tbl_Profile == null)
-				{
-					tbl_Profile = new Tbl_Profile
-					{
-						Correo_institucional = chat?.UserId,
-						Nombres = chat?.UserId,
-						Apellidos = chat?.UserId,
-						Estado = "ACTIVO",
-						Foto = "\\Media\\profiles\\avatar.png",
-						//Sexo = "Masculino"
-					};
-					tbl_Profile.Save();
-				}
-				Id_Perfil = tbl_Profile.Id_Perfil;
+        }
 
-				//RecoveryEmbebedCidImages(chat);
-
-				//guarda en base de dato el caso
-				Save();
-
-				CommitGlobalTransaction();
-				return true;
-			}
-			catch (Exception ex)
-			{
-				Console.Write("error al guardar");
-				RollBackGlobalTransaction();
-				LoggerServices.AddMessageError($"error al crear el caso de: {chat.UserId}, {chat.Text}", ex);
-				return false;
-			}
-
-		}
-
-		public Tbl_Case? CreateAutomaticCaseNotification(Notificaciones notificacion, string title)
+        public Tbl_Case? CreateAutomaticCaseNotification(Notificaciones notificacion, string title)
 		{
 			try
             {
@@ -609,6 +605,7 @@ con número {2}";
 		public string? InReplyTo { get; set; }
 		public string? PlatformType { get; set; }
 		public bool WithAgent { get; set; }
+		public bool isWithIaResponse { get; set; }
 	}
 	enum PlatformTypeEnum
 	{

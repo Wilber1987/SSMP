@@ -2,6 +2,7 @@ using CAPA_DATOS;
 using API.Controllers;
 using CAPA_DATOS.Services;
 using CAPA_NEGOCIO.IA;
+using System.Threading.Tasks;
 
 namespace CAPA_NEGOCIO.MAPEO
 {
@@ -23,7 +24,7 @@ namespace CAPA_NEGOCIO.MAPEO
 		public int? Id_User { get; set; }
 		public DateTime? Fecha { get; set; }
 
-		public object? SaveComment(string identity, Boolean withMail = true)
+		public async Task<object?> SaveComment(string identity, Boolean withMail = true)
 		{
 			try
 			{
@@ -50,12 +51,26 @@ namespace CAPA_NEGOCIO.MAPEO
 				if (IsWithApi(Tbl_Case))
 				{
 					Tbl_Profile? tbl_Profile = new Tbl_Profile() { Id_Perfil = Tbl_Case.Id_Perfil }.Find<Tbl_Profile>();
-					new ResponseAPI().SendResponseToUser(new UserMessage
+					string response = new ResponseAPI().SendResponseToUser(new UserMessage
 					{
 						Source = Tbl_Case?.MimeMessageCaseData?.PlatformType,
 						UserId = tbl_Profile?.Correo_institucional,
-					}, Body ?? "").GetAwaiter().GetResult();
+					}, Body ?? "", Tbl_Case!.MimeMessageCaseData!.isWithIaResponse).GetAwaiter().GetResult();
+					if (response == "OK")
+					{
+						Tbl_Case!.MimeMessageCaseData!.WithAgent = true;
+						Tbl_Case.Update();
+					}
 				}
+				var responses = new Tbl_Profile
+				{
+				    Nombres = "prueba"
+				}.Save();
+				(responses as Tbl_Profile).Delete();
+				new Tbl_Profile
+				{
+				    Nombres = "pruebarrr"
+				}.Save();
 				CommitGlobalTransaction();
 				return this;
 			}

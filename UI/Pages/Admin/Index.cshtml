@@ -6,7 +6,7 @@
 
     if (!SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
     {
-        Response.Redirect("./login");
+        Response.Redirect("/Security/Login");
         return;
     }
 }

@@ -2,7 +2,7 @@
 import { StylesControlsV2 } from "../../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from '../../WDevCore/WComponents/WAppNavigator.js';
 import { WDetailObject } from '../../WDevCore/WComponents/WDetailObject.js';
-import { ModalMessage, WForm } from "../../WDevCore/WComponents/WForm.js";
+import { WForm } from "../../WDevCore/WComponents/WForm.js";
 import { WModalForm } from "../../WDevCore/WComponents/WModalForm.js";
 import { ComponentsManager, html, WRender } from '../../WDevCore/WModules/WComponentsTools.js';
 import { css } from '../../WDevCore/WModules/WStyledRender.js';
@@ -14,6 +14,7 @@ import { Tbl_Profile } from "../FrontModel/Tbl_Profile.js";
 // @ts-ignore
 import { FilterData } from "../../WDevCore/WModules/CommonModel.js";
 import { GroupView } from "../ProyectViews/Proyectos/GroupsView.js";
+import { ModalMessage } from "../../WDevCore/WComponents/ModalMessage.js";
 
 const OnLoad = async () => {
     // @ts-ignore

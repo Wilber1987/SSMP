@@ -1,21 +1,29 @@
 
+//@ts-check
 import { WAppNavigator } from '../../../WDevCore/WComponents/WAppNavigator.js';
 import { WFilterOptions } from '../../../WDevCore/WComponents/WFilterControls.js';
 import { ComponentsManager, WRender } from '../../../WDevCore/WModules/WComponentsTools.js';
 import { WCssClass, WStyledRender } from '../../../WDevCore/WModules/WStyledRender.js';
 import { Cat_Dependencias_ModelComponent } from "../../FrontModel/Cat_Dependencias.js";
 import { Tbl_Tareas_ModelComponent } from "../../FrontModel/Tbl_Tareas.js";
-import { CaseManagerComponent } from './CaseManagerComponent.js';
+import { CaseForm, CaseManagerComponent } from './CaseManagerComponent.js';
 import { TaskManagers } from './TaskManager.js';
+import { Permissions, WSecurity } from '../../../WDevCore/Security/WSecurity.js';
+import { ModalMessage } from '../../../WDevCore/WComponents/ModalMessage.js';
+import { Tbl_Case, Tbl_Case_ModelComponent } from '../../FrontModel/Tbl_CaseModule.js';
+import { WForm } from '../../../WDevCore/WComponents/WForm.js';
+
 
 const OnLoad = async () => {
+    // @ts-ignore
     Main.append(WRender.Create({ tagName: "h3", innerText: "Administración de Actividades" }));
     const AdminPerfil = new MainProyect();
-    Main.append(AdminPerfil.MainNav);
+    // @ts-ignore
+    //Main.append(AdminPerfil.MainNav);
+    // @ts-ignore
     Main.appendChild(AdminPerfil);
 }
 window.onload = OnLoad;
-
 class MainProyect extends HTMLElement {
     constructor() {
         super();
@@ -24,22 +32,13 @@ class MainProyect extends HTMLElement {
         this.TabContainer = WRender.createElement({ type: 'div', props: { class: '', id: "TabContainer" } });
         this.TabManager = new ComponentsManager({ MainContainer: this.TabContainer });
         this.OptionContainer = WRender.Create({ className: "" });
+        this.Dependencias  = []
         this.DrawComponent();
     }
     EditarPerfilNav = () => { }
-    MainNav = new WAppNavigator({
-        NavStyle: "tab",
-        Inicialize: true,
-        Elements: [
-            // {
-            //     name: "Datos Generales",
-            //     action: async (ev) => {
-            //         const dataset = await new Tbl_Case().Get();
-            //         const dependencias = await new Cat_Dependencias().Get();
-            //         this.TabManager.NavigateFunction("Tab-Generales",
-            //             new CaseManagerComponent(dataset, dependencias));
-            //     }
-            // },
+    
+    BuildNavElements() {
+        const nav = [
             {
                 name: "Mis Actividades", action: async (ev) => { this.NavChargeActividades(); }
             },
@@ -48,17 +47,55 @@ class MainProyect extends HTMLElement {
             // }, 
             {
                 name: "Mis Tareas", action: async (ev) => { this.NavChargeOWTasks(); }
-            }]
-    });
+            }
+        ];
+
+        // @ts-ignore
+        console.log(this.Dependencias);
+        
+        if (this.Dependencias.length != 0 && WSecurity.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA)) {
+            nav.push({
+                name: 'Nuevo Proyecto', action: ()=> this.CaseForm()
+            })
+        }
+        if (WSecurity.HavePermission(Permissions.ADMINISTRAR_CASOS_PROPIOS)) {
+            nav.push({
+                name: 'Nuevo Proyecto Propio', action: async () => {
+                    this.TabManager.NavigateFunction("Tab-CaseFormBasicView",
+                        basicCaseForm(new Tbl_Case(), async (/**@type {Tbl_Case} */ entity) => {
+                            const response = await entity.SaveOwCase();
+                            this.append(ModalMessage("Caso guardado correctamente", undefined, true))
+                        }))
+                }
+            })
+        }
+        return nav;
+    }
+    CaseForm = async () => {
+        this.TabManager.NavigateFunction("Tab-CaseFormView",
+            WRender.Create({
+                className: "CaseFormView", children: [CaseForm(undefined, await this.Dependencias, () => {
+                    console.log(false);
+                    this.append(ModalMessage("Caso guardado correctamente", undefined, true))
+                })]
+            }));
+    }
+
     connectedCallback() { }
     DrawComponent = async () => {
-        this.append(this.OptionContainer, this.TabContainer);
+        this.Dependencias = await new Cat_Dependencias_ModelComponent().GetOwDependencies();
+        this.MainNav = new WAppNavigator({
+            NavStyle: "tab",
+            Inicialize: true,
+            Elements: this.BuildNavElements()
+        });
+
+        this.append(this.MainNav, this.OptionContainer, this.TabContainer);
     }
     NavChargeActividades = async () => {
-        const dependencias = await new Cat_Dependencias_ModelComponent().GetOwDependencies();
         //const dataset = await new Tbl_Case().GetOwCase();        
         this.TabManager.NavigateFunction("Tab-OwActividades",
-            new CaseManagerComponent( dependencias));
+            new CaseManagerComponent(this.Dependencias));
     }
     NavChargeTasks = async () => {
         const tasks = await new Tbl_Tareas_ModelComponent().Get();
@@ -69,6 +106,7 @@ class MainProyect extends HTMLElement {
         this.TabManager.NavigateFunction("Tab-OWTasks-Manager", this.ChargeTasks(tasks));
     }
     ChargeTasks(tasks) {
+        // @ts-ignore
         const tasksManager = new TaskManagers(tasks);
         const filterOptions = new WFilterOptions({
             Dataset: tasks,
@@ -77,6 +115,7 @@ class MainProyect extends HTMLElement {
             ModelObject: new Tbl_Tareas_ModelComponent(),
             //DisplayFilts: [],
             FilterFunction: (DFilt) => {
+                // @ts-ignore
                 tasksManager.DrawTaskManagers(DFilt);
             }
         })
@@ -113,3 +152,29 @@ class MainProyect extends HTMLElement {
 }
 
 customElements.define('w-proyect-class', MainProyect);
+/**
+ * @param {Tbl_Case} [entity]
+ * @param {Function} [action] 
+ * @returns {WForm}
+ */
+const basicCaseForm = (entity, action) => {
+    const form = new WForm({
+        EditObject: entity,
+        SaveFunction: action,
+        ImageUrlPath: "",
+        AutoSave: false,
+        ModelObject: new Tbl_Case_ModelComponent({
+            //Tbl_Tareas: { type: "text", hidden: true },
+            Id_Vinculate: { type: "text", hidden: true },
+            Titulo: { type: "text" },
+            Tbl_Servicios: undefined,
+            Fecha_Inicio: { type: "DATE" },
+            Estado: { type: "text", hidden: true },
+            Fecha_Final: { type: "text", hidden: true },
+            // @ts-ignore
+            Tbl_Comments: undefined,
+            Cat_Dependencias: undefined,
+        })
+    })
+    return form;
+}

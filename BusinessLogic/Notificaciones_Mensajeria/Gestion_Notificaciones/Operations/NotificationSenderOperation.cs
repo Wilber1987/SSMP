@@ -20,6 +20,7 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 		{
 			if (SystemConfig.IsWhatsAppActive())
 			{
+
 				List<Notificaciones> notificaciones = new Notificaciones()
 					.Where<Notificaciones>(
 						FilterData.Distinc("Enviado", true),
@@ -49,12 +50,12 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 								TemplateLocation ?? "es",
 								selectedParams,
 								TemplateImageHeader
-							));
+							), true);
 							if (response.Contains("Success"))
 							{
 								notificacion!.Fecha_Envio = DateTime.Now;
 								notificacion!.Enviado = true;
-								notificacion.Update();								
+								notificacion.Update();
 							}
 							else
 							{
@@ -117,6 +118,11 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 		}
 		public static void SendNotificationReport()
 		{
+			Transactional_Configuraciones automaticReportConfig = Transactional_Configuraciones.GetParam(ConfiguracionesThemeEnum.AUTOMATIC_SENDER_REPORT, "AUTOMATICO", ConfiguracionesTypeEnum.SELECT);
+			if (automaticReportConfig.Valor?.ToUpper() != "AUTOMATICO")
+			{
+				return;
+			}
 			try
 			{
 				DateTime firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -124,22 +130,28 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 				List<Notificaciones> notificaciones = new Notificaciones().Where<Notificaciones>(
 					FilterData.Between("Fecha_Envio", firstDayOfMonth, lastDayOfMonth)
 				);
-				string? destinatarioString = SystemConfig.AppConfigurationValue(AppConfigurationList.AutomaticReports, "Destinatarios");
-				List<string> destinatarios = destinatarioString?.Split(',').ToList() ?? [];
-				string body = $"REPORTE DE NOTIFICACIONES ENVIADAS DEL {firstDayOfMonth} AL {lastDayOfMonth}";
-				destinatarios.ForEach(destinatario =>
+				if (notificaciones.Count > 0)
 				{
-					NotificationsReportBuilder.EnviarReporte(destinatario,
-					$"REPORTE DE NOTIFICACIONES ENVIADAS", body, notificaciones);
-				});
+					Transactional_Configuraciones destinatariosAutomaticReportConfig =
+						Transactional_Configuraciones.GetParam(ConfiguracionesThemeEnum.DESTINATARIOS_AUTOMATIC_SENDER_REPORT, "wilberj1987@gmail.com");
+
+					//string? destinatarioString = SystemConfig.AppConfigurationValue(AppConfigurationList.AutomaticReports, "Destinatarios");
+					string? destinatarioString = destinatariosAutomaticReportConfig.Valor;
+					List<string> destinatarios = destinatarioString?.Split(',').ToList() ?? [];
+					string body = $"REPORTE DE NOTIFICACIONES ENVIADAS DEL {firstDayOfMonth} AL {lastDayOfMonth}";
+					destinatarios.ForEach(destinatario =>
+					{
+						NotificationsReportBuilder.EnviarReporte(destinatario,
+						$"REPORTE DE NOTIFICACIONES ENVIADAS", body, notificaciones);
+					});
+				}
 			}
 			catch (Exception ex)
 			{
 				LoggerServices.AddMessageError("error enviando report", ex);
 			}
-
-
 		}
+
 	}
 
 }

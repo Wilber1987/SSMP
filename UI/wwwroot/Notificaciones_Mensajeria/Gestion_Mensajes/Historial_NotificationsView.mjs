@@ -2,10 +2,12 @@
 
 
 import { StylesControlsV2, StylesControlsV3, StyleScrolls } from "../../WDevCore/StyleModules/WStyleComponents.js";
+import { ModalMessage } from "../../WDevCore/WComponents/ModalMessage.js";
 import { WFilterOptions } from "../../WDevCore/WComponents/WFilterControls.js";
 import { WPrintExportToolBar } from "../../WDevCore/WComponents/WPrintExportToolBar.mjs";
 import { PageType } from "../../WDevCore/WComponents/WReportComponent.js";
 import { DateTime } from "../../WDevCore/WModules/Types/DateTime.js";
+import { WAjaxTools } from "../../WDevCore/WModules/WAjaxTools.js";
 import { ComponentsManager, html, WRender } from "../../WDevCore/WModules/WComponentsTools.js";
 import { css } from "../../WDevCore/WModules/WStyledRender.js";
 import { Notificaciones_ModelComponent } from "../Model/ModelComponent/Notificacion_ModelComponent.js";
@@ -29,7 +31,7 @@ class Historial_NotificationsView extends HTMLElement {
 		this.Manager = new ComponentsManager({ MainContainer: this.TabContainer, SPAManage: false });
 		this.append(this.CustomStyle);
 		const container = WRender.Create({ className: "component" });
-		
+
 		// @ts-ignore
 		const EntityModel = new Notificaciones({
 			// @ts-ignore
@@ -48,6 +50,7 @@ class Historial_NotificationsView extends HTMLElement {
 			Dataset: [],
 			FilterFunction: async (filterData) => {
 				container.innerHTML = "";
+				this.Dataset = filterData;
 				//console.log(this.Filter.ModelObject);
 				/*const facturas = await new NotificationsRequest().Where(
 					this.Filter.ModelObject.FilterData[0]
@@ -57,6 +60,29 @@ class Historial_NotificationsView extends HTMLElement {
 				this.Manager.NavigateFunction("informe", container)
 			}
 		});
+		const notificationReportData = {
+			FirstDate: null,
+			LastDate: null,
+			Mail: "",
+			Notificaciones: []
+		}
+		this.OptionContainer.append(html`<div class="control-container">
+			<input type="text" placeholder="escribe un correo" onchange="${(ev) => {
+				notificationReportData.Mail = ev.target.value;
+				console.log(notificationReportData);
+
+			}}"/>
+			<button class="BtnSuccess" onclick="${async () => {
+				notificationReportData.Notificaciones = this.Dataset;
+				notificationReportData.FirstDate = this.Filter.ModelObject.FilterData[0].Values[0];
+				notificationReportData.LastDate = this.Filter.ModelObject.FilterData[0].Values[1];
+				console.log(notificationReportData);
+				const response = await WAjaxTools.PostRequest("/api/Report/SenReportNotifications", notificationReportData);
+				if (response.status == 200) {
+					document.body.append(ModalMessage(response.message))
+				}
+			}}">Enviar</button>
+		</div>`);
 		this.OptionContainer.append(new WPrintExportToolBar({
 			ExportPdfAction: (/**@type {WPrintExportToolBar} */ tool) => {
 				const body = container.cloneNode(true);
@@ -67,8 +93,8 @@ class Historial_NotificationsView extends HTMLElement {
 		this.append(
 			StylesControlsV2.cloneNode(true),
 			StyleScrolls.cloneNode(true),
-			StylesControlsV3.cloneNode(true), 
-			this.OptionContainer, 
+			StylesControlsV3.cloneNode(true),
+			this.OptionContainer,
 			this.Filter,
 			this.TabContainer
 		);
@@ -154,15 +180,17 @@ class Historial_NotificationsView extends HTMLElement {
 			div.append(html`<h3>${NotificationsMes.toUpperCase()}</h3>`)
 			const mesContainer = html`<table class="mes-container">				
 				<tr class="Notification-details-container">
-					<td class="Notification-title">Identificador</td>
+					<td class="Notification-title">No. de teléfono</td>
+					<td class="Notification-title">Destinatario</td>
+					<td class="Notification-title">No. Paquete</td>
+					<td class="Notification-title">No. Aduana</td>
 					<td class="Notification-title">Cita</td>
-					<td class="Notification-title">Nombre del destinatario</td>
 					<td class="Notification-title">Dirección del destinatario</td>
-					<td class="Notification-title">No de teléfono</td>
 					<td class="Notification-title">Fecha de ingreso</td>
 					<td class="Notification-title">Departamento</td>
 					<td class="Notification-title">Municipio</td>
 					<td class="Notification-title">Agencia</td>
+					<td class="Notification-title" width="300px">Mensaje</td>
 					<td class="Notification-title">Correlativo</td>
 					<td class="Notification-title">Fecha de ingreso de notificación</td>
 					<td class="Notification-title">DPI</td>
@@ -183,7 +211,7 @@ class Historial_NotificationsView extends HTMLElement {
 			</div>`)
 			//-------------------->
 			//mesContainer.append(html`<h3>Resumen</h3>`);
-		
+
 		}
 		div.append(html`<div class="mes-container total-container">
 			<div class="Notification-title" style="grid-column: span 12">Total</div>
@@ -198,20 +226,24 @@ class Historial_NotificationsView extends HTMLElement {
 		return WRender.Create({
 			tagName: "tr", className: "Notification-details-container",
 			children: [
-				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Identificador") },
-				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Cita") },
-				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Destinatario") },
-				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Dirección del destinatario") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("N.º de teléfono") },
-				{ tagName: "td", class: "Notification-value", innerText: new DateTime(Notification.Fecha).toISO() },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Destinatario") },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("No. de paquete") },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.NotificationData.NumeroAduana ?? "Desconocido" },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Cita") },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Dirección del destinatario") },
+				//{ tagName: "td", class: "Notification-value", innerText: new DateTime(Notification.GetParam("Fecha de ingreso")).toDDMMYYYY() },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Fecha de ingreso") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Departamento") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Municipio") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Agencia") },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.Mensaje ?? "-" },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Correlativo") },
-				{ tagName: "td", class: "Notification-value", innerText: new DateTime(Notification.Fecha_Envio).toISO() },
+				//{ tagName: "td", class: "Notification-value", innerText: new DateTime(Notification.GetParam("fecha del envió de notificación")).toDDMMYYYY() },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("fecha del envió de notificación") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Dpi") },
-				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("NIT") },
-				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Correo") },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.NotificationData.Nit ?? "Desconocido" },
+				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("E-mail") },
 			]
 		});
 	}
@@ -226,6 +258,21 @@ class Historial_NotificationsView extends HTMLElement {
 		.PENDIENTE {
 			color: red
 		}  
+		.control-container {
+			display: flex;
+			width: 400px;
+			height: 45px;
+		}
+		.component {
+			background-color: #FFF;
+			color: #000;	
+			border-radius: 10px;
+		}
+		.OptionContainer {
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+		}
 		.mes-container {
 			/* display: grid;
 			grid-template-columns: repeat(14, 1fr); */
@@ -261,6 +308,7 @@ class Historial_NotificationsView extends HTMLElement {
 		.Notification-value {
 			font-size: 0.8em;
 			padding: 8px;
+			vertical-align: top;
 		}
 		.total-container {			
 			font-size: 1em;

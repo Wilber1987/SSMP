@@ -22,20 +22,24 @@ const activityStyle = css`
 }
 .actividad {
     border: 1px solid var(--fourth-color);
-    padding: 20px;
+    padding: 15px;
     margin-bottom: 10px;   
     color: var(--font-primary-color);
     border-radius: 15px;
-    gap: 5px;
+    gap: 10px;
     display: flex;
     flex-direction: column;    
     background-color: var(--secundary-color);
+    display: grid;
+    grid-template-columns: calc(100% - 210px) 200px;
+
 }
 .actividad h4 {
     margin: 5px 0px;
     color: var(--font-secundary-color);
     display: flex;
     justify-content: space-between;
+    grid-column: span 2;
 }
 .actividad .propiedades {
     font-size: 12px;
@@ -48,12 +52,15 @@ const activityStyle = css`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 .actividad label {    
     flex-wrap: wrap;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display:flex;
 }
 .actividad .options {
     display: flex;

@@ -1,5 +1,4 @@
 //@ts-check
-import { LogErrorView } from "../../Admin/LogErrorView.js";
 import { StylesControlsV2 } from "../../WDevCore/StyleModules/WStyleComponents.js";
 import { WAppNavigator } from "../../WDevCore/WComponents/WAppNavigator.js";
 import { WTableComponent } from "../../WDevCore/WComponents/WTableComponent.js";
@@ -7,6 +6,7 @@ import { ComponentsManager, WRender } from '../../WDevCore/WModules/WComponentsT
 import { WOrtograficValidation } from "../../WDevCore/WModules/WOrtograficValidation.js";
 import { Article_ModelComponent } from "../Models/ModelComponents/Article_ModelComponent.js";
 import { Category_ModelComponent } from "../Models/ModelComponents/Category_ModelComponent.js";
+import { Tbl_Pronts_ModelComponent } from "../Models/ModelComponents/Tbl_Pronts_ModelComponent.js";
 window.addEventListener("load", async () => {
     setTimeout(async () => {
         // @ts-ignore
@@ -21,6 +21,7 @@ window.addEventListener("load", async () => {
             Elements: [
                 ElementTab(DOMManager, new Category_ModelComponent()),
                 ElementTab(DOMManager, new Article_ModelComponent()),
+                ElementTab(DOMManager, new Tbl_Pronts_ModelComponent()),
             ]
         }));
     }, 100);
@@ -32,6 +33,7 @@ function ElementTab(DOMManager, Model) {
             const Table = new WTableComponent({
                 ModelObject: Model,
                 AutoSave: true,
+                maxElementByPage: 20,
                 Options: {
                     Filter: true,
                     FilterDisplay: true,

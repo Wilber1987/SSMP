@@ -1,8 +1,10 @@
 //@ts-check
 
 import { StylesControlsV2 } from "../../../WDevCore/StyleModules/WStyleComponents.js";
+import { ModalMessage } from "../../../WDevCore/WComponents/ModalMessage.js";
+import { ModalVericateAction } from "../../../WDevCore/WComponents/ModalVericateAction.js";
 import { WAppNavigator } from "../../../WDevCore/WComponents/WAppNavigator.js";
-import { ModalMessage, ModalVericateAction } from "../../../WDevCore/WComponents/WForm.js";
+
 import { WModalForm } from "../../../WDevCore/WComponents/WModalForm.js";
 import { WTableComponent } from "../../../WDevCore/WComponents/WTableComponent.js";
 // @ts-ignore
@@ -43,13 +45,13 @@ class GroupView extends HTMLElement {
         document.body.append(new WModalForm({
             ModelObject: new Tbl_Grupos_Profile_ModelComponent({
                 Tbl_Grupo: { type: "WSelect", ModelObject: new Tbl_Grupo_ModelComponent(), Dataset: this.Config.MisGrupos },
-                Tbl_Profile: { type: "WSelect",  ModelObject: () =>  new Tbl_Profile_ModelComponent() }
+                Tbl_Profile: { type: "WSelect", ModelObject: () => new Tbl_Profile_ModelComponent() }
             }),
             title: "Invitar Miembro",
             AutoSave: false,
             ObjectOptions: {
                 SaveFunction: (/** @type {Tbl_Grupos_Profile} */ invitado) => {
-                    invitado.Estado =  GroupState.INVITADO;
+                    invitado.Estado = GroupState.INVITADO;
                     document.body.appendChild(ModalVericateAction(async () => {
                         const response = await new Tbl_Grupos_Profile(invitado).Save();
                         document.body.appendChild(ModalMessage(response.message, undefined, true));
@@ -62,17 +64,23 @@ class GroupView extends HTMLElement {
         const GrupoDiv = WRender.Create({
             className: "GroupDiv", children: [
                 WRender.Create({ tagName: "h4", innerText: group.Nombre, style: { background: group.Color } }),
-                WRender.Create({ tagName: "P", innerHTML: group.Descripcion }),
-                //WRender.Create({ tagName: "label", innerText: "Tipo: " + group.Cat_Tipo_Grupo?.Descripcion }),
-                WRender.Create({ tagName: "h5", innerText: "Instituciones" }),
-                WRender.Create({ tagName: "h5", innerText: "Miembros" }),
+                WRender.Create({ tagName: "P", className: "content", innerHTML: group.Descripcion }),
                 WRender.Create({
-                    tagName: "div", children: group.Tbl_Grupos_Profiles?.filter(I => I.Estado == GroupState.ACTIVO).map(I => ({
-                        tagName: 'img',
-                        src: I.Tbl_Profile?.Foto,
-                        title : I.Tbl_Profile?.Nombres
-                    }))
+                    className: "content",
+                    children: [
+                        WRender.Create({ tagName: "h5", innerText: "Instituciones" }),
+                        WRender.Create({ tagName: "h5", innerText: "Miembros" }),
+                        WRender.Create({
+                            tagName: "div", children: group.Tbl_Grupos_Profiles?.filter(I => I.Estado == GroupState.ACTIVO).map(I => ({
+                                tagName: 'img',
+                                src: I.Tbl_Profile?.Foto,
+                                title: I.Tbl_Profile?.Nombres
+                            }))
+                        }),
+                    ]
                 }),
+                //WRender.Create({ tagName: "label", innerText: "Tipo: " + group.Cat_Tipo_Grupo?.Descripcion }),
+
             ]
         })
         //OPTIONS
@@ -101,7 +109,7 @@ class GroupView extends HTMLElement {
                                     document.body.appendChild(ModalMessage(response.message, undefined, true));
                                 }, "¿Dar de baja este grupo? todos los miembros de este grupo perderan acceso a los proyectos creados por otros miembros y los otros miembros del grupo no podran acceder a los proyectos creados por usted."));
                             }
-                        } : "",,
+                        } : "", ,
                         group.Id_Perfil_Crea == this.Config.Profile.Id_Perfil ? {
                             tagName: 'input', type: 'button', className: 'Btn', value: 'Editar', onclick: async () => {
                                 this.EditarGrupo(group);
@@ -224,7 +232,7 @@ class GroupView extends HTMLElement {
             overflow: hidden;
         }
 
-        .GroupDiv * {
+        .GroupDiv .content {
             margin: 0px;
             padding: 10px 30px;
         }
@@ -254,7 +262,8 @@ class GroupView extends HTMLElement {
 
         .GroupOptions {
             display: flex;
-            width: calc(100% - 60px);
+            width: calc(100% - 30px);
+            padding:15px;
             justify-content: flex-end;
             flex-direction: row;
             align-items: center;
@@ -291,7 +300,7 @@ class GroupView extends HTMLElement {
             AutoSave: true,
             ModelObject: new Tbl_Grupo_ModelComponent(),
             StyleForm: "columnX1",
-            EditObject: group, 
+            EditObject: group,
             ObjectOptions: {
                 SaveFunction: (ObjectF, response) => {
                     document.body.appendChild(ModalMessage(response.message, undefined, true));
@@ -320,5 +329,5 @@ class Tbl_Profile_ModelComponent extends EntityClass {
     //**@type {ModelProperty}*/ Tbl_Grupos_Profiles = { type: 'masterdetail', require: false , ModelObject: ()=> new Tbl_Grupos_Profiles_ModelComponent() };
     /**@type {ModelProperty}*/ ORCID = { type: 'text', require: false };
     //PROPIEDADES DE HELPDESK
-   
+
 }

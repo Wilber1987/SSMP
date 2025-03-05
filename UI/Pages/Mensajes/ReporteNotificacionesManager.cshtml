@@ -1,0 +1,21 @@
+@page
+@using API.Controllers
+@using CAPA_DATOS.Security
+@using DataBaseModel
+@{
+    string? identify = HttpContext?.Session.GetString("seassonKey");
+    var SystemConfig = Config.SystemConfig();
+    if (!SecurityController.HavePermission(identify, Permissions.INFORME_NOTIFICACIONES))
+    {
+        Response.Redirect("./");
+        return;
+    }
+}
+<script type="text/javascript" src="/WDevCore/libs/xlsx.full.min.js"></script>
+<script type="module">
+    import {ReporteNotificacionesManagerView} from "/Notificaciones_Mensajeria/Gestion_Mensajes/ReporteNotificacionesManagerView.js";
+    window.onload = ()=> {
+        MainN.append(new ReporteNotificacionesManagerView());
+    } 
+</script>
+<div id="MainN"></div>

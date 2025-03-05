@@ -15,7 +15,7 @@ namespace BusinessLogic
 		{
 			await Semaphore.WaitAsync(); // Limitar concurrencia
 			try
-			{
+			{				
 				var instanceIA = new LlamaClient();
 				var response = await instanceIA.GenerateResponse(unifiedMessage);
 				var responseIA = new ResponseAPI();
@@ -23,7 +23,7 @@ namespace BusinessLogic
 				var deliveryResult = await responseIA.SendDeliveryReceipt(unifiedMessage.Id, unifiedMessage.UserId);
 				LoggerServices.AddMessageInfo(deliveryResult);
 				
-				await responseIA.SendResponseToUser(unifiedMessage, response?.MessageIA);
+				await responseIA.SendResponseToUser(unifiedMessage, response?.MessageIA, response.IsWithIaResponse);
 				var readResult = await responseIA.SendReadReceipt(unifiedMessage.Id, unifiedMessage.UserId);
 				LoggerServices.AddMessageInfo(readResult);
 			}
