@@ -3,7 +3,7 @@ using CAPA_DATOS;
 using CAPA_DATOS.Services;
 using CAPA_NEGOCIO.IA;
 using DocumentFormat.OpenXml.Wordprocessing;
-using IA.Dto;
+using IA.DtoWhatsApp;
 using Newtonsoft.Json;
 
 namespace CAPA_NEGOCIO
@@ -34,7 +34,7 @@ namespace CAPA_NEGOCIO
 				//var whatsAppMessage = message?.entry[0]?.changes[0]?.value?.messages[0];
 				LoggerServices.AddAction("nuevo mensaje: \n" + message.ToString(), 1);
 				WhatsappBusinessAccount whatsAppMessage = JsonConvert.DeserializeObject<WhatsappBusinessAccount>(message.ToString());
-				var messageEv = whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages[0];
+			    Message messageEv = whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages[0];
 				if (whatsAppMessage == null || messageEv == null)
 					return null;
 
@@ -107,7 +107,7 @@ namespace CAPA_NEGOCIO
 			}
 		}
 
-		private static string CalculeMessage(Message messageEv)
+		private static string CalculeMessage( Message messageEv)
 		{
 			if (messageEv.Type == "image")
 			{
@@ -124,16 +124,17 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
-				var entry = message?.entry?[0];
-				var messagingEvent = entry?.messaging?[0];
+				IAMeta.Dto.MetaModel metaModel = JsonConvert.DeserializeObject<IAMeta.Dto.MetaModel>(message.ToString());
+				var entry = metaModel?.Value;
+				var messagingEvent = entry?.Message;
 				if (messagingEvent == null)
 					return null;
 
 				return new UserMessage
 				{
 					Source = "Messenger",
-					UserId = messagingEvent.sender?.id,
-					Text = messagingEvent.message?.text,
+					UserId = entry?.Sender?.Id,
+					Text = messagingEvent?.Text,
 					Timestamp = DateTime.Now // O extraer del mensaje
 				};
 			}

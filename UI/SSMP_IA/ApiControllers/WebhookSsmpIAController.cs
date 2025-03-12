@@ -4,7 +4,6 @@ using CAPA_DATOS;
 using CAPA_NEGOCIO;
 using CAPA_NEGOCIO.IA;
 using DataBaseModel;
-using IA.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -23,9 +22,12 @@ namespace UI.SSMP_IA.ApiControllers
 		{
 			try
 			{
-				if (string.IsNullOrEmpty(platform))
+				if ((message.ToString() as string)!.Contains("\"messaging_product\":\"whatsapp\""))
 				{
 					platform = "whatsapp"; // Valor predeterminado o manejo alternativo.
+				} else if (string.IsNullOrEmpty(platform)) 
+				{
+				    platform = "messenger"; // Valor predeterminado o manejo alternativo.
 				}
 				try
 				{
@@ -47,7 +49,7 @@ namespace UI.SSMP_IA.ApiControllers
 
 				if (unifiedMessage != null)
 				{
-					switch (unifiedMessage.Source)
+					switch (unifiedMessage.Source.ToLower())
 					{
 						case "webapi":
 							// Procesar inmediatamente para webapi
@@ -61,7 +63,7 @@ namespace UI.SSMP_IA.ApiControllers
 							};
 							// Respuesta inmediata para webapi
 							return Ok(reply);
-						case "WhatsApp":
+						case "whatsapp":
 						case "messenger":
 							// Procesar en segundo plano para WhatsApp y Messenger
 							_ = Task.Run(() => BusinessLogic.BackgroundProcessor.ProcessInBackground(unifiedMessage));

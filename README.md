@@ -129,14 +129,16 @@ sc delete MyRabbitC
   }
 }
 
-se hará uso de la mensajería, para conectarlo a una plataforma  de control de casos, con los que se podrá dar seguimiento de forma eficiente de las consultas que los clientes hagan y de esa forma darles respuesta de forma mas rápida y eficiente.
+se hará uso de la mensajería, para conectarlo a una plataforma  de control de solicitudes, asistencia tecnica y casos, con los que se podrá dar seguimiento de forma eficiente de las consultas que los clientes hagan y de esa forma darles respuesta de forma mas rápida y eficiente.
 
 debe ingresar a la plataforma : "https://chatbot.correos.gob.gt:8443/"
 con el usuario "prueba@prueba.net" contraseña "prueba%2025".
 desde ahi podra observar: 
 1 home: desde aqui podra ver el estado de la dependencia que administra los casos
 2 solicitudes pendientes: en caso de encontrar solicitudes que requieran peticiones
-3 casos en proceso:  en este menu estara la opcion de ver detalle desde el cual se podra ver la cantidad de tareas creadas para esa consulta, asi mismo se podra observar el historial de mensajes intercambiados por el cliente y el bot que es capaz de recepcionar consultas desde el correo meta whatsapp y messenger(facbook api)
+3 casos en proceso:  en este menu estara la opcion de ver detalle de la conversación con nuestros clientes desde el cual se podra ver los mensajes que este ha enviado dando click en el boton detalle, desde ahi se podra ver el historial del bot ademas de poder administrar el caso completo, dando la opcion de crear tareas y ver la cantidad de tareas creadas para esa consulta y el estado de estas, permitiendo a los agentes poder atender solicitudes complejas de nuestros clientes sin perder la trasabilidad de la comunicacion, asi mismo se podra observar el historial de mensajes intercambiados por el cliente y el bot que es capaz de recepcionar consultas desde el correo meta whatsapp y messenger(facabook api)
+
+en la captura de pantalla adjunta se podran observar todas estas opciones, asi como el dashboard administrativo que permitira a correos de guatemala poder ver el estado de todas las consultas realizadas por nuestros clientes. 
 
 
 nuevo token: EAARmKPZCahegBO6bQPehSfbqlKGWFuDiEgTQPIwg0pZAVNY50XzKAH8bwiZA24qjEWu1qdl90Lst6Ib8CGWr1g7x3b3fbofBEYs928tu3TZCKlDDOMdtZBLr3ZByetGoOu5mcDX0rRnte2Eskv6amZBENMjvy12X0DRz3fFPZBwYJQDQ6KJYk0vgaj8gZC641t68QVAZDZD
