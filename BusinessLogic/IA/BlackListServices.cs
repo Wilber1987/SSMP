@@ -14,13 +14,13 @@ namespace BusinessLogic.IA
         public static bool IsPermitUser(string? userId)
         {
             string blackList = Transactional_Configuraciones
-                    .GetParam(ConfiguracionesThemeEnum.TEMPLATE_NAME, BlackListDefault)?
-                    .Valor ?? BlackListDefault;
-            if (userId != null && userId.Trim() != "" && blackList.Contains(userId))
-            {
-                return false;
-            }
-            return true;
+                .GetParam(ConfiguracionesThemeEnum.TEMPLATE_NAME, BlackListDefault)?
+                .Valor ?? BlackListDefault;
+
+            // Convertimos la lista negra en un conjunto de usuarios, asegurándonos de eliminar espacios en blanco.
+            HashSet<string> blackListUsers = [.. blackList.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+
+            return userId != null && !blackListUsers.Contains(userId.Trim());
         }
         public static ResponseService AddUser(int? Id_Perfil)
         {
