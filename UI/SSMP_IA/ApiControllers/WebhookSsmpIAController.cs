@@ -19,7 +19,7 @@ namespace UI.SSMP_IA.ApiControllers
 
 		[HttpPost]
 		[AuthController] // TODO: QUITAR
-		public IActionResult ReceiveMessage([FromBody] dynamic message, [FromHeader(Name = "X-Platform")] string? platform = null)
+		public async Task<IActionResult> ReceiveMessage([FromBody] dynamic message, [FromHeader(Name = "X-Platform")] string? platform = null)
 		{
 			try
 			{
@@ -39,7 +39,7 @@ namespace UI.SSMP_IA.ApiControllers
 				// Determinar el origen del mensaje
 				UserMessage unifiedMessage = platform?.ToLower() switch
 				{
-					"whatsapp" => UserMessage.ProcessWhatsAppMessage(message),
+					"whatsapp" => await UserMessage.ProcessWhatsAppMessage(message),
 					"messenger" => UserMessage.ProcessMessengerMessage(message),
 					"webapi" => UserMessage.ProcessWebApiMessage(message),
 					_ => throw new InvalidOperationException("Unsupported platform")
@@ -64,7 +64,7 @@ namespace UI.SSMP_IA.ApiControllers
 						case "WhatsApp":
 						case "messenger":
 							// Procesar en segundo plano para WhatsApp y Messenger
-							Task.Run(() => BusinessLogic.BackgroundProcessor.ProcessInBackground(unifiedMessage));
+							_ = Task.Run(() => BusinessLogic.BackgroundProcessor.ProcessInBackground(unifiedMessage));
 							return Ok("EVENT_RECEIVED");
 						default:
 							return BadRequest("Unsupported platform source.");

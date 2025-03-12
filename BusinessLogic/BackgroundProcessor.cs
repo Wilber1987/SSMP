@@ -22,10 +22,14 @@ namespace BusinessLogic
 				// Enviar recibo de entrega
 				var deliveryResult = await responseIA.SendDeliveryReceipt(unifiedMessage.Id, unifiedMessage.UserId);
 				LoggerServices.AddMessageInfo(deliveryResult);
+				if (response?.MessageIA != null && response?.MessageIA.Trim() != "")
+				{
+					await responseIA.SendResponseToUser(unifiedMessage, response?.MessageIA, response.IsWithIaResponse, []);
+					var readResult = await responseIA.SendReadReceipt(unifiedMessage.Id, unifiedMessage.UserId);
+					LoggerServices.AddMessageInfo(readResult);
+				}
 				
-				await responseIA.SendResponseToUser(unifiedMessage, response?.MessageIA, response.IsWithIaResponse);
-				var readResult = await responseIA.SendReadReceipt(unifiedMessage.Id, unifiedMessage.UserId);
-				LoggerServices.AddMessageInfo(readResult);
+				
 			}
 			catch (Exception ex)
 			{

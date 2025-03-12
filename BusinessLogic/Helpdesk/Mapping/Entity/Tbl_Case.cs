@@ -74,7 +74,8 @@ namespace CAPA_NEGOCIO.MAPEO
 				MimeMessageCaseData = new MimeMessageCaseData
 				{
 					MessageId = mail.MessageId,
-					InReplyTo = mail.References?.LastOrDefault()
+					InReplyTo = mail.References?.LastOrDefault(),
+					NewMessage = true
 				};
 				RecoveryEmbebedCidImages(mail);
 				BeginGlobalTransaction();
@@ -138,87 +139,87 @@ namespace CAPA_NEGOCIO.MAPEO
 
 		}
 
-        /*Automatico caso con IA*/
-        public bool CreateAutomaticCaseIA(UserMessage chat)
-        {
-            try
-            {
-                BeginGlobalTransaction();
-                List<ModelFiles> Attach = new List<ModelFiles>();
-
-                Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = chat.UserId }.Find<Tbl_Profile>();
-                if (tbl_Profile == null)
-                {
-                    tbl_Profile = new Tbl_Profile
-                    {
-                        Correo_institucional = chat?.UserId,
-                        Nombres = chat?.UserId,
-                        Apellidos = chat?.UserId,
-                        Estado = "ACTIVO",
-                        Foto = "\\Media\\profiles\\avatar.png",
-                        //Sexo = "Masculino"
-                    };
-                    tbl_Profile.Save();
-                }
-                Id_Perfil = tbl_Profile.Id_Perfil;
-                //RecoveryEmbebedCidImages(chat);
-                //guarda en base de dato el caso
-                Save();
-                CommitGlobalTransaction();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.Write("error al guardar");
-                RollBackGlobalTransaction();
-                LoggerServices.AddMessageError($"error al crear el caso de: {chat.UserId}, {chat.Text}", ex);
-                return false;
-            }
-
-        }
-
-        public Tbl_Case? CreateAutomaticCaseNotification(Notificaciones notificacion, string title)
+		/*Automatico caso con IA*/
+		public bool CreateAutomaticCaseIA(UserMessage chat)
 		{
 			try
-            {
-                BeginGlobalTransaction();
+			{
+				BeginGlobalTransaction();
+				List<ModelFiles> Attach = new List<ModelFiles>();
 
-                List<ModelFiles> Attach = new List<ModelFiles>();
+				Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = chat.UserId }.Find<Tbl_Profile>();
+				if (tbl_Profile == null)
+				{
+					tbl_Profile = new Tbl_Profile
+					{
+						Correo_institucional = chat?.UserId,
+						Nombres = chat?.UserId,
+						Apellidos = chat?.UserId,
+						Estado = "ACTIVO",
+						Foto = "\\Media\\profiles\\avatar.png",
+						//Sexo = "Masculino"
+					};
+					tbl_Profile.Save();
+				}
+				Id_Perfil = tbl_Profile.Id_Perfil;
+				//RecoveryEmbebedCidImages(chat);
+				//guarda en base de dato el caso
+				Save();
+				CommitGlobalTransaction();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				Console.Write("error al guardar");
+				RollBackGlobalTransaction();
+				LoggerServices.AddMessageError($"error al crear el caso de: {chat.UserId}, {chat.Text}", ex);
+				return false;
+			}
 
-                Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = notificacion.Telefono }.Find<Tbl_Profile>();
-                var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = "WHATSAPP" };
+		}
+
+		public Tbl_Case? CreateAutomaticCaseNotification(Notificaciones notificacion, string title)
+		{
+			try
+			{
+				BeginGlobalTransaction();
+
+				List<ModelFiles> Attach = new List<ModelFiles>();
+
+				Tbl_Profile? tbl_Profile = new Tbl_Profile { Correo_institucional = notificacion.Telefono }.Find<Tbl_Profile>();
+				var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = "WHATSAPP", NewMessage = true };
 				Cat_Dependencias? dependencia = new Cat_Dependencias().Find<Cat_Dependencias>(FilterData.Equal("Id_Dependencia", 2));
-                var newCase = new Tbl_Case()
-                {
-                    Titulo = title,
-                    Descripcion = GetDescription(notificacion),
-                    Estado = Case_Estate.Finalizado.ToString(),
-                    Fecha_Inicio = notificacion.Fecha_Envio,
-                    Id_Dependencia = 3,
-                    Id_Servicio = 7,
-                    MimeMessageCaseData = mimeMessageCaseData
-                };
+				var newCase = new Tbl_Case()
+				{
+					Titulo = title,
+					Descripcion = GetDescription(notificacion),
+					Estado = Case_Estate.Finalizado.ToString(),
+					Fecha_Inicio = notificacion.Fecha_Envio,
+					Id_Dependencia = 3,
+					Id_Servicio = 7,
+					MimeMessageCaseData = mimeMessageCaseData
+				};
 
-                if (tbl_Profile == null)
-                {
-                    tbl_Profile = new Tbl_Profile
-                    {
-                        Correo_institucional = notificacion?.Telefono,
-                        Nombres = notificacion?.NotificationData?.Destinatario,
-                        //Apellidos = chat?.UserId,
-                        Estado = "ACTIVO",
-                        Foto = "\\Media\\profiles\\avatar.png",
-                        //Sexo = "Masculino"
-                    };
-                    tbl_Profile.Save();
-                }
-                Id_Perfil = tbl_Profile.Id_Perfil;
-                var response = newCase.Save();
+				if (tbl_Profile == null)
+				{
+					tbl_Profile = new Tbl_Profile
+					{
+						Correo_institucional = notificacion?.Telefono,
+						Nombres = notificacion?.NotificationData?.Destinatario,
+						//Apellidos = chat?.UserId,
+						Estado = "ACTIVO",
+						Foto = "\\Media\\profiles\\avatar.png",
+						//Sexo = "Masculino"
+					};
+					tbl_Profile.Save();
+				}
+				Id_Perfil = tbl_Profile.Id_Perfil;
+				var response = newCase.Save();
 
-                CommitGlobalTransaction();
-                return (Tbl_Case?)response;
-            }
-            catch (Exception ex)
+				CommitGlobalTransaction();
+				return (Tbl_Case?)response;
+			}
+			catch (Exception ex)
 			{
 				Console.Write("error al guardar");
 				RollBackGlobalTransaction();
@@ -228,13 +229,13 @@ namespace CAPA_NEGOCIO.MAPEO
 
 		}
 
-        private static string GetDescription(Notificaciones notificaciones)
-        {
-            return $@"Ha llegado un paquete a nombre de {notificaciones.NotificationData?.Destinatario} y esta  resguardado en la oficina de Fardos Postales - SAT, ubicada en el Palacio de Correos, zona 1, 2do nivel. Of. 203
+		private static string GetDescription(Notificaciones notificaciones)
+		{
+			return $@"Ha llegado un paquete a nombre de {notificaciones.NotificationData?.Destinatario} y esta  resguardado en la oficina de Fardos Postales - SAT, ubicada en el Palacio de Correos, zona 1, 2do nivel. Of. 203
 con número {2}";
-        }
+		}
 
-        private void RecoveryEmbebedCidImages(MimeMessage mail)
+		private void RecoveryEmbebedCidImages(MimeMessage mail)
 		{
 			foreach (var part in mail.BodyParts)
 			{
@@ -601,6 +602,7 @@ con número {2}";
 
 	public class MimeMessageCaseData
 	{
+		public bool? NewMessage { get; set; }
 		public string? MessageId { get; set; }
 		public string? InReplyTo { get; set; }
 		public string? PlatformType { get; set; }

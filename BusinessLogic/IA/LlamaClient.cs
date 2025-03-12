@@ -18,6 +18,13 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
+				bool IsInBlackList = BlackListServices.IsPermitUser(question.UserId);
+				if (!IsInBlackList)
+				{
+					var ex = new Exception($"Usuario en lista negra {question.Source} - {question.UserId}");
+					LoggerServices.AddMessageError($"ERROR:" + ex.Message, ex);
+					throw ex;
+				}
 				bool isWithIaResponse = true;
 				bool isValidProcess = true;
 				if (question.IsMetaApi)
@@ -33,7 +40,6 @@ namespace CAPA_NEGOCIO
 					LoggerServices.AddMessageError($"ERROR:" + ex.Message, ex);
 					throw ex;
 				}
-
 				question.Text = question.Text?.Trim();
 				question.IsWithIaResponse = isWithIaResponse;
 
@@ -167,25 +173,26 @@ namespace CAPA_NEGOCIO
 					if (tipocaso == "RASTREO_Y_SEGUIMIENTOS")
 					{
 						(bool isProcesed, string? response) = TrakingUnindictableRequest.ProcessRequest();
-						if (isProcesed) 
+						if (isProcesed)
 						{
-						    question.MessageIA = response;
-							question.Id_case = dCaso.Id_Case;
-							await AddComment(dCaso, question);
-							return question;
-						}
-					} else 
-					{
-					    (bool isProcesed, string? response) = UnindictableRequest.ProcessRequest();
-						if (isProcesed) 
-						{
-						    question.MessageIA = response;
+							question.MessageIA = response;
 							question.Id_case = dCaso.Id_Case;
 							await AddComment(dCaso, question);
 							return question;
 						}
 					}
-					
+					else
+					{
+						(bool isProcesed, string? response) = UnindictableRequest.ProcessRequest();
+						if (isProcesed)
+						{
+							question.MessageIA = response;
+							question.Id_case = dCaso.Id_Case;
+							await AddComment(dCaso, question);
+							return question;
+						}
+					}
+
 					return await iAProcess(question, trakingNumber, tipocaso, dCaso, list);
 				}
 			}
@@ -198,8 +205,8 @@ namespace CAPA_NEGOCIO
 
 		private async Task<UserMessage> iAProcess(UserMessage question, string? trakingNumber, string tipocaso, Tbl_Case dCaso, List<TrackingHistory> list)
 		{
-			
-			
+
+
 			// Crear el prompt estructurado para Ollama
 			string prompt = ProntManager.CrearPrompt(question.Text, trakingNumber, list, tipocaso);
 			List<object> historialMensajes = GetHistoryMessage(question, dCaso, prompt, tipocaso);
@@ -337,7 +344,7 @@ Selecciona una opción";
 				}
 				else
 				{
-					var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = data!.Source?.ToUpper(), isWithIaResponse = isCaseWithIABotResponse };
+					var mimeMessageCaseData = new MimeMessageCaseData { PlatformType = data!.Source?.ToUpper(), isWithIaResponse = isCaseWithIABotResponse, NewMessage = true };
 
 					var newCase = new Tbl_Case()
 					{
@@ -371,6 +378,7 @@ Selecciona una opción";
 				Fecha = interaction.Timestamp,
 				Estado = CommetsState.Leido.ToString(),
 				Mail = interaction.UserId,
+				Attach_Files = [interaction.Attach],
 			};
 			us.Save();
 			if (interaction.MessageIA != null)
@@ -401,10 +409,11 @@ Selecciona una opción";
 					};
 					ia.Save();
 				}
-
 			}
+			data.MimeMessageCaseData.NewMessage = true;
+			data.Update();
 
-		}		
+		}
 
 		private static async Task<HttpResponseMessage> GetIAResponse(StringContent content)
 		{
@@ -416,7 +425,7 @@ Selecciona una opción";
 			var response = await client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.IAServices, "IAHost"), content);
 			return response;
 		}
-		
+
 	}
 
 }

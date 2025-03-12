@@ -52,7 +52,27 @@ namespace IA.Dto
         public string From { get; set; }
         public string Id { get; set; }
         public string Timestamp { get; set; }
-        public Text Text { get; set; }
+        public string Type { get; set; }
+        public Text? Text { get; set; }
+        public Image? Image { get; set; }
+        public Document? Document { get; set; }
+    }
+
+    public class Image
+    {
+        public string caption { get; set; }
+        public string mime_type { get; set; }
+        public string sha256 { get; set; }
+        public string link { get; set; }
+        public string Id { get; set; }
+    }
+    public class Document
+    {
+        public string caption { get; set; }
+        public string mime_type { get; set; }
+        public string sha256 { get; set; }
+        public string link { get; set; }
+        public string Id { get; set; }
     }
 
     public class Text

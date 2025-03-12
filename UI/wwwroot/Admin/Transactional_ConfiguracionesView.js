@@ -64,7 +64,7 @@ class Transactional_ConfiguracionesView extends HTMLElement {
         } else if (this.IsSelectRadio(element)) {
             return "RADIO";
         }
-        return "TEXT"
+        return "TEXTAREA"
     }
     IsSelectRadio(element) {
         return element.Tipo_Configuracion == "RADIO" || element.Tipo_Configuracion == "SELECT"

@@ -10,6 +10,8 @@ import { ModelProperty } from "../../WDevCore/WModules/CommonModel.js";
 
 
 class Tbl_Case_ModelComponent extends EntityClass {
+
+
     /**
     * @param {Partial<Tbl_Case_ModelComponent>} [props]
     */
@@ -179,10 +181,31 @@ class Tbl_Case_ModelComponent extends EntityClass {
             servicio: table_case.Tbl_Servicios
         });
     }
+    /**
+       * @param {Tbl_Case_ModelComponent} actividad
+       * @returns {Object}
+       */
+    AddToBlackList = async (actividad) => {
+        return await WAjaxTools.PostRequest("/api/ApiEntityADMINISTRATIVE_ACCESS/AddToBlackList", actividad);
+    }
+    /**
+        * @param {Tbl_Case_ModelComponent} actividad
+        * @returns {Object}
+    */
+    RemoveFromBlackList = async (actividad) => {
+        return await WAjaxTools.PostRequest("/api/ApiEntityADMINISTRATIVE_ACCESS/RemoveFromBlackList", actividad);
+    }
+    /**
+        * @param {Tbl_Case} actividad
+        * @returns {Object}
+        */
+    IsInBlackList = async (actividad) => {
+        return await WAjaxTools.PostRequest("/api/ApiEntityADMINISTRATIVE_ACCESS/IsInBlackList", actividad);
+    }
 }
 export { Tbl_Case_ModelComponent }
 class Tbl_Case extends EntityClass {
-    
+
     /** @param {Partial<Tbl_Case>} [props] */
     constructor(props) {
         super(props, 'EntityHelpdesk');

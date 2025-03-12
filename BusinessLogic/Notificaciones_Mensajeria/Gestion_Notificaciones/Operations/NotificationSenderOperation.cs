@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BusinessLogic.Notificaciones_Mensajeria.Informe;
 using CAPA_DATOS;
 using CAPA_DATOS.Services;
-using CAPA_NEGOCIO.Gestion_Mensajes.Operations;
 using CAPA_NEGOCIO.IA;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
@@ -26,9 +21,20 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 						FilterData.Distinc("Enviado", true),
 						FilterData.NotNull("Telefono")
 				);
-				string? TemplateName = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "TemplateName");
+				string defaultTemplateName = "notificacion_correo_aduana";
+				string defaultTemplateImageHeader = "https://correos.gob.gt/wp-content/uploads/2025/02/logo-190-X-90.png";
+
+				string? TemplateName = Transactional_Configuraciones
+					.GetParam(ConfiguracionesThemeEnum.TEMPLATE_NAME, defaultTemplateName)?
+					.Valor ?? defaultTemplateName;
+				string? TemplateImageHeader = Transactional_Configuraciones
+					.GetParam(ConfiguracionesThemeEnum.TEMPLATE_IMAGE_HEADER, defaultTemplateImageHeader)?
+					.Valor ?? defaultTemplateImageHeader;
+
 				string? TemplateLocation = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "TemplateLocation");
-				string? TemplateImageHeader = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "TemplateImageHeader");
+
+				//string? TemplateName = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "TemplateName");
+				//string? TemplateImageHeader = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "TemplateImageHeader");
 
 				foreach (Notificaciones notificacion in notificaciones)
 				{

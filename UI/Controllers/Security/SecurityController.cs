@@ -28,7 +28,7 @@ namespace API.Controllers
         }
        
        
-        public static bool Auth(string identfy)
+        public static bool Auth(string? identfy)
         {
             return AuthNetCore.Authenticate(identfy);
         }

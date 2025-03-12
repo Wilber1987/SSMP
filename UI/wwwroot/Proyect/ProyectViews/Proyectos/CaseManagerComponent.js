@@ -41,9 +41,17 @@ class CaseManagerComponent extends HTMLElement {
         this.CommentContainer = WRender.createElement({ type: 'div', props: { class: "content-container", id: "CommentsContainer" } });
         this.CommentManager = new ComponentsManager({ MainContainer: this.CommentContainer });
         this.OptionContainer = WRender.Create({ className: "OptionContainer" });
+        this.append(priorityStyles.cloneNode(true));
         this.DrawCaseManagerComponent();
     }
-    connectedCallback() { }
+    connectedCallback() {
+        this.interval = setInterval(()=> { 
+            this.FilterOptions?.filterFunction();
+        }, 5000);
+    }
+    disconnectedCallback() {
+        this.interval = null;        
+    }
     DrawCaseManagerComponent = async () => {
         //this.OptionContainer.append(WRender.Create({ tagName: 'input', type: 'button', className: 'Block-Basic', value: 'Estadística', onclick: this.dashBoardView }))
         this.OptionContainer.append(WRender.Create({ tagName: 'input', type: 'button', className: 'Block-Alert', value: 'Lista de Casos', onclick: this.actividadesManager }))
@@ -73,6 +81,8 @@ class CaseManagerComponent extends HTMLElement {
         this.actividadesManager();
     }
     CommentsDetail(/**@type {Tbl_Case} */ actividad) {
+        actividad.MimeMessageCaseData.NewMessage = false;
+        new Tbl_Case({Id_Case : actividad.Id_Case, MimeMessageCaseData : actividad.MimeMessageCaseData}).Update();
         if (!this.CommentManager.Exists("Comment" + actividad.Id_Case)) {
             const commentsContainer = new WCommentsComponent({
                 Dataset: [],
@@ -106,6 +116,7 @@ class CaseManagerComponent extends HTMLElement {
                 /**@type {Array<Tbl_Case>} */
                 // @ts-ignore
                 const data = await new Tbl_Case_ModelComponent({ FilterData: DFilt }).GetOwCase();
+                
                 const datasetMap = data.map(actividad => {
                     // @ts-ignore
                     actividad.Dependencia = actividad.Cat_Dependencias?.Descripcion;
@@ -116,6 +127,8 @@ class CaseManagerComponent extends HTMLElement {
             }
         });
 
+        
+
         this.TabManager.NavigateFunction("Tab-Actividades-Manager",
             WRender.Create({
                 className: "actividadesView", children: [this.FilterOptions, this.Paginator]
@@ -123,7 +136,7 @@ class CaseManagerComponent extends HTMLElement {
     }
 
     actividadElement = (actividad) => {
-        this.append(priorityStyles.cloneNode(true));
+        
         return WRender.Create({
             className: "actividad", object: actividad, children: [
                 {

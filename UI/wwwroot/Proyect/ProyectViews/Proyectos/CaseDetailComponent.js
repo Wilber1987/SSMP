@@ -36,6 +36,7 @@ import { ModalMessage } from '../../../WDevCore/WComponents/ModalMessage.js';
 import { DateTime } from '../../../WDevCore/WModules/Types/DateTime.js';
 
 class CaseDetailComponent extends HTMLElement {
+
     /**
      * 
      * @param {Tbl_Case} Actividad
@@ -59,6 +60,13 @@ class CaseDetailComponent extends HTMLElement {
     connectedCallback() { }
 
     DrawCaseDetailComponent = async (actividad = (new Tbl_Case())) => {
+        actividad.MimeMessageCaseData.NewMessage = false;
+        this.IsInBlackList = (await new Tbl_Case_ModelComponent().IsInBlackList(actividad)).body;
+
+        new Tbl_Case({ Id_Case: actividad.Id_Case, MimeMessageCaseData: actividad.MimeMessageCaseData }).Update();
+        
+
+
         const tareasActividad = await new Tbl_Tareas_ModelComponent({ Id_Case: actividad.Id_Case }).Get();
         actividad.Tbl_Tareas = tareasActividad;
         this.ganttChart = new GanttChart({ Dataset: tareasActividad ?? [], EvalValue: "date" });
@@ -78,7 +86,7 @@ class CaseDetailComponent extends HTMLElement {
             CommentsIdentify: actividad.Id_Case,
             CommentsIdentifyName: "Id_Case",
             UrlSearch: "../api/ApiEntityHelpdesk/getTbl_Comments",
-            UrlAdd: "../api/ApiEntityHelpdesk/saveTbl_Comments",           
+            UrlAdd: "../api/ApiEntityHelpdesk/saveTbl_Comments",
             AddObject: actividad?.MimeMessageCaseData?.PlatformType != "WHATSAPP" && actividad?.MimeMessageCaseData?.PlatformType != "WEBAPI",
             UseDestinatarios: actividad?.MimeMessageCaseData?.PlatformType != "WHATSAPP" && actividad?.MimeMessageCaseData?.PlatformType != "WEBAPI",
             isRichTextActive: actividad?.MimeMessageCaseData?.PlatformType != "WHATSAPP"
@@ -117,7 +125,10 @@ class CaseDetailComponent extends HTMLElement {
                                         actividad.Estado == "Solicitado" ?
                                             { tagName: 'button', className: 'Btn-Mini', innerText: 'Aprobar Caso', onclick: () => this.AprobarCaso(actividad) } :
                                             { tagName: 'button', className: 'Btn-Mini', innerText: 'Cerrar Caso', onclick: () => this.CerrarCaso(actividad) }
-                                    )
+
+                                    ),
+                                this.IsInBlackList != true ? { tagName: 'button', className: 'Btn-Mini', innerText: 'Agregar a lista negra', onclick: () => this.AddToBlackList(actividad) } : "",
+                                this.IsInBlackList == true ? { tagName: 'button', className: 'Btn-Mini', innerText: 'Remover de lista negra', onclick: () => this.RemoveFromBlackList(actividad) } : ""
 
                             ]
                         }
@@ -213,6 +224,30 @@ class CaseDetailComponent extends HTMLElement {
             }
         }, "¿Está seguro que desea reabrir este caso?"))
 
+    }
+    AddToBlackList(actividad) {
+        this.shadowRoot?.append(ModalVericateAction(async () => {
+            actividad.Estado = "Activo"
+            const response = await new Tbl_Case_ModelComponent().AddToBlackList(actividad);
+            if (response.status == 200) {
+                this.shadowRoot?.append(ModalMessage("Remitente enviado a lista negra"));
+                location.reload();
+            } else {
+                this.append(ModalMessage(response.message))
+            }
+        }, "Este remitente será enviado a lista negra ¿Está seguro que desea ejecutar esta acción?"))
+    }
+    RemoveFromBlackList(actividad) {
+        this.shadowRoot?.append(ModalVericateAction(async () => {
+            actividad.Estado = "Activo"
+            const response = await new Tbl_Case_ModelComponent().RemoveFromBlackList(actividad);
+            if (response.status == 200) {
+                this.shadowRoot?.append(ModalMessage("Remitente enviado a lista negra"));
+                location.reload();
+            } else {
+                this.append(ModalMessage(response.message))
+            }
+        }, "Este remitente será enviado a lista negra ¿Está seguro que desea ejecutar esta acción?"))
     }
     update = async () => {
         const dataTask = await new Tbl_Tareas_ModelComponent({ Id_Case: this.Actividad.Id_Case }).Get();
@@ -375,7 +410,7 @@ class CaseDetailComponent extends HTMLElement {
                 Dataset: tareasActividad, ModelObject: () => new Tbl_Tareas_ModelComponent()
             },
             Tbl_Calendario: {
-                type: 'CALENDAR', require: false,  CalendarFunction: async () => {
+                type: 'CALENDAR', require: false, CalendarFunction: async () => {
                     return {
                         Agenda: await new Tbl_Agenda_ModelComponent({ Id_Dependencia: actividad.Cat_Dependencias.Id_Dependencia }).Get(),
                         Calendario: await new ViewCalendarioByDependencia({ Id_Dependencia: actividad.Cat_Dependencias.Id_Dependencia }).Get()
@@ -409,9 +444,10 @@ const caseGeneralData = (actividad) => {
                 tagName: 'label', innerText: "Fecha inicio: " + (
                     new DateTime(actividad.Fecha_Inicio).toDDMMYYYY() ?? "")
             },
-            { tagName: 'label', innerText: actividad.Mail ? `Solicitante: ${actividad.Mail}` : "" },
             {
                 tagName: 'label', className: "platform_" + actividad?.MimeMessageCaseData?.PlatformType
+            }, {
+                tagName: 'label', className: "newActivity_" + actividad?.MimeMessageCaseData?.NewMessage?.toString()
             },
             //{ tagName: 'label', innerText: "Fecha de finalización: " + (actividad.Fecha_Final?.toString().toDateFormatEs() ?? "") },
         ]

@@ -1,14 +1,24 @@
 ﻿@page
 @using API.Controllers;
-@using CAPA_DATOS.Security; 
-@{   
-    
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+@using CAPA_DATOS.Security;
+@{
+    string? identfy = HttpContext?.Session?.GetString("seassonKey");
+    if (!SecurityController.Auth(identfy))
     {
         Response.Redirect("./Security/Login");
         return;
-    } else {
+    }
+    else if (SecurityController.HavePermission(identfy, Permissions.ADMINISTRAR_CASOS_DEPENDENCIA,
+        Permissions.ADMINISTRAR_CASOS_PROPIOS,
+        Permissions.TECNICO_CASOS_DEPENDENCIA))
+    {
         Response.Redirect("./home");
         return;
     }
+    else if (!SecurityController.HavePermission(identfy, Permissions.INFORME_NOTIFICACIONES))
+    {
+        Response.Redirect("./Mensajes/ReporteNotificacionesManager");
+        return;
+    }
 }
+<h1>BIENVENIDO</h1>

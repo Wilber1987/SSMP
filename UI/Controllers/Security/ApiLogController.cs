@@ -12,6 +12,7 @@ namespace API.Controllers
         [AuthController]
         public object getLog(Log Inst)
         {           
+            Inst.filterData = [ FilterData.Limit(1000) ];
             return Inst.Get<Log>();
         }
 

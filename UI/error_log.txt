@@ -64,3 +64,56 @@ The statement has been terminated.
    at System.Data.SqlClient.SqlConnection.Open()
    at CAPA_DATOS.EntityClass.Save() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 162
    at CAPA_DATOS.LoggerServices.AddMessageError(String message, Exception ex) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\LoggerServices.cs:line 77
+[3/5/2025 10:47:30 AM] ERROR: Max retries reached. Operation failed.: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass35_0.<TraerDatosSQL>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 286
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/5/2025 10:47:30 AM] Transaction failed and connection restarted.: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass35_0.<TraerDatosSQL>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 286
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/5/2025 10:47:30 AM] Transaction failed and connection restarted.: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass35_0.<TraerDatosSQL>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 286
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.TraerDatosSQL(String queryString, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 278
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.BuildTable(EntityClass Inst, String& CondSQL, Boolean isSimpleFind) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 548
+[3/5/2025 10:47:30 AM] ERROR: BuildTable 
+
+ Tbl_Mails 
+
+ @EstadoDNE_B_X_F = PENDIENTE 
+ SELECT  Id_Mail,Subject,Id_Case,MessageID,Estado,Sender,Body,FromAdress, ReplyTo = JSON_QUERY(ReplyTo), Bcc = JSON_QUERY(Bcc), Cc = JSON_QUERY(Cc), ToAdress = JSON_QUERY(ToAdress), Attach_Files = JSON_QUERY(Attach_Files),Flags,Date,Uid FROM helpdesk.Tbl_Mails as ARD_U_N_F   WHERE Estado = @EstadoDNE_B_X_F    ORDER BY Id_Mail DESC: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass35_0.<TraerDatosSQL>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 286
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.TraerDatosSQL(String queryString, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 278
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.BuildTable(EntityClass Inst, String& CondSQL, Boolean isSimpleFind) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 548

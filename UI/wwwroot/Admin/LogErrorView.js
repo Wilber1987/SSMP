@@ -41,6 +41,7 @@ class LogView extends HTMLElement {
             ModelObject: this.ModelComponent,
             EntityModel: this.EntityModel,
             AutoSave: true,
+            AddItemsFromApi: true,
             //Dataset: this.Dataset,
             Options: {
                 Show: true,

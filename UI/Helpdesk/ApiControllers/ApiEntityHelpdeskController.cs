@@ -285,7 +285,7 @@ namespace API.Controllers
 			return inst.Save();
 		}
 		[HttpPost]
-		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA)]
+		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA, Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS)]
 		public object? updateTbl_Case(Tbl_Case inst)
 		{
 			return inst.Update();
@@ -405,7 +405,7 @@ namespace API.Controllers
 		{
 			return inst.Get<Tbl_Grupos_Profile>();
 		}
-		
+
 		[HttpPost]
 		[AuthController]
 		public object? saveTbl_Grupos_Profile(Tbl_Grupos_Profile inst)

@@ -67,6 +67,14 @@ const priorityStyles = css`
     .platform_MAIL {
         background-image: url(/Media/Image/mail.svg);
     }
+    .newActivity_true {
+        display: block;
+        height: 23px;
+        width: 23px;
+        box-shadow: 0 0 5px 0 #000;
+        border-radius: 50%;
+        background-color: #03fa87;
+    }
 `
 
 export { priorityStyles }
