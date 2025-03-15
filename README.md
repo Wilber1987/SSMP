@@ -131,14 +131,40 @@ sc delete MyRabbitC
 
 se hará uso de la mensajería, para conectarlo a una plataforma  de control de solicitudes, asistencia tecnica y casos, con los que se podrá dar seguimiento de forma eficiente de las consultas que los clientes hagan y de esa forma darles respuesta de forma mas rápida y eficiente.
 
-debe ingresar a la plataforma : "https://chatbot.correos.gob.gt:8443/"
-con el usuario "prueba@prueba.net" contraseña "prueba%2025".
-desde ahi podra observar: 
-1 home: desde aqui podra ver el estado de la dependencia que administra los casos
-2 solicitudes pendientes: en caso de encontrar solicitudes que requieran peticiones
-3 casos en proceso:  en este menu estara la opcion de ver detalle de la conversación con nuestros clientes desde el cual se podra ver los mensajes que este ha enviado dando click en el boton detalle, desde ahi se podra ver el historial del bot ademas de poder administrar el caso completo, dando la opcion de crear tareas y ver la cantidad de tareas creadas para esa consulta y el estado de estas, permitiendo a los agentes poder atender solicitudes complejas de nuestros clientes sin perder la trasabilidad de la comunicacion, asi mismo se podra observar el historial de mensajes intercambiados por el cliente y el bot que es capaz de recepcionar consultas desde el correo meta whatsapp y messenger(facabook api)
+caso de uso: 
+1 Ingresar a facebook con usuario evaluador user: 89462441, password: developer01%
+2 enviar un mensaje de saludo a un canal habilitado de la api a nuestra pagina de aplicación https://www.facebook.com/profile.php?id=61569641234013.
+3 seleccionar una opcion de nuestro bot para la interacción con el cliente.
+4 si se dese comprobar la funcionalidad de la plataforma del bot ingresar a "https://chatbot.correos.gob.gt:8443/" con el usuario  "prueba@prueba.net" y contraseña "prueba%2025".
+5 Opcional: ( si se usa el portal de la aplicacion "https://chatbot.correos.gob.gt:8443/") en la opcion casos en proceso:  en este menu estara la opcion de ver detalle de la conversación con nuestros clientes desde el cual se podra ver los mensajes que este ha enviado dando click en el boton detalle, desde ahi se podra ver el historial del bot ademas de poder administrar el caso completo, dando la opcion de crear tareas y ver la cantidad de tareas creadas para esa consulta y el estado de estas, permitiendo a los agentes poder atender solicitudes complejas de nuestros clientes sin perder la trasabilidad de la comunicacion, asi mismo se podra observar el historial de mensajes intercambiados por el cliente y el bot que es capaz de recepcionar consultas desde el correo meta whatsapp y messenger(facabook api)
+ 
 
-en la captura de pantalla adjunta se podran observar todas estas opciones, asi como el dashboard administrativo que permitira a correos de guatemala poder ver el estado de todas las consultas realizadas por nuestros clientes. 
+cuando un cliente escribe a uno de nuestros canales este mensaje es capturado por el webhock y enviado a nuestra plataforma para su revision y atender a nuestro cliente enviar mensaje
+
+en la captura de pantalla adjunta se podran observar todas estas opciones, asi como el dashboard administrativo que permitira a correos de guatemala poder ver el estado de todas las consultas realizadas por nuestros clientes, ademas de un ejemplo de como comprobar la funcionalidad. 
+
+
+Messaging will be used to connect it to a request control platform, technical support, and case management, allowing for efficient tracking of customer inquiries. This will enable quicker and more efficient responses to their questions.
+
+Use Case:
+Log in to Facebook with the evaluator user credentials:
+User: 89462441
+Password: developer01%
+Send a greeting message to a channel enabled via the API on our application page: Facebook Profile.
+Select an option from our bot to interact with the customer.
+To verify the bot platform's functionality, log in to Chatbot Platform using:
+User: prueba@prueba.net
+Password: prueba%2025
+Optional:
+If using the application portal Chatbot Platform, navigate to "Cases in Progress."
+In this menu, you will find an option to view conversation details with customers.
+By clicking the "Details" button, you can see the message history with the bot.
+You can also manage the entire case, create tasks, view the number of tasks created for that inquiry, and track their status.
+This allows agents to handle complex customer requests while maintaining full communication traceability.
+Additionally, the full message history between the customer and the bot can be reviewed. The bot can receive inquiries via Meta (WhatsApp and Messenger - Facebook API).
+When a customer sends a message to one of our channels, it is captured by the webhook and forwarded to our platform for review and response.
+
+The attached screenshot displays all these options, along with the administrative dashboard, which allows Correos de Guatemala to track the status of all customer inquiries and provides an example of how to verify the functionality.
 
 
 nuevo token: EAARmKPZCahegBO6bQPehSfbqlKGWFuDiEgTQPIwg0pZAVNY50XzKAH8bwiZA24qjEWu1qdl90Lst6Ib8CGWr1g7x3b3fbofBEYs928tu3TZCKlDDOMdtZBLr3ZByetGoOu5mcDX0rRnte2Eskv6amZBENMjvy12X0DRz3fFPZBwYJQDQ6KJYk0vgaj8gZC641t68QVAZDZD

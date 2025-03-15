@@ -32,7 +32,7 @@ namespace CAPA_NEGOCIO.IA
 						await SendResponseToWhatsApp(userMessage.UserId, response, isWithIaResponse, attach_Files);
 						break;
 					case "MESSENGER":
-						await SendResponseToMessengerAsync(userMessage.UserId, response);
+						await SendResponseToMessengerAsync(userMessage.UserId, response, isWithIaResponse, attach_Files);
 						break;
 					default:
 						Console.WriteLine("Canal no reconocido.");
@@ -265,7 +265,7 @@ namespace CAPA_NEGOCIO.IA
 				return $"Exception: {ex.Message}";
 			}
 		}
-		public async Task<string> SendDeliveryReceipt(string messageId, string userId)
+		public async Task<string> SendDeliveryReceipt(string messageId, string userId, bool isCaseWithBotResponse = true)
 		{
 			try
 			{
@@ -275,22 +275,22 @@ namespace CAPA_NEGOCIO.IA
 				var content = new StringContent(JsonConvert.SerializeObject(new
 				{
 					messaging_product = "whatsapp",
-					status = "delivered",
-					message_id = messageId,
-					to = "+" + userId.Replace("+", "")
+					status = "read",
+					message_id = messageId
 				}), Encoding.UTF8, "application/json");
+				
+				// Enviar la solicitud y capturar la respuesta
+				string numberIdentification = isCaseWithBotResponse ? "IANumberIdentification" : "NumberIdentification";
+
+				// Enviar la solicitud y capturar la respuesta
+			
 
 				// Configurar el encabezado de autorización
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
 					"Bearer",
 					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverWhatsApp")
 				);
-
-				// Enviar la solicitud
-				var responseMessage = await client.PostAsync(
-					SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageWhatsAppServices"),
-					content
-				);
+				var responseMessage = await client.PostAsync(GetMetaApiRoute(numberIdentification), content);
 
 				// Leer el contenido de la respuesta
 				var responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -355,7 +355,7 @@ namespace CAPA_NEGOCIO.IA
 			}
 		}
 
-		public async static Task<string> SendResponseToMessengerAsync(string userId, string response)
+		public async static Task<string> SendResponseToMessengerAsync(string userId, string response, bool isWithIaResponse = true, List<ModelFiles>? attach_Files = null)
 		{
 			try
 			{
@@ -365,8 +365,9 @@ namespace CAPA_NEGOCIO.IA
 					recipient = new { id = userId },
 					message = new { text = response }
 				}), Encoding.UTF8, "application/json");
+				string identificationPage  =  isWithIaResponse ? "BeaverIAMessenger" : "BeaverMessenger";
 
-				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "BeaverMessenger"));
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, identificationPage));
 				client.PostAsync(SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "HostMessageMessengerServices"), content).Wait();
 
 				return "OK";

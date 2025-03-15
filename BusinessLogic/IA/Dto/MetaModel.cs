@@ -8,46 +8,39 @@ namespace IAMeta.Dto
 {
     public class MetaModel
     {
-        public string Field { get; set; }
-        public MessageValue Value { get; set; }
+        public string Object { get; set; }
+        public List<Entry> Entry { get; set; }
     }
 
-    public class MessageValue
+    public class Entry
     {
-        [JsonPropertyName("sender")]
-        public User Sender { get; set; }
+        public long Time { get; set; }
+        public string Id { get; set; }
+        public List<Messaging> Messaging { get; set; }
+    }
 
-        [JsonPropertyName("recipient")]
-        public User Recipient { get; set; }
-
-        [JsonPropertyName("timestamp")]
-        public string Timestamp { get; set; }
-
-        [JsonPropertyName("message")]
+    public class Messaging
+    {
+        public Sender Sender { get; set; }
+        public Recipient Recipient { get; set; }
+        public long Timestamp { get; set; }
         public Message Message { get; set; }
     }
 
-    public class User
+    public class Sender
     {
-        [JsonPropertyName("id")]
+        public string Id { get; set; }
+    }
+
+    public class Recipient
+    {
         public string Id { get; set; }
     }
 
     public class Message
     {
-        [JsonPropertyName("mid")]
         public string Mid { get; set; }
-
-        [JsonPropertyName("text")]
         public string Text { get; set; }
-
-        [JsonPropertyName("commands")]
-        public List<Command> Commands { get; set; }
     }
 
-    public class Command
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
 }

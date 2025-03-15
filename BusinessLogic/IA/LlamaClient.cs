@@ -18,7 +18,7 @@ namespace CAPA_NEGOCIO
 		{
 			try
 			{
-				bool IsInBlackList = BlackListServices.IsPermitUser(question.UserId);
+				bool IsInBlackList = BlackListServices.IsInBlackList(question.UserId);
 				if (!IsInBlackList)
 				{
 					var ex = new Exception($"Usuario en lista negra {question.Source} - {question.UserId}");
@@ -27,10 +27,17 @@ namespace CAPA_NEGOCIO
 				}
 				bool isWithIaResponse = true;
 				bool isValidProcess = true;
-				if (question.IsMetaApi)
+				if (question.IsMetaWhatsAppApi)
 				{
 					string? iaMetaIdentification = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "IANumberIdentification");
 					string? metaIdentification = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "NumberIdentification");
+					isWithIaResponse = question.ServicesIdentification == iaMetaIdentification;
+					isValidProcess = question.ServicesIdentification == iaMetaIdentification || question.ServicesIdentification == metaIdentification;
+				}
+				if (question.IsMessenger)
+				{
+					string? iaMetaIdentification = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "IAMessengerNumberIdentification");
+					string? metaIdentification = SystemConfig.AppConfigurationValue(AppConfigurationList.MettaApi, "MessengerNumberIdentification");
 					isWithIaResponse = question.ServicesIdentification == iaMetaIdentification;
 					isValidProcess = question.ServicesIdentification == iaMetaIdentification || question.ServicesIdentification == metaIdentification;
 				}

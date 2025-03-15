@@ -1,0 +1,20 @@
+{
+  "object": "page",
+  "entry": [
+    {
+      "time": 1741979213015,
+      "id": "462605797129212",
+      "messaging": [
+        {
+          "sender": { "id": "5029312800504630" },
+          "recipient": { "id": "462605797129212" },
+          "timestamp": 1741979092249,
+          "message": {
+            "mid": "m__9j20hJf0y5KPBNY5vOwj2yi9lgpp_Ri1Axbf1a38kdJGIdDPFbJsAz26YFwRUZHY-OzNFq-b_yPW9gkvGP43w",
+            "text": "prueba"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -47,9 +47,9 @@ namespace UI.SSMP_IA.ApiControllers
 					_ => throw new InvalidOperationException("Unsupported platform")
 				};
 
-				if (unifiedMessage != null)
+				if (unifiedMessage != null && unifiedMessage?.Text != null &&unifiedMessage?.Text?.Trim() != "")
 				{
-					switch (unifiedMessage.Source.ToLower())
+					switch (unifiedMessage?.Source?.ToLower())
 					{
 						case "webapi":
 							// Procesar inmediatamente para webapi

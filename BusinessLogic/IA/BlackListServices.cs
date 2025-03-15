@@ -11,7 +11,7 @@ namespace BusinessLogic.IA
     public class BlackListServices
     {
         public static string BlackListDefault = "";
-        public static bool IsPermitUser(string? userId)
+        public static bool IsInBlackList(string? userId)
         {
             string blackList = Transactional_Configuraciones
                 .GetParam(ConfiguracionesThemeEnum.TEMPLATE_NAME, BlackListDefault)?

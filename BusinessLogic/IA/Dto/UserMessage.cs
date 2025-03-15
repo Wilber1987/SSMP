@@ -22,7 +22,8 @@ namespace CAPA_NEGOCIO
 		public string? MessageIA { get; set; }
 		public bool? WithAgentResponse { get; set; } = false;
 		public int? Id_case { get; set; }
-		public bool IsMetaApi { get { return Source == "WhatsApp"; } }
+		public bool IsMetaWhatsAppApi { get { return Source == "WhatsApp"; } }
+		public bool IsMessenger { get { return Source == "Messenger"; } }
 		public bool IsWithIaResponse { get; set; }
 		public ModelFiles? Attach { get; set; }
 		public static async Task<UserMessage?> ProcessWhatsAppMessage(dynamic message)
@@ -34,7 +35,7 @@ namespace CAPA_NEGOCIO
 				//var whatsAppMessage = message?.entry[0]?.changes[0]?.value?.messages[0];
 				LoggerServices.AddAction("nuevo mensaje: \n" + message.ToString(), 1);
 				WhatsappBusinessAccount whatsAppMessage = JsonConvert.DeserializeObject<WhatsappBusinessAccount>(message.ToString());
-			    Message messageEv = whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages[0];
+			    Message? messageEv = whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages != null ? whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages.First() : null;
 				if (whatsAppMessage == null || messageEv == null)
 					return null;
 
@@ -52,6 +53,7 @@ namespace CAPA_NEGOCIO
 				} 
 				return new UserMessage
 				{
+					Id = messageEv?.Id,
 					Source = "WhatsApp",
 					UserId = messageEv?.From,
 					Text = mensaje,
@@ -125,17 +127,20 @@ namespace CAPA_NEGOCIO
 			try
 			{
 				IAMeta.Dto.MetaModel metaModel = JsonConvert.DeserializeObject<IAMeta.Dto.MetaModel>(message.ToString());
-				var entry = metaModel?.Value;
-				var messagingEvent = entry?.Message;
+				var entry = metaModel?.Entry?.First();
+				var messagingEvent = entry?.Messaging.First();
 				if (messagingEvent == null)
 					return null;
 
 				return new UserMessage
 				{
+					Id = entry?.Id,
 					Source = "Messenger",
-					UserId = entry?.Sender?.Id,
-					Text = messagingEvent?.Text,
-					Timestamp = DateTime.Now // O extraer del mensaje
+					UserId = messagingEvent?.Sender?.Id,
+					Text = messagingEvent?.Message?.Text,
+					Timestamp = DateTime.Now, // O extraer del mensaje
+					ServicesIdentification = messagingEvent?.Recipient?.Id,
+					IsWithIaResponse = true
 				};
 			}
 			catch
