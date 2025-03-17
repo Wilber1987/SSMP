@@ -50,6 +50,7 @@ namespace CAPA_NEGOCIO.MAPEO
 		public string? Uid { get; set; }
 		// [OneToOne(TableName = "Tbl_Comments", KeyColumn = "Id_Mail", ForeignKeyColumn = "Id_Mail")]
 		// public Tbl_Comments? Tbl_Comments  { get; set; }
+		
 	}	
 	public enum MailState
 	{

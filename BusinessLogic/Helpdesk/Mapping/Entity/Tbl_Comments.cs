@@ -58,34 +58,34 @@ namespace CAPA_NEGOCIO.MAPEO
 				// Verificar si el caso requiere integración con la API
 				if (IsWithApi(Tbl_Case))
 				{
-                    // Ejecutar el envío a la API en un hilo separado para que no bloquee la respuesta
-                    _ = Task.Run(async () =>
-                    {
-                        try
-                        {
-                            Tbl_Profile? tbl_Profile = new Tbl_Profile() { Id_Perfil = Tbl_Case.Id_Perfil }.Find<Tbl_Profile>();
-                            string response = await new ResponseAPI().SendResponseToUser(new UserMessage
-                            {
-                                Source = Tbl_Case?.MimeMessageCaseData?.PlatformType,
-                                UserId = tbl_Profile?.Correo_institucional,
-                            }, Body ?? "", Tbl_Case!.MimeMessageCaseData!.isWithIaResponse, Attach_Files);
+					// Ejecutar el envío a la API en un hilo separado para que no bloquee la respuesta
+					_ = Task.Run(async () =>
+					{
+						try
+						{
+							Tbl_Profile? tbl_Profile = new Tbl_Profile() { Id_Perfil = Tbl_Case.Id_Perfil }.Find<Tbl_Profile>();
+							string response = await new ResponseAPI().SendResponseToUser(new UserMessage
+							{
+								Source = Tbl_Case?.MimeMessageCaseData?.PlatformType,
+								UserId = tbl_Profile?.Correo_institucional,
+							}, Body ?? "", Tbl_Case!.MimeMessageCaseData!.isWithIaResponse, Attach_Files);
 
-                            if (response.ToUpper() == "OK")
-                            {
-                                Tbl_Case!.MimeMessageCaseData!.WithAgent = true;
-                                Tbl_Case!.MimeMessageCaseData!.NewMessage = false;
-                                Tbl_Case.Update();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LoggerServices.AddMessageError($@"Error respondiendo enviando respuesta a la API: {ex.Message},
+							if (response.ToUpper() == "OK")
+							{
+								Tbl_Case!.MimeMessageCaseData!.WithAgent = true;
+								Tbl_Case!.MimeMessageCaseData!.NewMessage = false;
+								Tbl_Case.Update();
+							}
+						}
+						catch (Exception ex)
+						{
+							LoggerServices.AddMessageError($@"Error respondiendo enviando respuesta a la API: {ex.Message},
 								 (case: {Tbl_Case?.Id_Case}, 
 								 plataforma: {Tbl_Case?.MimeMessageCaseData?.PlatformType})"
-                            , ex);
-                            // Manejo de errores en la tarea en segundo plano (puedes loguearlo si es necesario)						
-                        }
-                    });
+							, ex);
+							// Manejo de errores en la tarea en segundo plano (puedes loguearlo si es necesario)						
+						}
+					});
 				}
 
 				// Prueba de guardar y eliminar registros
@@ -140,6 +140,7 @@ namespace CAPA_NEGOCIO.MAPEO
 			}.Save();
 		}
 
+		
 		public List<Tbl_Comments> GetComments()
 		{
 			Tbl_Case Tbl_Case = new Tbl_Case() { Id_Case = Id_Case }.Find<Tbl_Case>();

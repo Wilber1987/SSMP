@@ -11,7 +11,7 @@ window.addEventListener("load", async () => {
     setTimeout(async () => {
         // @ts-ignore
         const DOMManager = new ComponentsManager({ MainContainer: Main });
-    // @ts-ignore
+        // @ts-ignore
         Main.append(WRender.createElement(StylesControlsV2));
         // @ts-ignore
         Aside.append(WRender.Create({ tagName: "h3", innerText: "Mantenimiento de Catalogos" }));
@@ -38,7 +38,8 @@ function ElementTab(DOMManager, Model) {
                     Filter: true,
                     FilterDisplay: true,
                     Add: true,
-                    Edit: true
+                    Edit: true,
+                    Show: true
                 }
             });
             return Table;

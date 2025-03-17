@@ -145,11 +145,10 @@ namespace BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operati
 					string? destinatarioString = destinatariosAutomaticReportConfig.Valor;
 					List<string> destinatarios = destinatarioString?.Split(',').ToList() ?? [];
 					string body = $"REPORTE DE NOTIFICACIONES ENVIADAS DEL {firstDayOfMonth} AL {lastDayOfMonth}";
-					destinatarios.ForEach(destinatario =>
-					{
-						NotificationsReportBuilder.EnviarReporte(destinatario,
-						$"REPORTE DE NOTIFICACIONES ENVIADAS", body, notificaciones);
-					});
+
+					NotificationsReportBuilder.EnviarReporte(destinatarios,
+					$"REPORTE DE NOTIFICACIONES ENVIADAS", body, notificaciones);
+
 				}
 			}
 			catch (Exception ex)

@@ -16,52 +16,47 @@ namespace WhatsAppApi
 		public string type { get; set; } = "template";
 		public Template template { get; set; }
 
-		public WhatsAppMessage(string to, string templateName, string languageCode, string? imageParam = null, params string?[] parameters)
+		private static bool IsImageHeader(string imageParam)
 		{
-			this.to = to;
-			template = new Template
-			{
-				name = templateName,
-				language = new Language { code = languageCode },
-				components =
-				[
-					new Component
-					{
-
-						type = "body",
-						parameters = CreateParameters(parameters)
-					}
-				]
-			};
-			if (imageParam != null)
-			{
-				template.components.Add(new Component
-				{
-
-					type = "header",
-					parameters = [new Parameter
-					{
-						type= "img",
-						image = imageParam
-					}]
-				});
-			}
+			return imageParam.Contains(".jpg") || imageParam.Contains(".png");
 		}
+
 		public WhatsAppMessage(string to, string templateName, string languageCode, List<NotificationsParams>? dataSource, string? imageParam = null)
 		{
 			this.to = to;
 			var components = new List<Component> { };
 			if (imageParam != null)
 			{
+				List<Parameter> parameters = [];
+				if (IsImageHeader(imageParam))
+				{
+					parameters.Add(new Parameter
+					{
+						type = "IMAGE",
+						image = new { link = imageParam }
+					});
+				}
+				else if (IsVideoHeader(imageParam))
+				{
+					parameters.Add(new Parameter
+					{
+						type = "video",
+						video = new { link = imageParam }
+					});
+				}
+				else if (IsVideDocumentHeader(imageParam))
+				{
+					parameters.Add(new Parameter
+					{
+						type = "document",
+						document = new { link = imageParam }
+					});
+				}
 				components.Add(new Component
 				{
 
 					type = "header",
-					parameters = [new Parameter
-					{
-						type= "IMAGE",
-						image =  new { link= imageParam }
-					}]
+					parameters = parameters.ToArray()
 				});
 			}
 			components.Add(new Component { type = "body", parameters = CreateParameters(dataSource ?? []) });
@@ -73,43 +68,15 @@ namespace WhatsAppApi
 				components = components
 			};
 		}
-		/*public WhatsAppMessage(string to, string templateName, string languageCode, object dataSource)
-		{
-			this.to = to;
-			template = new Template
-			{
-				name = templateName,
-				language = new Language { code = languageCode },
-				components = new[]
-				{
-					new Component
-					{
-						
-						type = "body",
-						parameters = CreateParametersFromObject(dataSource)
-					}
-				}
-			};
-		}*/
-		private Parameter[] CreateParametersFromObject(object dataSource)
-		{
-			// Obtener las propiedades públicas de la clase y sus valores
-			var properties = dataSource.GetType().GetProperties();
-			var parameters = new Parameter[properties.Length];
 
-			for (int i = 0; i < properties.Length; i++)
-			{
-				// Obtener el valor de la propiedad
-				var value = properties[i].GetValue(dataSource)?.ToString() ?? string.Empty;
+		private bool IsVideDocumentHeader(string imageParam)
+		{
+			return imageParam.Contains(".pdf");
+		}
 
-				// Crear un nuevo parámetro con el valor
-				parameters[i] = new Parameter
-				{
-					type = "text",
-					text = value
-				};
-			}
-			return parameters;
+		private bool IsVideoHeader(string imageParam)
+		{
+			return imageParam.Contains(".mp4") || imageParam.Contains(".avi");
 		}
 
 		private Parameter[] CreateParameters(List<NotificationsParams> values)
@@ -124,16 +91,6 @@ namespace WhatsAppApi
 			return parameters;
 		}
 
-
-		private Parameter[] CreateParameters(string[] values)
-		{
-			var parameters = new Parameter[values.Length];
-			for (int i = 0; i < values.Length; i++)
-			{
-				parameters[i] = new Parameter { type = "text", text = values[i] };
-			}
-			return parameters;
-		}
 		public static string ObtenerExtensionPorDepartamento(string? departamento)
 		{
 			// Diccionario que mapea departamentos a países y extensiones telefónicas
@@ -228,6 +185,8 @@ namespace WhatsAppApi
 
 	public class Parameter
 	{
+		public object? video { get; set; }
+		public object? document { get; set; }
 		public string? type { get; set; } // Tipo de parámetro (ejemplo: "text")
 		public string? text { get; set; } // Valor del parámetro
 		public object? image { get; set; }

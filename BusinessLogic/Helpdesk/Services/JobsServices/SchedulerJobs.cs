@@ -56,7 +56,7 @@ namespace BackgroundJob.Cron.Jobs
 				{
 					await new IMAPCaseServices().chargeAutomaticCase();
 				}				
-				await new SMTPCaseServices().sendCaseMailNotificationsAsync();
+				await new SmtpHelpdeskServices().sendCaseMailNotificationsAsync();
 			}
 			catch (System.Exception ex)
 			{
@@ -82,7 +82,7 @@ namespace BackgroundJob.Cron.Jobs
 			//CARGA AUTOMATICA DE CASOS
 			try
 			{
-				await new SMTPCaseServices().sendCaseMailNotificationsAsync();
+				await new SmtpHelpdeskServices().sendCaseMailNotificationsAsync();
 				//ENVIO DE NOTIFICACIONES
 				await NotificationSenderOperation.SendNotificationsAsync();
 			}

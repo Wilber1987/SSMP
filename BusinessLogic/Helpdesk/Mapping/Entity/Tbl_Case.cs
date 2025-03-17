@@ -5,6 +5,7 @@ using CAPA_DATOS.Services;
 using MimeKit;
 using CAPA_NEGOCIO.Gestion_Mensajes.Operations;
 using DatabaseModelNotificaciones;
+using BusinessLogic.Helpdesk.Services.MAILServices;
 
 namespace CAPA_NEGOCIO.MAPEO
 {
@@ -165,6 +166,7 @@ namespace CAPA_NEGOCIO.MAPEO
 				//RecoveryEmbebedCidImages(chat);
 				//guarda en base de dato el caso
 				Save();
+				CreateAsignationsByService(null);
 				CommitGlobalTransaction();
 				return true;
 			}
@@ -473,7 +475,8 @@ con número {2}";
 			if (this.Tbl_Servicios != null)
 			{
 				new Tbl_Profile_CasosAsignados { Id_Case = Id_Case }.Delete();
-				new Tbl_Servicios_Profile { Id_Servicio = this.Tbl_Servicios?.Id_Servicio }.Get<Tbl_Servicios_Profile>().ForEach(sp =>
+				var asignaciones = new Tbl_Servicios_Profile { Id_Servicio = this.Tbl_Servicios?.Id_Servicio }.Get<Tbl_Servicios_Profile>();
+				asignaciones.ForEach(sp =>
 				{
 					new Tbl_Profile_CasosAsignados
 					{
@@ -481,6 +484,7 @@ con número {2}";
 						Id_Perfil = sp.Id_Perfil,
 						Fecha = DateTime.Now
 					}.Save();
+					
 					if (nuevaTarea != null)
 					{
 						new Tbl_Participantes
@@ -489,8 +493,8 @@ con número {2}";
 							Id_Perfil = sp.Id_Perfil
 						}.Save();
 					}
-
-				});
+				});		
+				SendToMailListServices.CreateMailForAsignedCase(asignaciones.Select(asig => asig.Tbl_Profile).ToList(), this);		
 			}
 
 		}

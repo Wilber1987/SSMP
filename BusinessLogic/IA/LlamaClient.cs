@@ -346,6 +346,7 @@ Selecciona una opción";
 						instaCase.Id_Servicio = servicios?.Id_Servicio;
 						instaCase.Tbl_Servicios = servicios;
 						instaCase.Update();
+						instaCase.CreateAsignationsByService(null);
 					}
 					return instaCase;
 				}

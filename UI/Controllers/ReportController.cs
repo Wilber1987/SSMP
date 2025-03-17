@@ -18,7 +18,7 @@ namespace API.Controllers
 			try
 			{
 				string body = $"REPORTE DE NOTIFICACIONES ENVIADAS DEL {reportRequest.FirstDate} AL {reportRequest.LastDate}";
-				NotificationsReportBuilder.EnviarReporte(reportRequest.Mail, $"REPORTE DE NOTIFICACIONES ENVIADAS", body, reportRequest.Notificaciones);
+				NotificationsReportBuilder.EnviarReporte([reportRequest.Mail], $"REPORTE DE NOTIFICACIONES ENVIADAS", body, reportRequest.Notificaciones);
 				return StatusCode(200, new ResponseService
 				{
 					status= 200,

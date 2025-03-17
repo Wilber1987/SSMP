@@ -21,7 +21,7 @@ class CaseDashboardComponent extends HTMLElement {
         //console.log(Dataset);
         super();
         this.Dataset = [];
-        
+
         this.append(this.WStyle);
         this.OptionContainer = WRender.Create({ className: "options-container" });
         this.append(StylesControlsV2.cloneNode(true), StylesControlsV3.cloneNode(true));
@@ -43,8 +43,8 @@ class CaseDashboardComponent extends HTMLElement {
             tagName: 'input', type: 'button',
             className: 'Block-Primary', value: TITLE_1, onclick: () =>
                 this.drawReport(
-                    WArrayF.GroupArray(casosMap, ["Dependencia", "Estado"], ["casos"]),
-                    TITLE_1
+                    casosMap,
+                    ["Dependencia", "Estado"]
                 )
         }))
 
@@ -53,19 +53,43 @@ class CaseDashboardComponent extends HTMLElement {
             tagName: 'input', type: 'button',
             className: 'Block-Primary', value: TITLE_2, onclick: () =>
                 this.drawReport(
-                    WArrayF.GroupArray(casosEtiquetadosPorMes, ["Mes", "Estado"], ["casos"]),
-                    TITLE_2
+                    casosEtiquetadosPorMes,
+                    ["Mes", "Estado"]
                 )
-        }))       
+        }))
+
+        const TITLE_3 = "Plataforma por mes";
+        this.OptionContainer.append(WRender.Create({
+            tagName: 'input', type: 'button',
+            className: 'Block-Primary', value: TITLE_3, onclick: () =>
+                this.drawReport(
+                    casosEtiquetadosPorMes,
+                    ["Mes", "Plataforma"]
+                )
+        }))
     }
-    drawReport = (/** @type {any[]} */ MapData, /**@type {String} */ title, /**@type {Object} */ model) => {
-        console.log(this.FilterOptions?.FilterControls);
+    drawReport = (/** @type {any[]} */ Dataset, /** @type {any[]} */ groupsParam) => {       
         this.append(new WModalForm({
+            FullScreen: true,
             ObjectModal: new WReportComponent({
-                Dataset: MapData,
-                Logo: "/Media/img/logo.png",
-                Header: title,
-                SubHeader: `Del ${this.FilterOptions?.FilterControls[0].childNodes[0].value} al ${this.FilterOptions?.FilterControls[0].childNodes[1].value}`,
+                Dataset: Dataset,
+                ModelObject: new Tbl_Case_ModelComponent({
+                    Descripcion: undefined, Titulo: undefined,
+                    Cat_Dependencias: undefined,
+                    // @ts-ignore
+                    Dependencia: { type: "text" },
+                    Servicio: { type: "text" },
+                    Mes: { type: "text" },
+                    Plataforma: { type: "text" },
+                    UsaAgente: { type: "text" },
+                    casos: { type: "text" }
+                }),
+                GroupParams: groupsParam,
+                EvalParams: ["Estado"],
+                exportPdf: true,
+                //Logo: "/Media/img/logo.png",
+                //Header: title,
+                //SubHeader: `Del ${this.FilterOptions?.FilterControls[0].childNodes[0].value} al ${this.FilterOptions?.FilterControls[0].childNodes[1].value}`,
                 PageType: PageType.OFICIO_HORIZONTAL,
                 //ModelObject: model
             })
@@ -173,13 +197,17 @@ class CaseDashboardComponent extends HTMLElement {
     buildCharts() {
         const casosMap = this.Dataset.map(x => {
             x.Dependencia = x.Cat_Dependencias?.Descripcion ?? "No asignado";
+            x.Servicio = x.Tbl_Servicios?.Descripcion_Servicio ?? "No asignado";
+            x.Mes = `${x.Fecha_Inicio.getMonthFormatEs()} ${new Date(x.Fecha_Inicio).getFullYear()}`;
+            x.Plataforma = x.MimeMessageCaseData.PlatformType;
+            x.UsaAgente = x.MimeMessageCaseData.WithAgent;
             x.casos = 1;
             return x;
         });
         const casosProcesados = this.Dataset.filter(c => !c.Estado.includes("Pendiente") && !c.Estado.includes("Solicitado")
         ).map(c => ({
             Estado: c.Estado,
-            Servicio: c.Tbl_Servicios?.Descripcion_Servicio ??  "No asignado",
+            Servicio: c.Tbl_Servicios?.Descripcion_Servicio ?? "No asignado",
             Caso: "Caso",
             Mes: c.Fecha_Inicio.getMonthFormatEs(),
             casos: 1
@@ -189,6 +217,10 @@ class CaseDashboardComponent extends HTMLElement {
             Estado: c.Estado,
             Caso: "Caso",
             Mes: `${c.Fecha_Inicio.getMonthFormatEs()} ${new Date(c.Fecha_Inicio).getFullYear()}`,
+            Servicio : c.Tbl_Servicios?.Descripcion_Servicio ?? "No asignado",
+           //Mes : c.Fecha_Inicio.getMonthFormatEs(),
+            Plataforma : c.MimeMessageCaseData.PlatformType,
+            UsaAgente : c.MimeMessageCaseData.WithAgent,
             casos: 1
         }));
         //console.log(casosEtiquetadosPorMes);

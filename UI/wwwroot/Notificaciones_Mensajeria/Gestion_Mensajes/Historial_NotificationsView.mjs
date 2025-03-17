@@ -190,7 +190,7 @@ class Historial_NotificationsView extends HTMLElement {
 					<td class="Notification-title">Departamento</td>
 					<td class="Notification-title">Municipio</td>
 					<td class="Notification-title">Agencia</td>
-					<td class="Notification-title" width="300px">Mensaje</td>
+					<!-- <td class="Notification-title" width="300px">Mensaje</td> -->
 					<td class="Notification-title">Correlativo</td>
 					<td class="Notification-title">Fecha de ingreso de notificación</td>
 					<td class="Notification-title">DPI</td>
@@ -237,7 +237,7 @@ class Historial_NotificationsView extends HTMLElement {
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Departamento") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Municipio") },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Agencia") },
-				{ tagName: "td", class: "Notification-value", innerText: Notification.Mensaje ?? "-" },
+				//{ tagName: "td", class: "Notification-value", innerText: Notification.Mensaje ?? "-" },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("Correlativo") },
 				//{ tagName: "td", class: "Notification-value", innerText: new DateTime(Notification.GetParam("fecha del envió de notificación")).toDDMMYYYY() },
 				{ tagName: "td", class: "Notification-value", innerText: Notification.GetParam("fecha del envió de notificación") },
