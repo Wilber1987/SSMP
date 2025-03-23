@@ -1,31 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BusinessLogic.IA.Model;
 using BusinessLogic.Rastreo.Model;
 using BusinessLogic.SystemDocuments.Models;
 using CAPA_DATOS;
-using CAPA_NEGOCIO.IA;
 using CAPA_NEGOCIO.MAPEO;
 
 namespace BusinessLogic.IA
 {
 	public class ProntManager
 	{
-		public static string[] ValidCodes = Tbl_Servicios.GetServicesCodes(); /*{
-			"RASTREO_Y_SEGUIMIENTOS",
-			"INFORMACION_ENTREGAS_SEGUIMIENTOS",
-			"INFORMACION_SOBRE_DOCUMENTOS",
-			"QUEJAS_POR_RETRASOS",
-			"QUEJAS_POR_IMPORTES",
-			"QUEJAS_POR_ESTAFA",
-			"CONSULTA_DE_HORARIOS",
-			"CONSULTA_DE_CONTACTO",
-			"EVENTOS",
-			"SOLICITUD_DE_ASISTENCIA",
-			"ASISTENCIA_GENERAL"
-		};*/
+
 		public static string ProntValidation(string? prontTypes)
 		{
 			//
@@ -95,9 +78,9 @@ namespace BusinessLogic.IA
 			}.Get<Tbl_Pronts>().Select(p => p.Pront_Line).ToList());
 		}
 
-		public static string CrearPrompt(string pregCliente, string? trakingNumber, List<TrackingHistory> historial, string ProntType)
+		public static string CrearPrompt(string pregCliente, Tbl_Case dCase)
 		{
-			return $@"{ProntAdapter(pregCliente)}		
+			return $@"{ProntAdapter(pregCliente, dCase)}		
 							
 			**Reglas obligatorias al contestar:**
 				1- Contesta breve y directo, adaptándote como un agente virtual de correos de guatemala.
@@ -115,6 +98,11 @@ namespace BusinessLogic.IA
 			string ultimaUbicacion = "Información no disponible";
 			DateTime? ultimaFecha = null;
 			string? numeroSeguimiento = trakingNumber;
+
+			bool isEntregado = false;
+			bool isProcesadoPorSat = false;
+			bool isDisponibleParaRecoger = false;
+
 			// Validar si el historial contiene datos
 			if (historial != null && historial.Any())
 			{
@@ -122,82 +110,97 @@ namespace BusinessLogic.IA
 				var ultimaEntrada = historial.OrderByDescending(x => x.Fecha_Evento).FirstOrDefault();
 				if (ultimaEntrada != null)
 				{
-					ultimaUbicacion = ultimaEntrada.Oficina_Destino;
-					ultimaFecha = ultimaEntrada.Fecha_Evento;
-					numeroSeguimiento = ultimaEntrada.Tracking;
+					isEntregado = ultimaEntrada.Entregado == "Envio Entregado";
+					isProcesadoPorSat = ultimaEntrada.Citacion_Entregado != null
+						&& ultimaEntrada.Citacion_Entregado.Trim() != ""
+						&& !isEntregado;
+					isDisponibleParaRecoger = IsDisponibleParaRecoger(ultimaEntrada?.Entregado ?? "");
+					ultimaUbicacion = ultimaEntrada?.Oficina_Destino ?? "";
+					ultimaFecha = ultimaEntrada?.Fecha_Evento;
+					numeroSeguimiento = ultimaEntrada?.Tracking;
 				}
 			}
 			if (numeroSeguimiento != null && historial?.Count > 0)
 			{
-				responseUltimaHubicacionText = $@"Es un placer procesar tu solicitud, el numero de seguimiento  ""{numeroSeguimiento}"" es válido y esta en nuestro sistemas:				
-	- Última ubicación registrada: {ultimaUbicacion}. {(ultimaFecha.HasValue ? $"(Fecha: {ultimaFecha.Value:dd/MM/yyyy HH:mm})" : "")}""
-				";
+				if (isEntregado)
+				{
+					responseUltimaHubicacionText = "Tu paquete ha sido entregado.";
+				}
+				else if (!isEntregado && isProcesadoPorSat)
+				{
+					responseUltimaHubicacionText = "Tu paquete ha sido seleccionado por SAT recibirás una notificación cuando esté disponible.";
+				}
+				else if (isDisponibleParaRecoger)
+				{
+					responseUltimaHubicacionText = "Tu paquete se encuentra en bodega recógelo en agencia 7A Avenida 12-11, Cdad.  Guatemala. Horario de atención: 9:00 a";
+				}
+				else
+				{
+					responseUltimaHubicacionText = $@"Tu paquete aun no esta disponible, Última ubicación registrada: {ultimaUbicacion}. {(ultimaFecha.HasValue ? $"(Fecha: {ultimaFecha.Value:dd/MM/yyyy HH:mm})" : "")}""";
+				}
+
+
+
 			}
 			else if (numeroSeguimiento != null && historial?.Count == 0)
 			{
 				responseUltimaHubicacionText = $@"El número de seguimiento ""{numeroSeguimiento}"" no es valido o no esta registrado en nuestro sistema, puede hacer la consulta más adelante por si hay algun retrazo en el registro del sistema y si esta seguro que el paquete fue enviado, favor verificar que haya digitado bien el número y en caso que este sea correcto, favor pongase en contacto con la persona que envio el paquete o con su proveedor";
 			}
-			return responseUltimaHubicacionText;
+			return responseUltimaHubicacionText + OptionalActionAsistenciaOrMenu();
 		}
+
+		public static string OptionalActionAsistenciaOrMenu()
+		{
+			return " \n\nTambien puedes escribir \"5\" para solicitar asistencia o \"Menu\" para otras consultas.";
+		}
+
 
 		/*public static string ServicesEvaluatorPrompt(string text)
 		{
 			return GetPront("SERVICES_PRONT_VALIDATOR").Replace("{text}", text);
 		}*/
 
-		internal static string? GetSaludo()
-		{
 
-
-			return @"¡Hola! Bienvenido a Correos de Guatemala. Soy tu asistente virtual, listo para ayudarte. Por favor, cuéntame en qué puedo asistirte hoy.					
-Puedo ayudarte con lo siguiente:
-	1 - Consulta el estado de tu paquete.
-	2 - Consultar requisitos para recoger tu paquete. 
-	3 - Desaduanaje.
-	4 - Horario de atención en agencias.
-	5 - Comunicarme con un agente de servicio. 
-
-¡Ingresa un número de opción ¡";
-		}
 
 		internal static string? Get_Cierre()
 		{
 			return "Es un placer poderte ayudar, si necesitas algo más no dudes en preguntar!";
 		}
-		public static string ProntAdapter(string? consulta)
+		public static string? GetSaludo()
 		{
-			if (consulta == "5")
-			{
-				return "SOLICITUD_DE_ASISTENCIA";
-			}
-			else if (consulta == "4")
-			{
-				return "Quiero saber sobre los horario de atención en agencias";
-			}
-			else if (consulta == "3")
-			{
-				return "Información sobre esaduanaje";
-			}
-			else if (consulta == "2")
-			{
-				return "Consultar requisitos para recoger mi paquete";
-			}
-			else if (consulta == "1")
-			{
-				return "Necesito información sobre el estado de mi paquete";
-			}
-			else if (consulta?.ToUpper() == "MENU")
-			{
-				return "MENU";
-			}
-			else
-			{
-				return consulta ?? "ASISTENCIA_GENERAL";
-			}
+			return GetStringMenu(BotMenu.GetMainMenu());
 		}
-		internal static string? GetAutomaticResponse(string consulta)
+		
+		private static string? GetStringMenu(List<BotMenu>? menus) 
 		{
-			return consulta switch
+			if (menus?.Count == 0) return null;
+			
+		    return string.Join("\n", menus!
+		    	.Select(m => 
+		    		$"{(m.Code != null ? m.Code : "")} {(m.Descripcion != null && m.Descripcion.Trim() != "" &&  m.Code != null ? " - " + m.Descripcion :  (m.Descripcion ?? ""))}"
+		    	));
+		}
+
+		public static string ProntAdapter(string? consulta, Tbl_Case dCase)
+		{
+			(List<BotMenu> menu, bool Found) =BotMenu.GetMenuByCode(consulta ?? "ASISTENCIA_GENERAL", dCase.MimeMessageCaseData?.MenuParentId);
+			var menuItem = menu.First();
+			return menuItem?.CodeAdapter ?? "ASISTENCIA_GENERAL";
+		}
+
+
+		internal static string? GetAutomaticResponse(string consulta, Tbl_Case dCaso)
+		{
+			(List<BotMenu> menu, bool Found) =BotMenu.GetMenuByCode(consulta ?? "ASISTENCIA_GENERAL", dCaso.MimeMessageCaseData?.MenuParentId);
+			//List<BotMenu> menu = BotMenu.GetMenuByCode(consulta, dCaso.MimeMessageCaseData?.MenuParentId);
+			
+			if (menu != null && menu.Count > 0)
+			{
+				dCaso.MimeMessageCaseData!.MenuParentId = menu.First()?.ParentMenuId;
+			}			
+			return GetStringMenu(menu);
+			
+			/*return consulta switch
 			{
 				"1" => "Ingresa tu número de tracking.",
 				"2" => GetDocumentsProntCategory("INFORMACION_SOBRE_DOCUMENTOS", "REQUICITOS_PAQUETES", false) + "\n Escribe \"Menu\" para más opciones",
@@ -205,12 +208,12 @@ Puedo ayudarte con lo siguiente:
 				"4" => GetDocumentsProntCategory("CONSULTA_DE_CONTACTO", "HORARIO", false) + "\n Escribe \"Menu\" para más opciones",
 				"5" => "Entendido. Te pondré en contacto con un agente de servicio al cliente para que puedan asistirte directamente. Por favor, espera un momento.",
 				_ => null
-			};
+			};**/
 
 		}
 
 
-		
+
 
 		internal static string GetInvalidTrackingResponse(string? invalidTracking)
 		{
@@ -249,5 +252,33 @@ Puedo ayudarte con lo siguiente:
 			"Parece que \"{0}\" no es un código de seguimiento correcto. ¿Puedes intentarlo de nuevo?",
 			"Lamentamos el inconveniente, pero \"{0}\" no parece ser un código de rastreo válido. Verifícalo y vuelve a intentarlo."
 		};
+
+		static bool IsDisponibleParaRecoger(string estado)
+		{
+			// Lista de estados que indican que el artículo NO está disponible para recoger
+			string[] noDisponibles =
+			{
+				"Receive item at office of exchange (Otb)",
+				"Recibe articulo en la oficina de cambio (Inb)",
+				"Registrar dirección destinatario (entrada)",
+				"Return item from customs (Inb)",
+				"No enviado a aduana"
+			};
+
+			// Normaliza el texto a minúsculas para comparación más flexible
+			string estadoNormalizado = estado.ToLower();
+
+			// Verifica si el estado está en la lista de no disponibles
+			foreach (var item in noDisponibles)
+			{
+				if (estadoNormalizado.Contains(item.ToLower()))
+				{
+					return false;
+				}
+			}
+
+			// Si no está en la lista de "No disponibles", se asume que está disponible
+			return true;
+		}
 	}
 }

@@ -612,7 +612,8 @@ con número {2}";
 		public string? PlatformType { get; set; }
 		public bool WithAgent { get; set; }
 		public bool isWithIaResponse { get; set; }
-	}
+        public int? MenuParentId { get;  set; }
+    }
 	enum PlatformTypeEnum
 	{
 		WHATSAPP, MESSENGER, INSTAGRAM, WEBAPP, TELEGRAM, TWITTER, MAIL

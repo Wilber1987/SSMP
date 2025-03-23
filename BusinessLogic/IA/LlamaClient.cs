@@ -8,6 +8,7 @@ using CAPA_DATOS;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
 using DatabaseModelNotificaciones;
+using iText.Kernel.XMP.Options;
 using Newtonsoft.Json;
 
 namespace CAPA_NEGOCIO
@@ -142,6 +143,10 @@ namespace CAPA_NEGOCIO
 					question.MessageIA = ProntManager.GetSaludo();
 					question.Id_case = dCaso.Id_Case;
 					await AddComment(dCaso, question);
+					dCaso.MimeMessageCaseData!.WithAgent = false;
+					dCaso.MimeMessageCaseData!.MenuParentId = 0;
+					dCaso.Update();
+					dCaso.SetPropertyNull("Id_Servicio");
 					return question;
 				}
 				//CUANDO SE ESTA CERRANDO UNA SOLICITUD
@@ -169,7 +174,7 @@ namespace CAPA_NEGOCIO
 				//CUANDO ENTRA LA IA REALMENTE
 				else
 				{
-					string? automaticResponse = ProntManager.GetAutomaticResponse(question.Text);
+					string? automaticResponse = ProntManager.GetAutomaticResponse(question.Text, dCaso);
 					if (automaticResponse != null)
 					{
 						question.MessageIA = automaticResponse;
@@ -215,7 +220,7 @@ namespace CAPA_NEGOCIO
 
 
 			// Crear el prompt estructurado para Ollama
-			string prompt = ProntManager.CrearPrompt(question.Text, trakingNumber, list, tipocaso);
+			string prompt = ProntManager.CrearPrompt(question.Text, dCaso);
 			List<object> historialMensajes = GetHistoryMessage(question, dCaso, prompt, tipocaso);
 			object requestBody = BuildLLamaConfig(historialMensajes);
 			var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
@@ -250,9 +255,9 @@ namespace CAPA_NEGOCIO
 				return "SOLICITUD_DE_ASISTENCIA";
 			}
 			// evalua tipo de caso
-			return instaCase == null ? "INICIO" : trakingNumber != null
+			return instaCase == null &&  !CaseEvaluatorManager.IsOption(question.Text)  ? "INICIO" : trakingNumber != null
 			? DefaultServices_DptConsultasSeguimientos.RASTREO_Y_SEGUIMIENTOS.ToString()
-			: CaseEvaluatorManager.DeterminarCategoria(question.Text, instaCase?.Tbl_Servicios?.Descripcion_Servicio);
+			: CaseEvaluatorManager.DeterminarCategoria(question.Text, instaCase);
 		}
 
 		private async Task<(bool flowControl, UserMessage value)> ProcessWhenIxistsNotification(UserMessage question, Notificaciones notificacion)
@@ -316,7 +321,7 @@ Selecciona una opción";
 				new
 				{
 					role = c.NickName == question.UserId ? "user" : (c.NickName == "traking_system" ? "traking_system" : "asistant"),
-					content = ProntManager.ProntAdapter(c.Body)
+					content = ProntManager.ProntAdapter(c.Body, dCaso)
 				}
 			));
 			historialMensajes.Add(new { role = "user", content = prompt });

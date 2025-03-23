@@ -11,16 +11,18 @@ namespace BusinessLogic.IA.RequestEvaluator
         
 
         public static (bool, string?) ProcessRequest()
-        {         
+        {
             // Seleccionar una respuesta aleatoria
             Random random = new Random();
             int index = random.Next(responses.Length);
 
-            string finalMessage = responses[index] + " \n\nTambien puedes escribir \"5\" para solicitar asistencia o \"Menu\" para otras consultas.";
+            string finalMessage = responses[index] + ProntManager.OptionalActionAsistenciaOrMenu();
 
             return (true, finalMessage);
-         
+
         }
+
+        
         static string[] responses =
         {
             "Lo lamento, parece que no estoy entendiendo tu consulta. ¿Podrías ingresar un número de seguimiento para ayudarte?",

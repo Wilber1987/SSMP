@@ -4,14 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.IA.Model;
+using CAPA_NEGOCIO.MAPEO;
 
 namespace BusinessLogic.IA
 {
 	public class CaseEvaluatorManager
 	{
-		public static string DeterminarCategoria(string consulta, string? previusCategory)
+		public static string DeterminarCategoria(string consulta, Tbl_Case? dCase)
 		{
-			
+		
+			string? previusCategory = dCase?.Tbl_Servicios?.Descripcion_Servicio;
 
 			// Normalizar la consulta
 			consulta = NormalizarTexto(consulta);
@@ -21,8 +24,8 @@ namespace BusinessLogic.IA
 
 			// Diccionario para contar coincidencias ponderadas
 			Dictionary<string, int> coincidencias = new Dictionary<string, int>();
-			string category = ExtractCategoryServices(consulta, palabras, coincidencias);
-			if (previusCategory != null && category != "CIERRE_DE_CASO" && previusCategory != "INICIO")
+			string category = ExtractCategoryServices(consulta, palabras, coincidencias, dCase);
+			if (previusCategory != null && category != "CIERRE_DE_CASO" && previusCategory != "INICIO" && category != "SOLICITUD_DE_ASISTENCIA")
 			{
 				return previusCategory;
 			}
@@ -31,49 +34,22 @@ namespace BusinessLogic.IA
 
 		}
 		// Método para normalizar texto
-		private static	string NormalizarTexto(string texto)
-			{
-				texto = texto.ToLowerInvariant();
-				texto = string.Concat(texto.Normalize(NormalizationForm.FormD)
-										   .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
-				var caracteresPermitidos = texto.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c));
-				return new string(caracteresPermitidos.ToArray());
-			}
-		private static string ExtractCategoryServices(string consulta, string[] palabras, Dictionary<string, int> coincidencias)
+		private static string NormalizarTexto(string texto)
 		{
-			string category = "ASISTENCIA_GENERAL";
-			/*if (consulta == "8")
+			texto = texto.ToLowerInvariant();
+			texto = string.Concat(texto.Normalize(NormalizationForm.FormD)
+									   .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
+			var caracteresPermitidos = texto.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c));
+			return new string(caracteresPermitidos.ToArray());
+		}
+		public static string ExtractCategoryServices(string consulta, string[] palabras, Dictionary<string, int> coincidencias, Tbl_Case? dCase)
+		{
+			(List<BotMenu> menu, bool Found) =BotMenu.GetMenuByCode(consulta ?? "ASISTENCIA_GENERAL", dCase.MimeMessageCaseData?.MenuParentId);
+			var menuItem = menu?.FirstOrDefault();
+			if (menuItem != null)
 			{
-				return "EVENTOS";
+				return menuItem.CodeAdapter ?? "ASISTENCIA_GENERAL";
 			}
-			else if (consulta == "7")
-			{
-				return "SOLICITUD_DE_ASISTENCIA";
-			}
-			else  */if (consulta.ToUpper() == "MENU")
-			{
-				return "INICIO";
-			}
-			else if (consulta == "5")
-			{
-				return "SOLICITUD_DE_ASISTENCIA";
-			}
-			else if (consulta == "4")
-			{
-				return "CONSULTA_DE_CONTACTO";
-			}
-			else if (consulta == "3")
-			{
-				return "INFORMACION_SOBRE_DOCUMENTOS";
-			}
-			else if (consulta == "2")
-			{
-				return "INFORMACION_SOBRE_DOCUMENTOS";
-			}
-			else if (consulta == "1")
-			{
-				return "RASTREO_Y_SEGUIMIENTOS";
-			} 
 
 			foreach (var categoria in Categorias)
 			{
@@ -82,26 +58,14 @@ namespace BusinessLogic.IA
 				foreach (var fraseClave in categoria.Value)
 				{
 					string fraseNormalizada = NormalizarTexto(fraseClave);
-
-					// Coincidencia exacta de frase
 					if (consulta.Contains(fraseNormalizada))
 					{
-						conteo += 10; // Frases completas tienen más peso
+						conteo += 10;
 					}
 					else
 					{
-						// Coincidencias parciales en palabras clave
 						int palabraCoincidencias = palabras.Count(p => fraseNormalizada.Contains(p));
-
-						// Se puede incrementar el peso de las coincidencias de "retraso" para hacerlas más significativas
-						if (categoria.Key == "QUEJAS_POR_RETRASOS" && palabraCoincidencias > 0)
-						{
-							conteo += 20;  // Agregar más peso a coincidencias de queja por retrasos
-						}
-						else
-						{
-							conteo += palabraCoincidencias;
-						}
+						conteo += (categoria.Key == "QUEJAS_POR_RETRASOS" && palabraCoincidencias > 0) ? 20 : palabraCoincidencias;
 					}
 				}
 
@@ -111,17 +75,11 @@ namespace BusinessLogic.IA
 				}
 			}
 
-			// Seleccionar la categoría con más coincidencias ponderadas
-			if (coincidencias.Any())
-			{
-				category = coincidencias.OrderByDescending(c => c.Value).First().Key;
-			}
-			if (category != "CIERRE_DE_CASO")
-			{
-				return "INICIO";
-			}
-
-			return category;
+			return coincidencias.Any() ? coincidencias.OrderByDescending(c => c.Value).First().Key : "INICIO";
+		}
+		internal static bool IsOption(string? text)
+		{
+			return BotMenu.GetMainMenu().Where(m => m.Code != null && m.Code!.Equals(text)).Any();
 		}
 
 		static Dictionary<string, List<string>> Categorias = new Dictionary<string, List<string>>()

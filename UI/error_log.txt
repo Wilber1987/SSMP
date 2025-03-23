@@ -145,3 +145,255 @@ The statement has been terminated.
    at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
    at System.Data.SqlClient.SqlConnection.Open()
    at CAPA_DATOS.GDatosAbstract.TestConnection() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 132
+[3/23/2025 2:04:41 PM] ERROR: Max retries reached. Operation failed.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:04:41 PM] Transaction failed and connection restarted.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:04:41 PM] ERROR: Update entity: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 164
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.SetPropertyNull(EntityClass entityClass, String[] propertys) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 574
+   at CAPA_DATOS.EntityClass.SetPropertyNull(String[] properties) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 358
+[3/23/2025 2:04:57 PM] ERROR: Max retries reached. Operation failed.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:04:57 PM] Transaction failed and connection restarted.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:04:57 PM] ERROR: Update entity: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 164
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.SetPropertyNull(EntityClass entityClass, String[] propertys) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 574
+   at CAPA_DATOS.EntityClass.SetPropertyNull(String[] properties) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 358
+[3/23/2025 2:24:41 PM] ERROR: Max retries reached. Operation failed.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:24:41 PM] Transaction failed and connection restarted.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:24:41 PM] ERROR: Update entity: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 164
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.SetPropertyNull(EntityClass entityClass, String[] propertys) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 574
+   at CAPA_DATOS.EntityClass.SetPropertyNull(String[] properties) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 358
+[3/23/2025 2:25:47 PM] ERROR: Max retries reached. Operation failed.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:25:47 PM] Transaction failed and connection restarted.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:25:47 PM] ERROR: Update entity: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 164
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.SetPropertyNull(EntityClass entityClass, String[] propertys) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 574
+   at CAPA_DATOS.EntityClass.SetPropertyNull(String[] properties) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 358
+[3/23/2025 2:26:26 PM] ERROR: Max retries reached. Operation failed.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:26:26 PM] Transaction failed and connection restarted.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:26:26 PM] ERROR: Update entity: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 164
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.SetPropertyNull(EntityClass entityClass, String[] propertys) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 574
+   at CAPA_DATOS.EntityClass.SetPropertyNull(String[] properties) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 358
+[3/23/2025 2:27:52 PM] ERROR: Max retries reached. Operation failed.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:27:52 PM] Transaction failed and connection restarted.: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+[3/23/2025 2:27:52 PM] ERROR: Update entity: Invalid object name 'Tbl_Case'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at CAPA_DATOS.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 170
+   at CAPA_DATOS.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 234
+   at CAPA_DATOS.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 164
+   at CAPA_DATOS.BDCore.Abstracts.WDataMapper.SetPropertyNull(EntityClass entityClass, String[] propertys) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\BDCore\DataMapper.cs:line 574
+   at CAPA_DATOS.EntityClass.SetPropertyNull(String[] properties) in C:\Users\wilbe\repos\NETCORE\SSMP\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 358
