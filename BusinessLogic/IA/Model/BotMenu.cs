@@ -204,7 +204,7 @@ América. ",
                 SubMenu = [
                     new BotMenu { Id = 20, ParentMenuId = 3, Name = "-",
                         Type = TypeLine.LINE,
-                        Descripcion = "Porfavor digita el número de tracking del paquete", CodeAdapter = "RASTREO_Y_SEGUIMIENTOS" },
+                        Descripcion = "Por favor digita el número de tracking del paquete", CodeAdapter = "RASTREO_Y_SEGUIMIENTOS" },
                     new BotMenu { Id = 22, ParentMenuId = 3, Name = "-",
                             Type = TypeLine.LINE,
                             Descripcion = "\nEscribe “MENU” para regresar", CodeAdapter = "INFORMACION_SOBRE_DOCUMENTOS" },

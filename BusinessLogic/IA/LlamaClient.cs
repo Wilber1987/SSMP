@@ -138,7 +138,7 @@ namespace CAPA_NEGOCIO
 					return question;
 				}
 				//CUANDO SE ESTA INICANDO UNA SOLICITUD
-				else if (tipocaso == "INICIO" || question.Text.ToUpper() == "MENU")
+				else if (tipocaso == "INICIO" || question.Text.ToUpper() == "MENU" || question.Text.ToLower() == "menú")
 				{
 					question.MessageIA = ProntManager.GetSaludo();
 					question.Id_case = dCaso.Id_Case;
