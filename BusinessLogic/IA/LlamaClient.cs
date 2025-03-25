@@ -20,7 +20,7 @@ namespace CAPA_NEGOCIO
 			try
 			{
 				bool IsInBlackList = BlackListServices.IsInBlackList(question.UserId);
-				if (!IsInBlackList)
+				if (IsInBlackList)
 				{
 					var ex = new Exception($"Usuario en lista negra {question.Source} - {question.UserId}");
 					LoggerServices.AddMessageError($"ERROR:" + ex.Message, ex);
@@ -49,21 +49,22 @@ namespace CAPA_NEGOCIO
 					throw ex;
 				}
 				question.Text = question.Text?.Trim();
+				
 				question.IsWithIaResponse = isWithIaResponse;
 
-				Notificaciones? notificacion = new Notificaciones().Find<Notificaciones>(
+				/*Notificaciones? notificacion = new Notificaciones().Find<Notificaciones>(
 					FilterData.Like("Telefono", question.UserId?.Replace("+", "")),
 					FilterData.Equal("Enviado", true)
-				);
+				);*/
 				//PROCESA LA SOLICITUD Y VERIFICA QUE NO HAYA UNA NBOTIFICACION PENDIENTE DE EVALUAR
-				if (notificacion != null)
+				/*if (notificacion != null)
 				{
 					(bool flowControl, UserMessage value) = await ProcessWhenIxistsNotification(question, notificacion);
 					if (!flowControl)
 					{
 						return value;
 					}
-				}
+				}*/
 
 				//PROCESAMIENTO CUANDO NO EXISTE UNA  NOTIFICACION PENDIENTE
 				string caseTitle = $"{question?.UserId} - {(isWithIaResponse ? " WithBot" : "")} - {question?.Timestamp?.ToString("yyyy-MM-dd")} ";
@@ -71,6 +72,8 @@ namespace CAPA_NEGOCIO
 					FilterData.Equal("Titulo", caseTitle),
 					FilterData.Equal("Estado", Case_Estate.Activo)
 				);
+				
+				
 				//PROCESA EL EMNSAJE Y NO AGREGA CONTESTACION DEL BOT
 				if (instaCase != null && (instaCase.MimeMessageCaseData?.WithAgent == true || !isWithIaResponse))
 				{
@@ -98,6 +101,15 @@ namespace CAPA_NEGOCIO
 					NegacionTraking.ProcesarNegationTrackingResponse(question.Text, tipocaso, isInvalidTraking);
 
 				List<TrackingHistory> list = [];
+				
+				if(question?.Attach != null && isWithIaResponse && (question.Text == "" || question.Text == null))
+				{
+					question.MessageIA = "Las consultas sobre ficheros solo pueden ser atendidas con un agente de soporte. escribe 5 para solicitar asistencia o MENU para seleccionar otra opción";
+				    question!.WithAgentResponse = true;
+					question.Id_case = dCaso.Id_Case;					
+					await AddComment(dCaso, question);
+					return question;
+				}
 
 
 				#region RESPUESTAS CONTROLADAS

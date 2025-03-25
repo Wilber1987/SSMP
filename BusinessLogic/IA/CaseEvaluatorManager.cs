@@ -44,7 +44,7 @@ namespace BusinessLogic.IA
 		}
 		public static string ExtractCategoryServices(string consulta, string[] palabras, Dictionary<string, int> coincidencias, Tbl_Case? dCase)
 		{
-			(List<BotMenu> menu, bool Found) =BotMenu.GetMenuByCode(consulta ?? "ASISTENCIA_GENERAL", dCase.MimeMessageCaseData?.MenuParentId);
+			(List<BotMenu> menu, bool Found) =BotMenu.GetMenuByCode(consulta ?? "ASISTENCIA_GENERAL", dCase?.MimeMessageCaseData?.MenuParentId);
 			var menuItem = menu?.FirstOrDefault();
 			if (menuItem != null)
 			{

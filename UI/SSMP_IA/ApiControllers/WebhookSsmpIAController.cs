@@ -47,7 +47,7 @@ namespace UI.SSMP_IA.ApiControllers
 					_ => throw new InvalidOperationException("Unsupported platform")
 				};
 
-				if (unifiedMessage != null && unifiedMessage?.Text != null &&unifiedMessage?.Text?.Trim() != "")
+				if (unifiedMessage != null && unifiedMessage?.Text != null)
 				{
 					switch (unifiedMessage?.Source?.ToLower())
 					{

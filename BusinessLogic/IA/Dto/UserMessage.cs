@@ -33,7 +33,7 @@ namespace CAPA_NEGOCIO
 				//string whatsAppMessagestringg = message.ToString();
 
 				//var whatsAppMessage = message?.entry[0]?.changes[0]?.value?.messages[0];
-				LoggerServices.AddAction("nuevo mensaje: \n" + message.ToString(), 1);
+				
 				WhatsappBusinessAccount whatsAppMessage = JsonConvert.DeserializeObject<WhatsappBusinessAccount>(message.ToString());
 			    Message? messageEv = whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages != null ? whatsAppMessage?.Entry?[0]?.Changes?[0]?.Value?.Messages.First() : null;
 				if (whatsAppMessage == null || messageEv == null)
@@ -51,6 +51,7 @@ namespace CAPA_NEGOCIO
 					string type = GetMediaType(messageEv?.Document?.mime_type);
 					Attach = await ResponseAPI.DownloadImageAsync(messageEv?.Document?.Id, type);
 				} 
+				LoggerServices.AddAction("nuevo mensaje: \n" + message.ToString(), 1);
 				return new UserMessage
 				{
 					Id = messageEv?.Id,
@@ -64,7 +65,7 @@ namespace CAPA_NEGOCIO
 			}
 			catch (Exception ex)
 			{
-				LoggerServices.AddMessageError("error, construyendo mensaje", ex);
+				//LoggerServices.AddMessageError("error, construyendo mensaje", ex);
 				return null;
 			}
 		}
