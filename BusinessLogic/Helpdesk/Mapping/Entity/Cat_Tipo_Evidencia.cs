@@ -1,4 +1,4 @@
-using CAPA_DATOS;
+using APPCORE;
 using CAPA_NEGOCIO.Services;
 using System;
 using System.Collections.Generic;

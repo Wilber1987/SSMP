@@ -1,7 +1,7 @@
 @page
 @using API.Controllers;
-@using CAPA_DATOS;
-@using CAPA_DATOS.Security
+@using APPCORE;
+@using APPCORE.Security
 @using DataBaseModel;
 @{
     string? identify = HttpContext.Session?.GetString("seassonKey") ?? "";

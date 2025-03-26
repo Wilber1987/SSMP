@@ -1,7 +1,7 @@
 using BusinessLogic.IA.Model;
 using BusinessLogic.Rastreo.Model;
 using BusinessLogic.SystemDocuments.Models;
-using CAPA_DATOS;
+using APPCORE;
 using CAPA_NEGOCIO.MAPEO;
 
 namespace BusinessLogic.IA

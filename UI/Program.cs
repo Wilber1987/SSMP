@@ -1,13 +1,13 @@
-using CAPA_DATOS;
+using APPCORE;
 using System.Text.Json.Serialization;
 using BackgroundJob.Cron.Jobs;
-using CAPA_DATOS.Cron.Jobs;
+using APPCORE.Cron.Jobs;
 using Microsoft.AspNetCore.ResponseCompression;
 using BusinessLogic.Rastreo.Model;
 using CAPA_NEGOCIO.MAPEO;
 using UI;
 using BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operations;
-using CAPA_DATOS.Security;
+using APPCORE.Security;
 
 
 new BDConnection().IniciarMainConecction();

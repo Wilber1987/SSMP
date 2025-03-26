@@ -1,6 +1,6 @@
 using API.Controllers;
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
+using APPCORE;
+using APPCORE.Security;
 using CAPA_NEGOCIO;
 using System;
 using System.Collections.Generic;

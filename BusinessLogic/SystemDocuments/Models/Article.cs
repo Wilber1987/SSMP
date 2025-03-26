@@ -1,5 +1,5 @@
 using System;
-using CAPA_DATOS;
+using APPCORE;
 
 namespace BusinessLogic.SystemDocuments.Models
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using CAPA_DATOS.Security; 
+using APPCORE.Security; 
 using CAPA_NEGOCIO.Services;
-using CAPA_DATOS.Services;
+using APPCORE.Services;
 
 namespace API.Controllers
 {

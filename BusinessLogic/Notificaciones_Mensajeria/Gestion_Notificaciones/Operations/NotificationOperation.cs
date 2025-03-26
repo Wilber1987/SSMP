@@ -1,7 +1,7 @@
 using System.Reflection;
 using API.Controllers;
-using CAPA_DATOS;
-using CAPA_DATOS.Services;
+using APPCORE;
+using APPCORE.Services;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
 using DatabaseModelNotificaciones;

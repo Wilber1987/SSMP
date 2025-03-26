@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using API.Controllers;
-using CAPA_DATOS;
+using APPCORE;
 using CAPA_NEGOCIO;
 using CAPA_NEGOCIO.IA;
 using DataBaseModel;

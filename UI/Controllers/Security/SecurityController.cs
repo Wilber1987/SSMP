@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CAPA_DATOS.Security;
+using APPCORE.Security;
 using BusinessLogic.Security;
 
 namespace API.Controllers

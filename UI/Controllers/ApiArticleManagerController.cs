@@ -6,8 +6,8 @@ using API.Controllers;
 using BusinessLogic.IA.Model;
 using BusinessLogic.SystemDocuments.Models;
 using BusinessLogic.SystemDocuments.Operations;
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
+using APPCORE;
+using APPCORE.Security;
 using DataBaseModel;
 using Microsoft.AspNetCore.Mvc;
 

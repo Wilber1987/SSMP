@@ -9,7 +9,7 @@ using iText.Layout;
 using iText.Html2pdf;
 using iText.Layout.Properties;
 using iText.Kernel.Geom;
-using CAPA_DATOS.Services;
+using APPCORE.Services;
 //using Microsoft.Playwright;
 
 namespace UI.Controllers

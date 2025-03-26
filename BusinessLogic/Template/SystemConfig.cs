@@ -1,4 +1,4 @@
-using CAPA_DATOS.Services;
+using APPCORE.Services;
 using Microsoft.Extensions.Configuration;
 namespace DataBaseModel
 {

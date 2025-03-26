@@ -1,4 +1,4 @@
-using CAPA_DATOS;
+using APPCORE;
 
 namespace CAPA_NEGOCIO.MAPEO
 {

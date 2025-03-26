@@ -1,7 +1,7 @@
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
+using APPCORE;
+using APPCORE.Security;
 using API.Controllers;
-using CAPA_DATOS.Services;
+using APPCORE.Services;
 
 namespace CAPA_NEGOCIO.MAPEO;
 

@@ -1,7 +1,7 @@
 
 
 
-using CAPA_DATOS;
+using APPCORE;
 using CAPA_NEGOCIO.MAPEO;
 
 namespace CAPA_NEGOCIO.Services

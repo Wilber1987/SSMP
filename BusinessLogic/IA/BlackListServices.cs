@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
+using APPCORE;
+using APPCORE.Security;
 using DataBaseModel;
 
 namespace BusinessLogic.IA

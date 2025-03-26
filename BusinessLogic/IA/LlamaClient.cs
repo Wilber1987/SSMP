@@ -4,7 +4,7 @@ using BusinessLogic.IA;
 using BusinessLogic.IA.RequestEvaluator;
 using BusinessLogic.Rastreo.Model;
 using BusinessLogic.Rastreo.Operations;
-using CAPA_DATOS;
+using APPCORE;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;
 using DatabaseModelNotificaciones;

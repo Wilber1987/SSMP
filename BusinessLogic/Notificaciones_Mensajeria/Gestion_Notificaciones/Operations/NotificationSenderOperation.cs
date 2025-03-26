@@ -1,6 +1,6 @@
 using BusinessLogic.Notificaciones_Mensajeria.Informe;
-using CAPA_DATOS;
-using CAPA_DATOS.Services;
+using APPCORE;
+using APPCORE.Services;
 using CAPA_NEGOCIO.IA;
 using CAPA_NEGOCIO.MAPEO;
 using DataBaseModel;

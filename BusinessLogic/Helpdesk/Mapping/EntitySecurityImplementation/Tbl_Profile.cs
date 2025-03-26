@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers;
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
-using CAPA_DATOS.Services;
+using APPCORE;
+using APPCORE.Security;
+using APPCORE.Services;
 
 namespace CAPA_NEGOCIO.MAPEO
 {
-	public class Tbl_Profile : CAPA_DATOS.Security.Tbl_Profile
+	public class Tbl_Profile : APPCORE.Security.Tbl_Profile
 	{
 		public static Tbl_Profile? GetUserProfile(string identity)
 		{

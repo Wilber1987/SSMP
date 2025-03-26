@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
-using CAPA_DATOS.Services;
+using APPCORE.Services;
 using CAPA_NEGOCIO.Services;
 using DataBaseModel;
 using DatabaseModelNotificaciones;

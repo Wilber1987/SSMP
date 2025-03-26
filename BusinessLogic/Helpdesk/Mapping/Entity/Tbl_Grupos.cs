@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers;
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
+using APPCORE;
+using APPCORE.Security;
 
 namespace CAPA_NEGOCIO.MAPEO
 {

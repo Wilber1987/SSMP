@@ -1,6 +1,6 @@
 ﻿@page
 @using API.Controllers;
-@using CAPA_DATOS.Security;
+@using APPCORE.Security;
 @{
     string? identfy = HttpContext?.Session?.GetString("seassonKey");
     if (!SecurityController.Auth(identfy))

@@ -1,11 +1,11 @@
-using CAPA_DATOS;
+using APPCORE;
 using API.Controllers;
-using CAPA_DATOS.Security;
-using CAPA_DATOS.Services;
+using APPCORE.Security;
+using APPCORE.Services;
 
 namespace CAPA_NEGOCIO.MAPEO
 {
-    public class Security_Users : CAPA_DATOS.Security.Security_Users
+    public class Security_Users : APPCORE.Security.Security_Users
 	{
 		[OneToMany(TableName = "Security_Users_Roles", KeyColumn = "Id_User", ForeignKeyColumn = "Id_User")]
 		public new List<Security_Users_Roles>? Security_Users_Roles { get; set; }

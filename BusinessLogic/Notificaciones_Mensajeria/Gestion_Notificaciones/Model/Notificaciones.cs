@@ -1,7 +1,7 @@
 using API.Controllers;
-using CAPA_DATOS;
-using CAPA_DATOS.Security;
-using CAPA_DATOS.Services;
+using APPCORE;
+using APPCORE.Security;
+using APPCORE.Services;
 using CAPA_NEGOCIO.Gestion_Mensajes.Operations;
 using DataBaseModel;
 using MimeKit.Utils;

@@ -42,7 +42,7 @@ namespace SNI_UI2.CAPA_NEGOCIO.Helpdesk.Services
 						}],
 						Estado = "ACTIVO",
 						Foto ="\\Media\\profiles\\avatar.png",
-					}], Security_Users_Roles = [ new CAPA_DATOS.Security.Security_Users_Roles { Id_Role = 4 } ]
+					}], Security_Users_Roles = [ new APPCORE.Security.Security_Users_Roles { Id_Role = 4 } ]
 				}.SaveUser(identfy);
 			});
 		}

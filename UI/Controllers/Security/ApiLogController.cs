@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CAPA_DATOS.Security;
-using CAPA_DATOS;
+using APPCORE.Security;
+using APPCORE;
 
 namespace API.Controllers
 {

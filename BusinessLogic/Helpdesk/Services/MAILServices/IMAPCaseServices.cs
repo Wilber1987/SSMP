@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using CAPA_DATOS;
-using CAPA_DATOS.BDCore.Abstracts;
-using CAPA_DATOS.Services;
+using APPCORE;
+using APPCORE.BDCore.Abstracts;
+using APPCORE.Services;
 using CAPA_NEGOCIO.MAPEO;
 
 namespace CAPA_NEGOCIO.Services

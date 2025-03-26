@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CAPA_DATOS;
+using APPCORE;
 using CAPA_NEGOCIO;
 using CAPA_NEGOCIO.IA;
 

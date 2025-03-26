@@ -1,5 +1,5 @@
-﻿using CAPA_DATOS;
-using CAPA_DATOS.Services;
+﻿using APPCORE;
+using APPCORE.Services;
 using DataBaseModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,7 +19,7 @@ namespace CAPA_NEGOCIO.IA
 		public async Task<string> SendResponseToUser(UserMessage userMessage,
 			string response,
 		 	bool isWithIaResponse,
-		 	List<CAPA_DATOS.Services.ModelFiles>? attach_Files)
+		 	List<APPCORE.Services.ModelFiles>? attach_Files)
 		{
 			try
 			{

@@ -1,6 +1,6 @@
 @page
 @using API.Controllers
-@using CAPA_DATOS.Security
+@using APPCORE.Security
 @{
     if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
     {

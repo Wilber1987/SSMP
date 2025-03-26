@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using API.Controllers;
 using BusinessLogic.SystemDocuments.Models;
-using CAPA_DATOS;
+using APPCORE;
 
 namespace BusinessLogic.SystemDocuments.Operations
 {

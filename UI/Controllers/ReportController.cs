@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using CAPA_DATOS.Security;
+using APPCORE.Security;
 using CAPA_NEGOCIO.Services;
-using CAPA_DATOS.Services;
+using APPCORE.Services;
 using BusinessLogic.Notificaciones_Mensajeria.Informe;
 using DatabaseModelNotificaciones;
-using CAPA_DATOS;
+using APPCORE;
 
 namespace API.Controllers
 {

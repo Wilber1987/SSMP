@@ -1,5 +1,5 @@
-﻿using CAPA_DATOS;
-using CAPA_DATOS.Security;
+﻿using APPCORE;
+using APPCORE.Security;
 using CAPA_NEGOCIO.MAPEO;
 using CAPA_NEGOCIO.Services;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-using CAPA_DATOS;
+using APPCORE;
 namespace DataBaseModel {
 
    public class ViewParticipantesServicios : EntityClass {
