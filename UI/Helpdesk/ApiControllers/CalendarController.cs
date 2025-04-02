@@ -17,7 +17,7 @@ namespace API.Controllers
 			data.Add(Dep.Get<Cat_Dependencias>());
 			Tbl_Profile Users = new Tbl_Profile();
 			data.Add(Users.Get<Tbl_Profile>());
-			Users.Id_Perfil = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId;
+			Users.Id_Perfil = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId;
 			data.Add(Users.TakeDepCoordinaciones());
 			return data;
 		}
@@ -58,7 +58,7 @@ namespace API.Controllers
 		[AuthController]
 		public Object SolicitarActividad(Tbl_Case Act)
 		{
-			return Act.SolicitarActividades(HttpContext.Session.GetString("seassonKey"));
+			return Act.SolicitarActividades(HttpContext.Session.GetString("sessionKey"));
 		}
 		//Agenda por usuario
 		[HttpPost]
@@ -67,7 +67,7 @@ namespace API.Controllers
 		{
 			Tbl_Agenda ag = new Tbl_Agenda();
 			ag.Id_Dependencia = Act.Id_Dependencia;
-			ag.Id_Perfil = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId;
+			ag.Id_Perfil = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId;
 			return ag.Get<Tbl_Agenda>();
 		}
 		[HttpPost]

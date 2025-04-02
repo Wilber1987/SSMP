@@ -8,6 +8,8 @@ using CAPA_NEGOCIO.MAPEO;
 using UI;
 using BusinessLogic.Notificaciones_Mensajeria.Gestion_Notificaciones.Operations;
 using APPCORE.Security;
+using System.Runtime;
+using APPCORE.Services;
 
 
 new BDConnection().IniciarMainConecction();
@@ -102,9 +104,41 @@ app.UseResponseCompression(); // Usa la compresión en la aplicación
 app.UseRouting();
 
 app.UseAuthorization();
+
 app.UseSession();
+app.Use(async (context, next) =>
+{
+    string? sessionKey = context.Session.GetString("sessionKey");
+
+    await next(); // Ejecutar la solicitud
+
+    if (string.IsNullOrEmpty(sessionKey)) // Si la sesión ya expiró
+    {
+        SessionServices.ClearSeason(sessionKey); // Limpia la sesión en memoria
+    }
+});
+
+
 
 app.MapRazorPages();
 app.MapControllers();
+
+// 🔥 Liberar memoria antes de iniciar la aplicación
+int requestCounter = 0;
+const int requestThreshold = 1000; // Ajusta el número de solicitudes antes de liberar memoria
+
+app.Use(async (context, next) =>
+{
+    Interlocked.Increment(ref requestCounter);
+
+    await next(); // Ejecuta la petición
+
+    if (requestCounter >= requestThreshold)
+    {
+        requestCounter = 0;
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+});
 
 app.Run();

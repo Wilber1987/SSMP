@@ -27,7 +27,7 @@ namespace UI.Controllers
 		[AuthController(Permissions.MANAGE_ARTICLES)]
 		public ResponseService SaveArticle(Article article)
 		{
-			return ArticleOperation.CreateArticle(article, HttpContext.Session.GetString("seassonKey"));
+			return ArticleOperation.CreateArticle(article, HttpContext.Session.GetString("sessionKey"));
 		}
 
 		[HttpPost]

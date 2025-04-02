@@ -17,7 +17,7 @@ namespace API.Controllers
 		[AuthController]
 		public object getDashboard(ProfileTransaction Inst)
 		{
-			string? token = HttpContext.Session.GetString("seassonKey");
+			string? token = HttpContext.Session.GetString("sessionKey");
 			var caseTable = new Tbl_Case().GetOwParticipantCase(token);
 			return new
 			{

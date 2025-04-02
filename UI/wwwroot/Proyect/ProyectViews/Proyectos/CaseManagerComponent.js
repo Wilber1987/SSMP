@@ -104,15 +104,17 @@ class CaseManagerComponent extends HTMLElement {
     }
     actividadesManager = async () => {
         // @ts-ignore
-        this.Paginator = new WPaginatorViewer({ Dataset: [] });
+        this.Paginator = new WPaginatorViewer({ Dataset: [], maxElementByPage: 20});
         this.FilterOptions = new WFilterOptions({
             Dataset: [],
             UseEntityMethods: false,
             AutoFilter: true,
+            IsFilterWithChange: true,
             //Display: true,
             AutoSetDate: true,
             ModelObject: new Tbl_Case_ModelComponent(),
-            FilterFunction: async (/** @type {Array | undefined} */ DFilt) => {
+            FilterFunction: async (/** @type {Array | undefined} */ DFilt, isFilterWithChange) => {
+                //alert(isFilterWithChange)
                 /**@type {Array<Tbl_Case>} */
                 // @ts-ignore
                 const data = await new Tbl_Case_ModelComponent({ FilterData: DFilt }).GetOwCase();
@@ -123,7 +125,7 @@ class CaseManagerComponent extends HTMLElement {
                     actividad.Progreso = actividad.Tbl_Tareas?.filter(tarea => tarea.Estado?.includes("Finalizado")).length;
                     return this.actividadElement(actividad);
                 });
-                this.Paginator?.Draw(datasetMap);
+                this.Paginator?.Draw(datasetMap, isFilterWithChange);
             }
         });
 
@@ -135,10 +137,9 @@ class CaseManagerComponent extends HTMLElement {
             }));
     }
 
-    actividadElement = (actividad) => {
-        
+    actividadElement = (actividad) => {        
         return WRender.Create({
-            className: "actividad", object: actividad, children: [
+            className: "actividad", id: "actividad" + actividad.Id_Case, object: actividad, children: [
                 {
                     tagName: 'h4', innerText: `#${actividad.Id_Case} - ${actividad.Titulo} ${actividad.Tbl_Servicios?.Descripcion_Servicio ?? ""}`, children: [
                         {

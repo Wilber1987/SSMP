@@ -60,7 +60,7 @@ class Tbl_Case_ModelComponent extends EntityClass {
      * @returns {Array<Tbl_Case_ModelComponent>}
      */
     GetOwCase = async () => {
-        return await this.GetData("Proyect/GetOwCase");
+        return await this.GetData("Proyect/GetOwCase", true);
     }
     /**
      * @returns {Array<Tbl_Case_ModelComponent>}

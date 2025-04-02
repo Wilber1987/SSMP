@@ -2,12 +2,12 @@
 @using API.Controllers
 @{
     // Layout = null;
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.Auth(HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../Security/login");
         return;
     }
-    if (!SecurityController.HavePermission("PERFIL_ACCESS", HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.HavePermission("PERFIL_ACCESS", HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../Security/permission_error");
         return;

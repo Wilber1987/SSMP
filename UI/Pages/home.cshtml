@@ -3,7 +3,7 @@
 @using APPCORE.Security; 
 @{
    
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.Auth(HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("./Security/Login");
         return;
@@ -22,7 +22,7 @@
 </head>
 
 <body id="App">
-    @* @if (SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+    @* @if (SecurityController.IsAdmin(HttpContext.Session.GetString("sessionKey")))
     {
         <header id="Header" class="admin-header" >
             <a href="~/Admin/Index" style="color: #000;">Admin Panel</a>

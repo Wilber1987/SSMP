@@ -21,14 +21,14 @@ namespace UI.Controllers
 		[AuthController(Permissions.NOTIFICACIONES_READER)]
 		public List<Notificaciones> getNotificaciones(Notificaciones Inst)
 		{
-			return NotificationOperation.GetNotificaciones(Inst, HttpContext.Session.GetString("seassonKey"));
+			return NotificationOperation.GetNotificaciones(Inst, HttpContext.Session.GetString("sessionKey"));
 		}
 
 		[HttpPost]
 		[AuthController(Permissions.SEND_MESSAGE)]
 		public ResponseService SaveNotificationRequest(NotificationRequest notificationRequest)
 		{
-			return new NotificationOperation().SaveNotificacion(HttpContext.Session.GetString("seassonKey"), notificationRequest);
+			return new NotificationOperation().SaveNotificacion(HttpContext.Session.GetString("sessionKey"), notificationRequest);
 		}
 
 		[HttpPost]
@@ -43,13 +43,13 @@ namespace UI.Controllers
 		[AuthController(Permissions.SEND_MESSAGE)]
 		public List<Contacto> getContactos(Contacto Inst)
 		{
-			return new Conversacion().GetContactos(HttpContext.Session.GetString("seassonKey"), Inst);
+			return new Conversacion().GetContactos(HttpContext.Session.GetString("sessionKey"), Inst);
 		}
 		[HttpPost]
 		[AuthController(Permissions.SEND_MESSAGE)]
 		public List<Conversacion> getConversacion(Contacto Inst)
 		{
-			return Conversacion.GetConversaciones(HttpContext.Session.GetString("seassonKey"), Inst);
+			return Conversacion.GetConversaciones(HttpContext.Session.GetString("sessionKey"), Inst);
 		}
 		[HttpPost]
 		[AuthController(Permissions.SEND_MESSAGE)]
@@ -61,7 +61,7 @@ namespace UI.Controllers
 		[AuthController(Permissions.SEND_MESSAGE)]
 		public object? saveConversacion(Conversacion Inst)
 		{
-			return Inst.SaveConversacion(HttpContext.Session.GetString("seassonKey"));
+			return Inst.SaveConversacion(HttpContext.Session.GetString("sessionKey"));
 		}
 		#endregion
 		//Notificaciones

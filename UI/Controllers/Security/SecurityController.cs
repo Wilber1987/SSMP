@@ -11,16 +11,16 @@ namespace API.Controllers
         [HttpPost]
         public object Login(UserModel Inst)
         {
-            HttpContext.Session.SetString("seassonKey", Guid.NewGuid().ToString());
-            return AuthNetCore.loginIN(Inst.mail, Inst.password, HttpContext.Session.GetString("seassonKey"));
+            HttpContext.Session.SetString("sessionKey", Guid.NewGuid().ToString());
+            return AuthNetCore.loginIN(Inst.mail, Inst.password, HttpContext.Session.GetString("sessionKey"));
         }
         public object LogOut()
         {
-            return AuthNetCore.ClearSeason();
+            return AuthNetCore.ClearSeason(HttpContext.Session.GetString("sessionKey"));
         }
         public bool Verification()
         {
-            return AuthNetCore.Authenticate(HttpContext.Session.GetString("seassonKey"));
+            return AuthNetCore.Authenticate(HttpContext.Session.GetString("sessionKey"));
         }
         public object RecoveryPassword(UserModel Inst)
         {

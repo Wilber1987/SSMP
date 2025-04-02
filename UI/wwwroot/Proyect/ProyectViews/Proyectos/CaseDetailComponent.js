@@ -295,7 +295,7 @@ class CaseDetailComponent extends HTMLElement {
             border: 1px solid var(--fifty-color);
             padding: 20px;
             border-radius: 15px;           
-            background-color: var(--secundary-color);
+            background-color: var(--primary-color);
         }
 
         @media(max-width: 1400px){

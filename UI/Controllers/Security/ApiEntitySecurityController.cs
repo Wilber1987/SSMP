@@ -31,14 +31,14 @@ namespace API.Controllers
         [AdminAuth]
         public Object saveSecurity_Users(CAPA_NEGOCIO.MAPEO.Security_Users inv)
         {
-            return inv.SaveUserT(HttpContext.Session.GetString("seassonKey"));
+            return inv.SaveUserT(HttpContext.Session.GetString("sessionKey"));
         }
 
         [HttpPost]
         [AdminAuth]
         public Object updateSecurity_Permissions(Security_Permissions inv) { return inv.Update("Id_Permission"); }
 
-        public Object changePassword(CAPA_NEGOCIO.MAPEO.Security_Users inv) { return inv.changePassword(HttpContext.Session.GetString("seassonKey")); }
+        public Object changePassword(CAPA_NEGOCIO.MAPEO.Security_Users inv) { return inv.changePassword(HttpContext.Session.GetString("sessionKey")); }
 
         #endregion
     }

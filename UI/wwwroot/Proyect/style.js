@@ -29,7 +29,7 @@ const activityStyle = css`
     gap: 10px;
     display: flex;
     flex-direction: column;    
-    background-color: var(--secundary-color);
+    background-color: var(--primary-color);
     display: grid;
     grid-template-columns: calc(100% - 210px) 200px;
 

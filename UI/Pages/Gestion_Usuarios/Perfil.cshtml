@@ -4,7 +4,7 @@
 @using APPCORE.Security
 @using DataBaseModel;
 @{
-    string? identify = HttpContext.Session?.GetString("seassonKey") ?? "";
+    string? identify = HttpContext.Session?.GetString("sessionKey") ?? "";
     if (!SecurityController.HavePermission(identify, Permissions.PERFIL_ACCESS))
     {
         Response.Redirect("/Security/Login");

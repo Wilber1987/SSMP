@@ -2,12 +2,12 @@
 @using API.Controllers
 @using APPCORE.Security
 @{
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.Auth(HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../LoginView");
         return;
     }   
-    if (!SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../Security/permission_error");
         return;

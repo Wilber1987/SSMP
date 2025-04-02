@@ -3,17 +3,17 @@
 @using APPCORE.Security
 @{
     // Layout = null;
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.Auth(HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../Security/login");
         return;
     }
     if (!SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA.ToString(),
-    HttpContext.Session.GetString("seassonKey"))
+    HttpContext.Session.GetString("sessionKey"))
     && !SecurityController.HavePermission(Permissions.ADMINISTRAR_CASOS_PROPIOS.ToString(),
-    HttpContext.Session.GetString("seassonKey"))
+    HttpContext.Session.GetString("sessionKey"))
     && !SecurityController.HavePermission(Permissions.TECNICO_CASOS_DEPENDENCIA.ToString(),
-    HttpContext.Session.GetString("seassonKey")))
+    HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../Security/permission_error");
         return;

@@ -2,7 +2,7 @@
 @using APPCORE.Security
 @using DataBaseModel
 @{
-    string identify = Context.Session.GetString("seassonKey");
+    string identify = Context.Session.GetString("sessionKey");
     var SystemConfig = Config.SystemConfig();
 }
 <!DOCTYPE html>

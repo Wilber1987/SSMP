@@ -24,7 +24,7 @@ namespace API.Controllers
 		[AuthController]
 		public object? saveTbl_Comments(Tbl_Comments inst)
 		{
-			return inst.SaveComment(HttpContext.Session.GetString("seassonKey"));
+			return inst.SaveComment(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
@@ -42,7 +42,7 @@ namespace API.Controllers
 		[AuthController]
 		public object? saveTbl_Comments_Tasks(Tbl_Comments_Tasks inst)
 		{
-			return inst.SaveComment(HttpContext.Session.GetString("seassonKey"), false);
+			return inst.SaveComment(HttpContext.Session.GetString("sessionKey"), false);
 		}
 		[HttpPost]
 		[AuthController]
@@ -212,7 +212,7 @@ namespace API.Controllers
 		[AuthController(Permissions.PERFIL_MANAGER)]
 		public List<CAPA_NEGOCIO.MAPEO.Tbl_Profile> getTbl_Profile(CAPA_NEGOCIO.MAPEO.Tbl_Profile Inst)
 		{
-			return Inst.GetProfiles(HttpContext.Session.GetString("seassonKey"));
+			return Inst.GetProfiles(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController(Permissions.PERFIL_MANAGER)]
@@ -224,7 +224,7 @@ namespace API.Controllers
 		[AuthController(Permissions.PERFIL_MANAGER)]
 		public object? updateTbl_Profile(CAPA_NEGOCIO.MAPEO.Tbl_Profile inst)
 		{
-			inst.IdUser = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId;
+			inst.IdUser = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId;
 			return inst.SaveProfile();
 		}
 
@@ -279,8 +279,8 @@ namespace API.Controllers
 		public object? saveTbl_Case(Tbl_Case inst)
 		{
 			inst.Estado ??= Case_Estate.Solicitado.ToString();
-			inst.Id_Perfil = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId;
-			inst.Mail = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).mail;
+			inst.Id_Perfil = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId;
+			inst.Mail = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).mail;
 			inst.Titulo = inst?.Titulo?.ToUpper();
 			return inst.Save();
 		}
@@ -320,7 +320,7 @@ namespace API.Controllers
 		[AuthController(Permissions.GESTOR_TAREAS)]
 		public object? saveTbl_Tareas(Tbl_Tareas inst)
 		{
-			return inst.SaveTareaWithTransaction(HttpContext.Session.GetString("seassonKey"));
+			return inst.SaveTareaWithTransaction(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
@@ -391,13 +391,13 @@ namespace API.Controllers
 		[AuthController]
 		public object? saveTbl_Grupo(Tbl_Grupo inst)
 		{
-			return inst.SaveGroup(HttpContext.Session.GetString("seassonKey"));
+			return inst.SaveGroup(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public object? updateTbl_Grupo(Tbl_Grupo inst)
 		{
-			return inst.UpdateGroup(HttpContext.Session.GetString("seassonKey"));
+			return inst.UpdateGroup(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
@@ -410,13 +410,13 @@ namespace API.Controllers
 		[AuthController]
 		public object? saveTbl_Grupos_Profile(Tbl_Grupos_Profile inst)
 		{
-			return inst.SaveGroup(HttpContext.Session.GetString("seassonKey"));
+			return inst.SaveGroup(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public object? updateTbl_Grupos_Profile(Tbl_Grupos_Profile inst)
 		{
-			return inst.UpdateGroup(HttpContext.Session.GetString("seassonKey"));
+			return inst.UpdateGroup(HttpContext.Session.GetString("sessionKey"));
 		}
 		#endregion
 

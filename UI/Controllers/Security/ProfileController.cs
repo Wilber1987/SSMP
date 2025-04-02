@@ -13,7 +13,7 @@ namespace API.Controllers
         //Save
         public object? SaveProfile(CAPA_NEGOCIO.MAPEO.Tbl_Profile Inst)
         {
-            Inst.IdUser = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId;
+            Inst.IdUser = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId;
             return Inst.SaveProfile();
         }
         [HttpPost]
@@ -22,7 +22,7 @@ namespace API.Controllers
         public object? TakeProfile(CAPA_NEGOCIO.MAPEO.Tbl_Profile Inst)
         {
             Inst.Id_Perfil = null;
-            Inst.IdUser = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId;
+            Inst.IdUser = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId;
             return Inst.TakeProfile();
         }
 
@@ -33,7 +33,7 @@ namespace API.Controllers
         {
             CAPA_NEGOCIO.MAPEO.Tbl_Profile Inst = new()
             {
-                IdUser = AuthNetCore.User(HttpContext.Session.GetString("seassonKey")).UserId
+                IdUser = AuthNetCore.User(HttpContext.Session.GetString("sessionKey")).UserId
             };
             return Inst.TakeProfile();
         }

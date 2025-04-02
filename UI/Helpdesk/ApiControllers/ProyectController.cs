@@ -32,101 +32,101 @@ namespace API.Controllers
 		[AuthController]
 		public List<Tbl_Tareas> GetOwParticipations(Tbl_Tareas inst)
 		{
-			return inst.GetOwParticipations(HttpContext.Session.GetString("seassonKey"));
+			return inst.GetOwParticipations(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwCase(Tbl_Case inst)
 		{
-			return inst.GetOwCase(HttpContext.Session.GetString("seassonKey"));
+			return inst.GetOwCase(HttpContext.Session.GetString("sessionKey"));
 		}
 		
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwCloseCase(Tbl_Case inst)
 		{
-			return inst.GetOwCloseCase(HttpContext.Session.GetString("seassonKey"));
+			return inst.GetOwCloseCase(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetVinculateCase(Tbl_Case inst)
 		{
-			return inst.GetVinculateCase(HttpContext.Session.GetString("seassonKey"));
+			return inst.GetVinculateCase(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Cat_Dependencias> GetOwDependencies(Cat_Dependencias inst)
 		{
-			return inst.GetOwDependencies(HttpContext.Session.GetString("seassonKey"));
+			return inst.GetOwDependencies(HttpContext.Session.GetString("sessionKey"));
 		}
 		//Pendiente, Solicitado, Activo, Finalizado, Espera
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesPendientesAprobar(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Solicitado);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Solicitado);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesAprobadas(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Activo);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Activo);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesRechazadas(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Rechazado);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Rechazado);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesFinalizadas(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Finalizado);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Finalizado);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesVinculadas(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Vinculado);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Vinculado);
 		}
 
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesPendientes(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Pendiente);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Pendiente);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetSolicitudesPendientesAprobar(Tbl_Case inst)
 		{
-			return inst.GetSolicitudesPendientesAprobar(HttpContext.Session.GetString("seassonKey"), Case_Estate.Solicitado);
+			return inst.GetSolicitudesPendientesAprobar(HttpContext.Session.GetString("sessionKey"), Case_Estate.Solicitado);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetSolicitudesPendientesAprobarAdmin(Tbl_Case inst)
 		{
-			return inst.GetSolicitudesPendientesAprobarAdmin(HttpContext.Session.GetString("seassonKey"));
+			return inst.GetSolicitudesPendientesAprobarAdmin(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesProceso(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Activo);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Activo);
 		}
 		[HttpPost]
 		[AuthController]
 		public List<Tbl_Case> GetOwSolicitudesEspera(Tbl_Case inst)
 		{
-			return inst.GetOwSolicitudes(HttpContext.Session.GetString("seassonKey"), Case_Estate.Espera);
+			return inst.GetOwSolicitudes(HttpContext.Session.GetString("sessionKey"), Case_Estate.Espera);
 		}
 		[HttpPost]
 		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA)]
 
 		public object RechazarSolicitud(Tbl_Case Tbl_Case)
 		{
-			return Tbl_Case.RechazarSolicitud(HttpContext.Session.GetString("seassonKey"));
+			return Tbl_Case.RechazarSolicitud(HttpContext.Session.GetString("sessionKey"));
 		}
 
 		[HttpPost]
@@ -134,13 +134,13 @@ namespace API.Controllers
 
 		public object AprobarSolicitud(Tbl_Case Tbl_Case)
 		{
-			return new CaseBlock().AprobarSolicitud(HttpContext.Session.GetString("seassonKey"), Tbl_Case);
+			return new CaseBlock().AprobarSolicitud(HttpContext.Session.GetString("sessionKey"), Tbl_Case);
 		}
 		[HttpPost]
 		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA, Permissions.TECNICO_CASOS_DEPENDENCIA)]
 		public object CerrarCaso(Tbl_Case Tbl_Case)
 		{
-			return Tbl_Case.CerrarCaso(HttpContext.Session.GetString("seassonKey"));
+			return Tbl_Case.CerrarCaso(HttpContext.Session.GetString("sessionKey"));
 		}
 		//CASOS VINCULADOS      
 		[HttpPost]
@@ -160,37 +160,37 @@ namespace API.Controllers
 		public List<Tbl_Case> GetCasosToVinculate(Tbl_Case Inst)
 		{
 			return new Tbl_Case()
-			.GetCasosToVinculate(HttpContext.Session.GetString("seassonKey"), Inst);
+			.GetCasosToVinculate(HttpContext.Session.GetString("sessionKey"), Inst);
 		}
 		[HttpPost]
 		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA)]
 		public object AprobarCaseList(CaseBlock Inst)
 		{
-			return Inst.AprobarSolicitudes(HttpContext.Session.GetString("seassonKey"));
+			return Inst.AprobarSolicitudes(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA)]
 		public object RechazarCaseList(CaseBlock Inst)
 		{
-			return Inst.RechazarSolicitudes(HttpContext.Session.GetString("seassonKey"));
+			return Inst.RechazarSolicitudes(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController(Permissions.ADMINISTRAR_CASOS_DEPENDENCIA)]
 		public object RemitirCasos(CaseBlock Inst)
 		{
-			return Inst.RemitirCasos(HttpContext.Session.GetString("seassonKey"));
+			return Inst.RemitirCasos(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController(Permissions.PERFIL_MANAGER)]
 		public object AsignarDependencias(ProfileTransaction Inst)
 		{
-			return Inst.AsignarDependencias(HttpContext.Session.GetString("seassonKey"));
+			return Inst.AsignarDependencias(HttpContext.Session.GetString("sessionKey"));
 		}
 		[HttpPost]
 		[AuthController]
 		public object getDashboard(ProfileTransaction Inst)
 		{
-			string? token = HttpContext.Session.GetString("seassonKey");
+			string? token = HttpContext.Session.GetString("sessionKey");
 			var caseTable = new Tbl_Case().GetOwParticipantCase(token);
 			return new
 			{
@@ -204,7 +204,7 @@ namespace API.Controllers
 		[AuthController]
 		public object getDashboardgET(DateFilter dateFilter)
 		{
-			string? token = HttpContext.Session.GetString("seassonKey");
+			string? token = HttpContext.Session.GetString("sessionKey");
 			var caseTable = new Tbl_Case
 			{
 				filterData = new List<FilterData> { FilterData.Between("Fecha_Inicio", dateFilter.Desde, dateFilter.Hasta) }
@@ -227,7 +227,7 @@ namespace API.Controllers
 		[AuthController]
 		public object SaveOwCase(Tbl_Case Inst)
 		{
-			string? token = HttpContext.Session.GetString("seassonKey");
+			string? token = HttpContext.Session.GetString("sessionKey");
 			return Inst.SaveOwCase(token);
 		}
 

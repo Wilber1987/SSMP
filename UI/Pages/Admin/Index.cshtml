@@ -4,7 +4,7 @@
 @using DataBaseModel;
 @{  
 
-    if (!SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.IsAdmin(HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("/Security/Login");
         return;
@@ -17,32 +17,32 @@
     import { StyleScrolls } from "../WDevCore/StyleModules/WStyleComponents.js";
     AdminTemplate.append(WRender.createElement(StyleScrolls));
 </script>
-@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("seassonKey")))
+@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("sessionKey")))
 {
     <hr/>
     <script src="~/Admin/CaseManagerView.js" type="module"></script>    
 }
 
-@if (SecurityController.IsAdmin(HttpContext.Session.GetString("seassonKey")))
+@if (SecurityController.IsAdmin(HttpContext.Session.GetString("sessionKey")))
 {    
     <script  src="~/Admin/AdminConfig.js" type="module"></script>
     
 }
-@if (SecurityController.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(), HttpContext.Session.GetString("seassonKey")))
+@if (SecurityController.HavePermission(Permissions.ADMINISTRAR_USUARIOS.ToString(), HttpContext.Session.GetString("sessionKey")))
 {  
     <script src="~/WDevCore/Security/AdminSecurity.js" type="module"></script>
 }
-@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("seassonKey")))
+@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("sessionKey")))
 { 
     <script src="~/Proyect/AdminNavigator.js" type="module"></script>
 }
-@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("seassonKey")))
+@if (SecurityController.HavePermission(Permissions.ADMIN_ACCESS.ToString(), HttpContext.Session.GetString("sessionKey")))
 {  
     <script src="~/SystemDocuments/Views/SystemDocumentsNavigator.js" type="module"></script>
 }
 
 
-@if (SystemConfig.IsQuestionnairesActive() &&  SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("seassonKey")))
+@if (SystemConfig.IsQuestionnairesActive() &&  SecurityController.HavePermission(Permissions.QUESTIONNAIRES_MANAGER.ToString(), HttpContext.Session.GetString("sessionKey")))
 {
     <script src="~/Questionnaires/Views/AdminNavigator.js" type="module"></script>
 }

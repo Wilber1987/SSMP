@@ -3,12 +3,12 @@
 @using APPCORE.Security
 @{
     // Layout = null;
-    if (!SecurityController.Auth(HttpContext.Session.GetString("seassonKey")))
+    if (!SecurityController.Auth(HttpContext.Session.GetString("sessionKey")))
     {
         Response.Redirect("../Security/login");
         return;
     }
-    @if (!SecurityController.HavePermission(HttpContext.Session.GetString("seassonKey"),
+    @if (!SecurityController.HavePermission(HttpContext.Session.GetString("sessionKey"),
         Permissions.ADMINISTRAR_CASOS_DEPENDENCIA,
         Permissions.TECNICO_CASOS_DEPENDENCIA, Permissions.ADMINISTRAR_CASOS_PROPIOS))
     {
